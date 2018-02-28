@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.mapper.SystemaccountflowMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Systemaccountflow" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="createdDate" property="createddate" jdbcType="TIMESTAMP" />
+    <result column="accountactiontype" property="accountactiontype" jdbcType="TINYINT" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="balance" property="balance" jdbcType="DECIMAL" />
+    <result column="freezedAmount" property="freezedamount" jdbcType="DECIMAL" />
+    <result column="systemAccount_id" property="systemaccountId" jdbcType="BIGINT" />
+    <result column="targetuser_id" property="targetuserId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from systemaccountflow
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Systemaccountflow" >
+    insert into systemaccountflow (id, createdDate, accountactiontype, 
+      amount, note, balance, 
+      freezedAmount, systemAccount_id, targetuser_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{createddate,jdbcType=TIMESTAMP}, #{accountactiontype,jdbcType=TINYINT}, 
+      #{amount,jdbcType=DECIMAL}, #{note,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, 
+      #{freezedamount,jdbcType=DECIMAL}, #{systemaccountId,jdbcType=BIGINT}, #{targetuserId,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Systemaccountflow" >
+    update systemaccountflow
+    set createdDate = #{createddate,jdbcType=TIMESTAMP},
+      accountactiontype = #{accountactiontype,jdbcType=TINYINT},
+      amount = #{amount,jdbcType=DECIMAL},
+      note = #{note,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      freezedAmount = #{freezedamount,jdbcType=DECIMAL},
+      systemAccount_id = #{systemaccountId,jdbcType=BIGINT},
+      targetuser_id = #{targetuserId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, createdDate, accountactiontype, amount, note, balance, freezedAmount, 
+    systemAccount_id, targetuser_id
+    from systemaccountflow
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, createdDate, accountactiontype, amount, note, balance, freezedAmount, 
+    systemAccount_id, targetuser_id
+    from systemaccountflow
+  </select>
+</mapper>

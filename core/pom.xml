@@ -13,6 +13,17 @@
   <url>http://maven.apache.org</url>
 
   <build>
+    <!--注意不配置tomcat启动找不到xml-->
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <includes>
+          <include>**/*.properties</include>
+          <include>**/*.xml</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.mybatis.generator</groupId>

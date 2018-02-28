@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.mapper.RealauthMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Realauth" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="birthDate" property="birthdate" jdbcType="VARCHAR" />
+    <result column="idNumber" property="idnumber" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="image1" property="image1" jdbcType="VARCHAR" />
+    <result column="image2" property="image2" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
+    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
+    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
+    <result column="applier_id" property="applierId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from realauth
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Realauth" >
+    insert into realauth (id, realname, sex, 
+      birthDate, idNumber, address, 
+      state, image1, image2, 
+      remark, auditTime, applyTime, 
+      auditor_id, applier_id)
+    values (#{id,jdbcType=BIGINT}, #{realname,jdbcType=VARCHAR}, #{sex,jdbcType=TINYINT}, 
+      #{birthdate,jdbcType=VARCHAR}, #{idnumber,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{state,jdbcType=TINYINT}, #{image1,jdbcType=VARCHAR}, #{image2,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, 
+      #{auditorId,jdbcType=BIGINT}, #{applierId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Realauth" >
+    update realauth
+    set realname = #{realname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=TINYINT},
+      birthDate = #{birthdate,jdbcType=VARCHAR},
+      idNumber = #{idnumber,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT},
+      image1 = #{image1,jdbcType=VARCHAR},
+      image2 = #{image2,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      auditTime = #{audittime,jdbcType=TIMESTAMP},
+      applyTime = #{applytime,jdbcType=TIMESTAMP},
+      auditor_id = #{auditorId,jdbcType=BIGINT},
+      applier_id = #{applierId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
+    auditTime, applyTime, auditor_id, applier_id
+    from realauth
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
+    auditTime, applyTime, auditor_id, applier_id
+    from realauth
+  </select>
+</mapper>

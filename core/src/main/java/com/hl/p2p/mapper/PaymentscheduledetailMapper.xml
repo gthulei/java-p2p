@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.mapper.PaymentscheduledetailMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Paymentscheduledetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bidamount" property="bidamount" jdbcType="DECIMAL" />
+    <result column="bid_id" property="bidId" jdbcType="BIGINT" />
+    <result column="totalamount" property="totalamount" jdbcType="DECIMAL" />
+    <result column="principal" property="principal" jdbcType="DECIMAL" />
+    <result column="interest" property="interest" jdbcType="DECIMAL" />
+    <result column="monthindex" property="monthindex" jdbcType="TINYINT" />
+    <result column="deadline" property="deadline" jdbcType="TIMESTAMP" />
+    <result column="bidrequest_id" property="bidrequestId" jdbcType="BIGINT" />
+    <result column="paydate" property="paydate" jdbcType="TIMESTAMP" />
+    <result column="returntype" property="returntype" jdbcType="TINYINT" />
+    <result column="paymentschedule_id" property="paymentscheduleId" jdbcType="BIGINT" />
+    <result column="fromlogininfo_id" property="fromlogininfoId" jdbcType="BIGINT" />
+    <result column="tologininfo_id" property="tologininfoId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from paymentscheduledetail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Paymentscheduledetail" >
+    insert into paymentscheduledetail (id, bidamount, bid_id, 
+      totalamount, principal, interest, 
+      monthindex, deadline, bidrequest_id, 
+      paydate, returntype, paymentschedule_id, 
+      fromlogininfo_id, tologininfo_id)
+    values (#{id,jdbcType=BIGINT}, #{bidamount,jdbcType=DECIMAL}, #{bidId,jdbcType=BIGINT}, 
+      #{totalamount,jdbcType=DECIMAL}, #{principal,jdbcType=DECIMAL}, #{interest,jdbcType=DECIMAL}, 
+      #{monthindex,jdbcType=TINYINT}, #{deadline,jdbcType=TIMESTAMP}, #{bidrequestId,jdbcType=BIGINT}, 
+      #{paydate,jdbcType=TIMESTAMP}, #{returntype,jdbcType=TINYINT}, #{paymentscheduleId,jdbcType=BIGINT}, 
+      #{fromlogininfoId,jdbcType=BIGINT}, #{tologininfoId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Paymentscheduledetail" >
+    update paymentscheduledetail
+    set bidamount = #{bidamount,jdbcType=DECIMAL},
+      bid_id = #{bidId,jdbcType=BIGINT},
+      totalamount = #{totalamount,jdbcType=DECIMAL},
+      principal = #{principal,jdbcType=DECIMAL},
+      interest = #{interest,jdbcType=DECIMAL},
+      monthindex = #{monthindex,jdbcType=TINYINT},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      bidrequest_id = #{bidrequestId,jdbcType=BIGINT},
+      paydate = #{paydate,jdbcType=TIMESTAMP},
+      returntype = #{returntype,jdbcType=TINYINT},
+      paymentschedule_id = #{paymentscheduleId,jdbcType=BIGINT},
+      fromlogininfo_id = #{fromlogininfoId,jdbcType=BIGINT},
+      tologininfo_id = #{tologininfoId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, bidamount, bid_id, totalamount, principal, interest, monthindex, deadline, 
+    bidrequest_id, paydate, returntype, paymentschedule_id, fromlogininfo_id, tologininfo_id
+    from paymentscheduledetail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, bidamount, bid_id, totalamount, principal, interest, monthindex, deadline, 
+    bidrequest_id, paydate, returntype, paymentschedule_id, fromlogininfo_id, tologininfo_id
+    from paymentscheduledetail
+  </select>
+</mapper>

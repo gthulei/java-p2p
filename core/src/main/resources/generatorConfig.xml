@@ -63,7 +63,7 @@
       targetPackage/targetProject:同javaModelGenerator
 
       targetProject="src/main/java-->
-    <sqlMapGenerator targetPackage="com.hl.p2p.dao"
+    <sqlMapGenerator targetPackage="com.hl.p2p.mapper"
                      targetProject="src/main/java">
       <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
       <property name="enableSubPackages" value="true" />
@@ -74,7 +74,7 @@
       type：选择怎么生成mapper接口（在MyBatis3/MyBatis3Simple下）： 1，ANNOTATEDMAPPER：会生成使用Mapper接口+Annotation的方式创建（SQL生成在annotation中），不会生成对应的XML；
       2，MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中； 3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
       注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER -->
-    <javaClientGenerator targetPackage="com.hl.p2p.dao"
+    <javaClientGenerator targetPackage="com.hl.p2p.mapper"
                          type="XMLMAPPER" targetProject="src/main/java">
       <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
       <property name="enableSubPackages" value="true" />
