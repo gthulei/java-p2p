@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.dao.BidrequestMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Bidrequest" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+    <result column="bidRequestType" property="bidrequesttype" jdbcType="TINYINT" />
+    <result column="bidRequestState" property="bidrequeststate" jdbcType="TINYINT" />
+    <result column="bidRequestAmount" property="bidrequestamount" jdbcType="DECIMAL" />
+    <result column="currentRate" property="currentrate" jdbcType="DECIMAL" />
+    <result column="monthes2Return" property="monthes2return" jdbcType="TINYINT" />
+    <result column="bidCount" property="bidcount" jdbcType="INTEGER" />
+    <result column="totalRewardAmount" property="totalrewardamount" jdbcType="DECIMAL" />
+    <result column="currentSum" property="currentsum" jdbcType="DECIMAL" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="disableDate" property="disabledate" jdbcType="TIMESTAMP" />
+    <result column="createuser_id" property="createuserId" jdbcType="BIGINT" />
+    <result column="disableDays" property="disabledays" jdbcType="TINYINT" />
+    <result column="minBidAmount" property="minbidamount" jdbcType="DECIMAL" />
+    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
+    <result column="publishTime" property="publishtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from bidrequest
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Bidrequest" >
+    insert into bidrequest (id, version, bidRequestType, 
+      bidRequestState, bidRequestAmount, currentRate, 
+      monthes2Return, bidCount, totalRewardAmount, 
+      currentSum, title, description, 
+      note, disableDate, createuser_id, 
+      disableDays, minBidAmount, applyTime, 
+      publishTime)
+    values (#{id,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, #{bidrequesttype,jdbcType=TINYINT}, 
+      #{bidrequeststate,jdbcType=TINYINT}, #{bidrequestamount,jdbcType=DECIMAL}, #{currentrate,jdbcType=DECIMAL}, 
+      #{monthes2return,jdbcType=TINYINT}, #{bidcount,jdbcType=INTEGER}, #{totalrewardamount,jdbcType=DECIMAL}, 
+      #{currentsum,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{disabledate,jdbcType=TIMESTAMP}, #{createuserId,jdbcType=BIGINT}, 
+      #{disabledays,jdbcType=TINYINT}, #{minbidamount,jdbcType=DECIMAL}, #{applytime,jdbcType=TIMESTAMP}, 
+      #{publishtime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Bidrequest" >
+    update bidrequest
+    set version = #{version,jdbcType=INTEGER},
+      bidRequestType = #{bidrequesttype,jdbcType=TINYINT},
+      bidRequestState = #{bidrequeststate,jdbcType=TINYINT},
+      bidRequestAmount = #{bidrequestamount,jdbcType=DECIMAL},
+      currentRate = #{currentrate,jdbcType=DECIMAL},
+      monthes2Return = #{monthes2return,jdbcType=TINYINT},
+      bidCount = #{bidcount,jdbcType=INTEGER},
+      totalRewardAmount = #{totalrewardamount,jdbcType=DECIMAL},
+      currentSum = #{currentsum,jdbcType=DECIMAL},
+      title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      disableDate = #{disabledate,jdbcType=TIMESTAMP},
+      createuser_id = #{createuserId,jdbcType=BIGINT},
+      disableDays = #{disabledays,jdbcType=TINYINT},
+      minBidAmount = #{minbidamount,jdbcType=DECIMAL},
+      applyTime = #{applytime,jdbcType=TIMESTAMP},
+      publishTime = #{publishtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, version, bidRequestType, bidRequestState, bidRequestAmount, currentRate, 
+    monthes2Return, bidCount, totalRewardAmount, currentSum, title, description, note, 
+    disableDate, createuser_id, disableDays, minBidAmount, applyTime, publishTime
+    from bidrequest
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, version, bidRequestType, bidRequestState, bidRequestAmount, currentRate, 
+    monthes2Return, bidCount, totalRewardAmount, currentSum, title, description, note, 
+    disableDate, createuser_id, disableDays, minBidAmount, applyTime, publishTime
+    from bidrequest
+  </select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.dao.IplogMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Iplog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="loginState" property="loginstate" jdbcType="TINYINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="loginInfoId" property="logininfoid" jdbcType="BIGINT" />
+    <result column="loginType" property="logintype" jdbcType="TINYINT" />
+    <result column="loginTime" property="logintime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from iplog
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Iplog" >
+    insert into iplog (id, ip, loginState, 
+      username, loginInfoId, loginType, 
+      loginTime)
+    values (#{id,jdbcType=BIGINT}, #{ip,jdbcType=VARCHAR}, #{loginstate,jdbcType=TINYINT}, 
+      #{username,jdbcType=VARCHAR}, #{logininfoid,jdbcType=BIGINT}, #{logintype,jdbcType=TINYINT}, 
+      #{logintime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Iplog" >
+    update iplog
+    set ip = #{ip,jdbcType=VARCHAR},
+      loginState = #{loginstate,jdbcType=TINYINT},
+      username = #{username,jdbcType=VARCHAR},
+      loginInfoId = #{logininfoid,jdbcType=BIGINT},
+      loginType = #{logintype,jdbcType=TINYINT},
+      loginTime = #{logintime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, ip, loginState, username, loginInfoId, loginType, loginTime
+    from iplog
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, ip, loginState, username, loginInfoId, loginType, loginTime
+    from iplog
+  </select>
+</mapper>

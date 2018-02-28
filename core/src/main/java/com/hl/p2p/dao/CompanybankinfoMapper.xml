@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.dao.CompanybankinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Companybankinfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="bankname" property="bankname" jdbcType="VARCHAR" />
+    <result column="accountname" property="accountname" jdbcType="VARCHAR" />
+    <result column="banknumber" property="banknumber" jdbcType="VARCHAR" />
+    <result column="bankforkname" property="bankforkname" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from companybankinfo
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Companybankinfo" >
+    insert into companybankinfo (id, bankname, accountname, 
+      banknumber, bankforkname)
+    values (#{id,jdbcType=BIGINT}, #{bankname,jdbcType=VARCHAR}, #{accountname,jdbcType=VARCHAR}, 
+      #{banknumber,jdbcType=VARCHAR}, #{bankforkname,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Companybankinfo" >
+    update companybankinfo
+    set bankname = #{bankname,jdbcType=VARCHAR},
+      accountname = #{accountname,jdbcType=VARCHAR},
+      banknumber = #{banknumber,jdbcType=VARCHAR},
+      bankforkname = #{bankforkname,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, bankname, accountname, banknumber, bankforkname
+    from companybankinfo
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, bankname, accountname, banknumber, bankforkname
+    from companybankinfo
+  </select>
+</mapper>

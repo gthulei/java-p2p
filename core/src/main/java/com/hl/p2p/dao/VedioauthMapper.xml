@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.dao.VedioauthMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Vedioauth" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
+    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
+    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
+    <result column="applier_id" property="applierId" jdbcType="BIGINT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from vedioauth
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Vedioauth" >
+    insert into vedioauth (id, state, remark, 
+      auditTime, applyTime, auditor_id, 
+      applier_id)
+    values (#{id,jdbcType=BIGINT}, #{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=BIGINT}, 
+      #{applierId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Vedioauth" >
+    update vedioauth
+    set state = #{state,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      auditTime = #{audittime,jdbcType=TIMESTAMP},
+      applyTime = #{applytime,jdbcType=TIMESTAMP},
+      auditor_id = #{auditorId,jdbcType=BIGINT},
+      applier_id = #{applierId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id
+    from vedioauth
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, state, remark, auditTime, applyTime, auditor_id, applier_id
+    from vedioauth
+  </select>
+</mapper>
