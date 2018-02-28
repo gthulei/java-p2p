@@ -22,4 +22,8 @@
 hs_err_pid*
 *.iml
 target
+.settings
+.settings/**
+.classpath
+.project
 /.metadata/
