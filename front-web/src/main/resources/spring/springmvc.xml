@@ -42,4 +42,8 @@
 		<!-- 配置视图的输出HTML的contentType -->
 		<property name="contentType" value="text/html;charset=UTF-8" />
 	</bean>
+	<!-- 资源映射配置 -->
+	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
+	<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/images/" mapping="/images/**"/>
 </beans>        
