@@ -2,6 +2,8 @@ package com.hl.p2p.controller;
 
 import com.hl.p2p.pojo.Userinfo;
 import com.hl.p2p.server.UserServer;
+
+import com.hl.p2p.utils.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +17,11 @@ public class UserController {
   @Autowired
   UserServer userServer;
 
-  @RequestMapping(value="/userInfo/{id}",method= RequestMethod.GET)
+  @RequestMapping(value = "/userInfo/{id}", method = RequestMethod.GET)
   @ResponseBody
-  public Userinfo getUserInfo(@PathVariable Long id){
-     Userinfo userInfoById = userServer.getUserInfoById(id);
-     return  userInfoById;
+  public JsonResult getUserInfo(@PathVariable Long id) {
+    Userinfo userInfo = userServer.getUserInfoById(id);
+    return JsonResult.resultSuccess(userInfo);
   }
 
 }

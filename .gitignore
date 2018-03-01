@@ -26,4 +26,5 @@ target
 .settings/**
 .classpath
 .project
+.recommenders/**
 /.metadata/
