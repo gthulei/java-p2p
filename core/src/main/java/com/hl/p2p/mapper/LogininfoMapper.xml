@@ -28,13 +28,28 @@
       admin = #{admin,jdbcType=BIT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <sql id="base_column">
+    id, username, password, state, usertype, admin
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, username, password, state, usertype, admin
+    select <include refid="base_column"/>
     from logininfo
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, username, password, state, usertype, admin
+    select <include refid="base_column"/>
     from logininfo
   </select>
+
+  <select id="selectCountByUserName"  resultType="java.lang.Integer" parameterType="string">
+    select COUNT(id)
+    from logininfo
+    where username = #{userName}
+  </select>
+
+  <select id="login" resultMap="BaseResultMap" parameterType="string">
+    SELECT  <include refid="base_column"/>
+    FROM  logininfo WHERE username = #{userName} AND password = #{passWord}
+  </select>
+
 </mapper>

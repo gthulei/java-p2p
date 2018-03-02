@@ -21,12 +21,12 @@
 	$(function(){
 		$("#loginForm").ajaxForm({
 			success:function(data){
-				if(data.success){
+				if(data.succeed){
 					$.messager.confirm("提示","登陆成功,点击确定进入个人中心",function(){
 						window.location.href="/personal.do";
 					});
 				}else{
-					$.messager.popup(data.msg)
+					$.messager.popup(data.errorMessage)
 				}
 			}
 		});
@@ -76,7 +76,7 @@
 	
 	<!-- 网页内容 --> 
 	<div class="container">  
-		<form id="loginForm" class="form-horizontal el-login-form" action="/login.do" method="post" >
+		<form id="loginForm" class="form-horizontal el-login-form" action="/login.json" method="post" >
 			<p class="h4" style="margin: 10px 10px 20px 110px;color:#999;">请输入用户名和密码</p> 
 			<div class="form-group">
 				<label class="control-label col-sm-2">用户名</label>

@@ -1,15 +1,21 @@
 package com.hl.p2p.pojo;
 
 public class Logininfo {
+
+    public static final int STATE_NORMAL = 0 ; // 普通用户
+
+    public static final int USER_MANAGER = 0 ;//后台用户
+    public static final int USER_CLIENT = 1 ;// 前台用户
+
     private Long id;
 
     private String username;
 
     private String password;
 
-    private Byte state;
+    private int state;
 
-    private Byte usertype;
+    private int usertype;
 
     private Boolean admin;
 
@@ -37,19 +43,19 @@ public class Logininfo {
         this.password = password == null ? null : password.trim();
     }
 
-    public Byte getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(Byte state) {
+    public void setState(int state) {
         this.state = state;
     }
 
-    public Byte getUsertype() {
+    public int getUsertype() {
         return usertype;
     }
 
-    public void setUsertype(Byte usertype) {
+    public void setUsertype(int usertype) {
         this.usertype = usertype;
     }
 

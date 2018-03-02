@@ -22,11 +22,7 @@
 			rules:{
 				username:{
 					required:true,
-					rangelength:[4,16],
-					remote:{
-						url:"checkUserName.do",  
-						type:"post"
-					}
+					rangelength:[4,16]
 				},
 				password:{
 					required:true,
@@ -56,10 +52,10 @@
 				$("#registerForm").ajaxSubmit({
 					dataType:"json",
 					success:function(data){
-						if(data.success){
-							$.messager.confirm("提示","注册成功")
+						if(data.succeed){
+							$.messager.confirm(data.errorMessage)
 						}else{
-							$.messager.popup("注册失败!")
+							$.messager.popup(data.errorMessage)
 						}
 					}
 				});
@@ -101,7 +97,7 @@
 	
 	<!-- 网页内容 -->
 	<div class="container">  
-		<form id="registerForm" class="form-horizontal el-register-form"  action="/register.do" method="post" >
+		<form id="registerForm" class="form-horizontal el-register-form"  action="/register.json" method="post" >
 			<p class="h4" style="margin: 10px 10px 20px;color:#999;">请填写注册信息，点击“提交注册”即可完成注册！</p>
 			<div class="form-group">
 				<label class="control-label col-sm-2">用户名</label>
