@@ -3,6 +3,7 @@ package com.hl.p2p.server.imlp;
 import com.hl.p2p.mapper.LogininfoMapper;
 import com.hl.p2p.pojo.Logininfo;
 import com.hl.p2p.server.ILoginInfoServer;
+import cpm.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -39,6 +40,8 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
   public boolean login(String userName, String password) {
     Logininfo login = logininfoMapper.login(userName, DigestUtils.md5DigestAsHex(password.getBytes()));
     if(login != null){
+      // 存Session
+      UserContext.putCurrent(login);
       return true;
     }
     return false;
