@@ -1,8 +1,12 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.LogininfoMapper;
+import com.hl.p2p.pojo.Account;
 import com.hl.p2p.pojo.Logininfo;
+import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.server.IAccountServer;
 import com.hl.p2p.server.ILoginInfoServer;
+import com.hl.p2p.server.IUserinfoServer;
 import cpm.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,12 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
 
   @Autowired
   private LogininfoMapper logininfoMapper;
+
+  @Autowired
+  private IUserinfoServer userinfoServer;
+
+  @Autowired
+  private IAccountServer accountServer;
 
   // 注册
   @Override
@@ -27,6 +37,14 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
       logininfo.setUsertype(logininfo.USER_CLIENT);
       int user = logininfoMapper.insert(logininfo);
       if(user > 0){
+        //userinfo
+        Userinfo userinfo = new Userinfo();
+        userinfo.setId(logininfo.getId());
+        userinfoServer.addUserinfo(userinfo);
+        //account
+        Account account = new Account();
+        account.setId(logininfo.getId());
+        accountServer.addAccount(account);
         return 1;
       }else {
         return 2;

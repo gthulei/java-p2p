@@ -5,7 +5,7 @@ public class Userinfo {
 
     private Integer version;
 
-    private Long bitstate;
+    private long bitstate = 0;
 
     private String realname;
 

@@ -17,17 +17,14 @@
     <result column="realauthid" property="realauthid" jdbcType="BIGINT" />
     <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from userinfo
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
   <insert id="insert" parameterType="com.hl.p2p.pojo.Userinfo" >
     insert into userinfo (id, version, bitState, 
       realName, idNumber, phoneNumber, 
       incomeGrade_id, marriage_id, kidCount_id, 
       educationBackground_id, authScore, houseCondition_id, 
       realauthid, email)
-    values (#{id,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, #{bitstate,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, 0, #{bitstate,jdbcType=BIGINT},
       #{realname,jdbcType=VARCHAR}, #{idnumber,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, 
       #{incomegradeId,jdbcType=BIGINT}, #{marriageId,jdbcType=BIGINT}, #{kidcountId,jdbcType=BIGINT}, 
       #{educationbackgroundId,jdbcType=BIGINT}, #{authscore,jdbcType=INTEGER}, #{houseconditionId,jdbcType=BIGINT}, 
@@ -35,7 +32,7 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Userinfo" >
     update userinfo
-    set version = #{version,jdbcType=INTEGER},
+    set version = version+1,
       bitState = #{bitstate,jdbcType=BIGINT},
       realName = #{realname,jdbcType=VARCHAR},
       idNumber = #{idnumber,jdbcType=VARCHAR},
@@ -48,7 +45,7 @@
       houseCondition_id = #{houseconditionId,jdbcType=BIGINT},
       realauthid = #{realauthid,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} AND version=${version}
   </update>
 
   <sql id="base_column">
@@ -61,9 +58,6 @@
     from userinfo
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select  <include refid="base_column" />
-    from userinfo
-  </select>
+
 
 </mapper>

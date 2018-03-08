@@ -1,27 +1,38 @@
 package com.hl.p2p.pojo;
 
+import cpm.hl.p2p.utils.BidConst;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
 public class Account {
     private Long id;
 
-    private String tradepassword;
-
-    private BigDecimal usableamount;
-
-    private BigDecimal freezedamount;
-
-    private BigDecimal borrowlimitamount;
-
     private Integer version;
 
-    private BigDecimal unreceiveinterest;
+    private String tradepassword; // 交易密码
 
-    private BigDecimal unreceiveprincipal;
+    private BigDecimal usableamount = BidConst.ZERO;// 账户可用金额
 
-    private BigDecimal unreturnamount;
+    private BigDecimal freezedamount = BidConst.ZERO; // 账户冻结金额
 
-    private BigDecimal remainborrowlimit;
+    private BigDecimal borrowlimitamount = BidConst.ZERO; //授信额度
+
+
+    private BigDecimal unreceiveinterest = BidConst.ZERO; //账户待收利息
+
+    private BigDecimal unreceiveprincipal = BidConst.ZERO; //账户待收本金
+
+    private BigDecimal unreturnamount = BidConst.ZERO; //账户待还金额
+
+    private BigDecimal remainborrowlimit = BidConst.INIT_BORROW_LIMIT; //账户剩余授信额度
+
+
+    //账户总额= 账户可用金额 + 账户冻结金额 + 账户待收本金
+    private BigDecimal getTotalAmount(){
+        return usableamount.add(this.freezedamount).add(this.unreceiveprincipal);
+    }
 
     public Long getId() {
         return id;

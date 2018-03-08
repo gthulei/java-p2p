@@ -13,17 +13,13 @@
     <result column="unReturnAmount" property="unreturnamount" jdbcType="DECIMAL" />
     <result column="remainBorrowLimit" property="remainborrowlimit" jdbcType="DECIMAL" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from account
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Account" >
     insert into account (id, tradePassword, usableAmount, 
       freezedAmount, borrowLimitAmount, version, 
       unReceiveInterest, unReceivePrincipal, 
       unReturnAmount, remainBorrowLimit)
     values (#{id,jdbcType=BIGINT}, #{tradepassword,jdbcType=VARCHAR}, #{usableamount,jdbcType=DECIMAL}, 
-      #{freezedamount,jdbcType=DECIMAL}, #{borrowlimitamount,jdbcType=DECIMAL}, #{version,jdbcType=INTEGER}, 
+      #{freezedamount,jdbcType=DECIMAL}, #{borrowlimitamount,jdbcType=DECIMAL}, 0,
       #{unreceiveinterest,jdbcType=DECIMAL}, #{unreceiveprincipal,jdbcType=DECIMAL}, 
       #{unreturnamount,jdbcType=DECIMAL}, #{remainborrowlimit,jdbcType=DECIMAL})
   </insert>
@@ -33,12 +29,12 @@
       usableAmount = #{usableamount,jdbcType=DECIMAL},
       freezedAmount = #{freezedamount,jdbcType=DECIMAL},
       borrowLimitAmount = #{borrowlimitamount,jdbcType=DECIMAL},
-      version = #{version,jdbcType=INTEGER},
+      version = version+1,
       unReceiveInterest = #{unreceiveinterest,jdbcType=DECIMAL},
       unReceivePrincipal = #{unreceiveprincipal,jdbcType=DECIMAL},
       unReturnAmount = #{unreturnamount,jdbcType=DECIMAL},
       remainBorrowLimit = #{remainborrowlimit,jdbcType=DECIMAL}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} ANT version=${version}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, tradePassword, usableAmount, freezedAmount, borrowLimitAmount, version, 
@@ -46,9 +42,5 @@
     from account
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, tradePassword, usableAmount, freezedAmount, borrowLimitAmount, version, 
-    unReceiveInterest, unReceivePrincipal, unReturnAmount, remainBorrowLimit
-    from account
-  </select>
+
 </mapper>

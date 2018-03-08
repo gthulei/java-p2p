@@ -9,11 +9,7 @@
     <result column="usertype" property="usertype" jdbcType="TINYINT" />
     <result column="admin" property="admin" jdbcType="BIT" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from logininfo
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.hl.p2p.pojo.Logininfo" >
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Logininfo" useGeneratedKeys="true" keyProperty="id">
     insert into logininfo (id, username, password, 
       state, usertype, admin)
     values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
@@ -35,10 +31,6 @@
     select <include refid="base_column"/>
     from logininfo
     where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select <include refid="base_column"/>
-    from logininfo
   </select>
 
   <select id="selectCountByUserName"  resultType="java.lang.Integer" parameterType="string">
