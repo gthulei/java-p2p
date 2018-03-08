@@ -8,4 +8,6 @@ public interface IAccountServer {
 
   boolean addAccount(Account account);
 
+  Account getAccountInfoById(long id);
+
 }

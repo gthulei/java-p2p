@@ -30,7 +30,7 @@ public class Account {
 
 
     //账户总额= 账户可用金额 + 账户冻结金额 + 账户待收本金
-    private BigDecimal getTotalAmount(){
+    public BigDecimal getTotalAmount(){
         return usableamount.add(this.freezedamount).add(this.unreceiveprincipal);
     }
 

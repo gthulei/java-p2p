@@ -25,4 +25,10 @@ public class UserinfoServerImpl implements IUserinfoServer{
     int result = userinfoMapper.insert(userinfo);
     return result > 0;
   }
+
+  @Override
+  public Userinfo getUserinfoById(long id) {
+    Userinfo userinfo = userinfoMapper.selectByPrimaryKey(id);
+    return userinfo;
+  }
 }

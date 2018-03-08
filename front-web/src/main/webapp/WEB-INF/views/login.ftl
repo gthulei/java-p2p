@@ -1,7 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<#include "base/header.ftl">
+	<#include "base/links.ftl">
+  <script type="text/javascript" src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+  <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
   <title>蓝源Eloan-P2P平台->用户登录</title>
 </head>
 <style type="text/css">
@@ -23,7 +25,7 @@
 			success:function(data){
 				if(data.succeed){
 					$.messager.confirm("提示","登陆成功,点击确定进入个人中心",function(){
-						window.location.href="/personal.do";
+						window.location.href="/personal";
 					});
 				}else{
 					$.messager.popup(data.errorMessage)

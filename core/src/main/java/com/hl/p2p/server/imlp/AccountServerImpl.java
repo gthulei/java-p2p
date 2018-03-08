@@ -26,4 +26,10 @@ public class AccountServerImpl implements IAccountServer{
     int result = accountMapper.insert(account);
     return result > 0;
   }
+
+  @Override
+  public Account getAccountInfoById(long id) {
+    Account result = accountMapper.selectByPrimaryKey(id);
+    return result;
+  }
 }

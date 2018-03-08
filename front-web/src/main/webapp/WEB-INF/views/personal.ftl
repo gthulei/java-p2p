@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>蓝源Eloan-P2P平台</title>
+<#include "base/links.ftl" />
+<script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
+<link type="text/css" rel="stylesheet" href="/css/account.css" />
+
+<script type="text/javascript">
+	$(function() {
+		//邮箱的马上绑定按钮
+		$("#showBindEmailModal").click(function() {
+			$("#bindEmailModal").modal("show");
+		});
+		
+		//给邮箱的保存按钮添加点击事件发送ajax请求
+		$("#bindEmail").click(function() {
+			//提交整个表单 (url 是默认的action)
+			$("#bindEmailForm").ajaxSubmit({
+				success : function(data) {
+					if (data.success) {
+						window.location.reload(); //刷新当前页面  关闭模式窗
+					} else {
+						$.messager.popup(data.msg);
+					}
+				}
+			})
+		});
+		
+		
+		//点击马上绑定
+		$("#showBindPhoneModal").click(function() {
+			$("#bindPhoneModal").modal("show");
+		});
+		//给发送验证码按钮添加事件
+		$("#sendVerifyCode").click(function() {
+			var phoneNumber = $("#phoneNumber").val(); //获取到手机号后发送ajax请求
+			var _this = $(this);
+			_this.attr("disabled", true); //点击之后立刻禁用按钮
+			if (phoneNumber) {
+				$.ajax({
+					type : "POST",
+					url : "/sendVerifyCode.do",
+					dataType : "json",
+					data : { //发送到服务器的数据
+						phoneNumber : phoneNumber
+					},
+					success : function(data) {
+						if (data.success) { //做倒计时
+							var count = 5;
+							var timer = window.setInterval(function() {
+								count--;
+								if (count <= 0) {
+									window.clearInterval(timer);
+									_this.text("重新发送验证码");
+									_this.attr("disabled", false);
+								} else {
+									_this.text(count + "秒后重新发送");
+								}
+							}, 1000);
+						} else {
+							$.messager.popup(data.msg);
+							_this.attr("disabled", false);
+						}
+					}
+				})
+			}
+		});
+		//保存按钮绑定事件
+		$("#bindPhone").click(function() {
+			//提交整个表单
+			$("#bindPhoneForm").ajaxSubmit({
+				success : function(data) {
+					if (data.success) {
+						window.location.reload(); //刷新当前页面  关闭模式窗
+					} else {
+						$.messager.popup(data.msg);
+					}
+				}
+			})
+		});
+	});
+</script>
+</head>
+<body>
+	<!-- 网页顶部导航 -->
+	<#include "base/head-tpl.ftl" />
+	<!-- 网页导航 -->
+	<!-- 在当前的freemarker的上下文中,添加一个变量,变量的名字叫currentNav,变量的值叫personal -->
+	<#assign currentNav="personal" />
+	<#include "base/navbar-tpl.ftl" />
+
+	<div class="container">
+		<div class="row">
+			<!--导航菜单-->
+			<div class="col-sm-3">
+			 <#assign currentMenu="personal" />
+				<#include "base/leftmenu-tpl.ftl" /></div>
+			<!-- 功能页面 -->
+			<div class="col-sm-9">
+				<div class="panel panel-default">
+					<div class="panel-body el-account">
+						<div class="el-account-info">
+							<div class="pull-left el-head-img">
+								<img class="icon" src="/images/ms.png" />
+							</div>
+							<div class="pull-left el-head">
+								<p>用户名:${userinfo.realname}</p>
+								<p>最后登录时间：xxxxxxxxxxxx</p>
+							</div>
+							<div class="pull-left"
+								style="text-align: center; width: 400px; margin: 30px auto 0px auto;">
+								<a class="btn btn-primary btn-lg" href="/recharge">账户充值</a> <a
+									class="btn btn-danger btn-lg" href="/moneyWithdraw">账户提现</a>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+
+						<div class="row h4 account-info">
+							<div class="col-sm-4">
+								账户总额：<span class="text-primary">${account.totalAmount}元</span>
+							</div>
+							<div class="col-sm-4">
+								可用金额：<span class="text-primary">${account.usableamount}元</span>
+							</div>
+							<div class="col-sm-4">
+								冻结金额：<span class="text-primary">${account.freezedamount}元</span>
+							</div>
+						</div>
+
+						<div class="row h4 account-info">
+							<div class="col-sm-4">
+								待收利息：<span class="text-primary">${account.unreceiveinterest}元</span>
+							</div>
+							<div class="col-sm-4">
+								待收本金：<span class="text-primary">${account.unreceiveprincipal}元</span>
+							</div>
+							<div class="col-sm-4">
+								待还本息：<span class="text-primary">${account.unreturnamount}元</span>
+							</div>
+						</div>
+
+						<div class="el-account-info top-margin">
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="el-accoun-auth">
+										<div class="el-accoun-auth-left">
+											<img src="images/shiming.png" />
+										</div>
+										<div class="el-accoun-auth-right">
+											<h5>实名认证</h5>
+											<p>
+												未认证 <a href="javascript:;">马上认证 </a>
+											</p>
+										</div>
+										<div class="clearfix"></div>
+										<p class="info">实名认证之后才能在平台投资</p>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="el-accoun-auth">
+										<div class="el-accoun-auth-left">
+											<img src="images/shouji.jpg" />
+										</div>
+										<div class="el-accoun-auth-right">
+											<h5>手机认证</h5>
+											<p>
+												未认证 <a href="javascript:;" id="showBindPhoneModal">马上绑定</a>
+											</p>
+										</div>
+										<div class="clearfix"></div>
+										<p class="info">可以收到系统操作信息,并增加使用安全性</p>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="el-accoun-auth">
+										<div class="el-accoun-auth-left">
+											<img src="images/youxiang.jpg" />
+										</div>
+										<div class="el-accoun-auth-right">
+											<h5>邮箱认证</h5>
+											<p>
+												未绑定  <a href="javascript:;" id="showBindEmailModal">马上绑定</a>
+											</p>
+										</div>
+										<div class="clearfix"></div>
+										<p class="info">您可以设置邮箱来接收重要信息</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="el-accoun-auth">
+										<div class="el-accoun-auth-left">
+											<img src="images/baozhan.jpg" />
+										</div>
+										<div class="el-accoun-auth-right">
+											<h5>VIP会员</h5>
+											<p>
+												普通用户 <a href="">查看</a>
+											</p>
+										</div>
+										<div class="clearfix"></div>
+										<p class="info">VIP会员，让你更快捷的投资</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<#include "base/floor.ftl" />
+</body>
+</html>

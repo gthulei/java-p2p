@@ -7,4 +7,6 @@ public interface IUserinfoServer {
   void updateUserInfo(Userinfo userinfo);
 
   boolean addUserinfo(Userinfo userinfo);
+
+  Userinfo getUserinfoById(long id);
 }

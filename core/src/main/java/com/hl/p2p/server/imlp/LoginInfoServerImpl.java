@@ -40,6 +40,7 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
         //userinfo
         Userinfo userinfo = new Userinfo();
         userinfo.setId(logininfo.getId());
+        userinfo.setRealname(userName);
         userinfoServer.addUserinfo(userinfo);
         //account
         Account account = new Account();

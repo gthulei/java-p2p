@@ -1,7 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<#include "base/header.ftl">
+	<#include "base/links.ftl">
+  <script type="text/javascript" src="/js/plugins/jquery-validation/jquery.validate.js"></script>
+  <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
   <title>蓝源Eloan-P2P平台->用户注册</title>
 </head>
 <style type="text/css">
