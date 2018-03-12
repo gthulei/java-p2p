@@ -22,6 +22,11 @@ public class UserContext {
 
 
   public static Logininfo getCurrent() {
+
     return (Logininfo) getSession().getAttribute(LOGININFO_IN_SESSION);
+  }
+
+  public static void removeCurrent(){
+    getSession().setAttribute(LOGININFO_IN_SESSION, null);
   }
 }

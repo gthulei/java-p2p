@@ -83,13 +83,13 @@
 			<div class="form-group">
 				<label class="control-label col-sm-2">用户名</label>
 				<div class="col-sm-10">
-					<input type="text" autocomplete="off" name="username" class="form-control" value="stef"/>
+					<input type="text" autocomplete="off" name="username" class="form-control" value=""/>
 				</div> 
 			</div>
 			<div class="form-group">
 				<label class="control-label col-sm-2">密&emsp;码</label>
 				<div class="col-sm-10">
-					<input type="password" autocomplete="off" name="password" class="form-control" value="1111"/>
+					<input type="password" autocomplete="off" name="password" class="form-control" value=""/>
 				</div>
 			</div>
 			<div class="form-gorup">

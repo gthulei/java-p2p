@@ -69,5 +69,11 @@ public class RegisterController {
 
   }
 
+  @RequestMapping(value = "/escLogin.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult escLogin(){
+    iLoginInfoServer.escLogin();
+    return JsonResult.resultSuccess(null);
+  }
 
 }

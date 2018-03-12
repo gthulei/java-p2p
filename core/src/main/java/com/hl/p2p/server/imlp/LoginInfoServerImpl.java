@@ -91,4 +91,9 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
     return false;
   }
 
+  @Override
+  public void escLogin() {
+    UserContext.removeCurrent();
+  }
+
 }
