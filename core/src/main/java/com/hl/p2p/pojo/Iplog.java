@@ -3,17 +3,22 @@ package com.hl.p2p.pojo;
 import java.util.Date;
 
 public class Iplog {
+
+    public static final int LOG_SUCCESS = 1;//登录成功
+
+    public static final int LOG_ERROR = 0;//登录失败
+
     private Long id;
 
     private String ip;
 
-    private Byte loginstate;
+    private int loginstate;
 
     private String username;
 
     private Long logininfoid;
 
-    private Byte logintype;
+    private int logintype;
 
     private Date logintime;
 
@@ -29,15 +34,16 @@ public class Iplog {
         return ip;
     }
 
+
     public void setIp(String ip) {
         this.ip = ip == null ? null : ip.trim();
     }
 
-    public Byte getLoginstate() {
+    public int getLoginstate() {
         return loginstate;
     }
 
-    public void setLoginstate(Byte loginstate) {
+    public void setLoginstate(int loginstate) {
         this.loginstate = loginstate;
     }
 
@@ -57,11 +63,11 @@ public class Iplog {
         this.logininfoid = logininfoid;
     }
 
-    public Byte getLogintype() {
+    public int getLogintype() {
         return logintype;
     }
 
-    public void setLogintype(Byte logintype) {
+    public void setLogintype(int logintype) {
         this.logintype = logintype;
     }
 

@@ -2,6 +2,7 @@ package com.hl.p2p.controller;
 
 import com.hl.p2p.pojo.Logininfo;
 import com.hl.p2p.server.IAccountServer;
+import com.hl.p2p.server.IIplogServer;
 import com.hl.p2p.server.IUserinfoServer;
 import cpm.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,15 @@ public class personalController {
   @Autowired
   private IUserinfoServer userinfoServer;
 
+  @Autowired
+  private IIplogServer iIplogServer;
+
   @RequestMapping("/personal")
   public String doPersonal(Model model){
     Logininfo user = UserContext.getCurrent();
     model.addAttribute("userinfo",userinfoServer.getUserinfoById(user.getId()));
     model.addAttribute("account",accountServer.getAccountInfoById(user.getId()));
+    model.addAttribute("lasetTime",iIplogServer.getLogLastTime(user.getUsername()));
     return "personal";
   }
 }

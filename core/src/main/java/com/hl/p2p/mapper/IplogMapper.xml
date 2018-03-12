@@ -10,10 +10,7 @@
     <result column="loginType" property="logintype" jdbcType="TINYINT" />
     <result column="loginTime" property="logintime" jdbcType="TIMESTAMP" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from iplog
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
   <insert id="insert" parameterType="com.hl.p2p.pojo.Iplog" >
     insert into iplog (id, ip, loginState, 
       username, loginInfoId, loginType, 
@@ -22,23 +19,49 @@
       #{username,jdbcType=VARCHAR}, #{logininfoid,jdbcType=BIGINT}, #{logintype,jdbcType=TINYINT}, 
       #{logintime,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Iplog" >
-    update iplog
-    set ip = #{ip,jdbcType=VARCHAR},
-      loginState = #{loginstate,jdbcType=TINYINT},
-      username = #{username,jdbcType=VARCHAR},
-      loginInfoId = #{logininfoid,jdbcType=BIGINT},
-      loginType = #{logintype,jdbcType=TINYINT},
-      loginTime = #{logintime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, ip, loginState, username, loginInfoId, loginType, loginTime
+
+  <sql id="base_column">
+    id, ip, loginState, username, loginInfoId, loginType, loginTime
+  </sql>
+  <select id="selectByuseName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="base_column"/>
     from iplog
-    where id = #{id,jdbcType=BIGINT}
+    where username = #{username}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, ip, loginState, username, loginInfoId, loginType, loginTime
-    from iplog
+
+  <select id="selectByusernameLogLast" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT  <include refid="base_column"/>
+     FROM iplog WHERE username = #{username} ORDER BY id DESC LIMIT 1
+  </select>
+
+  <sql id="condition">
+    <where>
+      <if test="beginDate!=null">
+        AND loginTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND loginTime &lt;= #{endDate}
+      </if>
+      <if test="state>-1">
+        AND  loginState = #{state}
+      </if>
+      <if test="userType>-1">
+        AND  userType = #{userType}
+      </if>
+      <if test="username!=null">
+        AND username = #{username}
+      </if>
+    </where>
+  </sql>
+
+  <select id="selectAll" resultMap="BaseResultMap" resultType="com.hl.p2p.query.IpLogQueryObject">
+    SELECT <include refid="base_column"/>
+     FROM iplog
+    <include refid="condition"/>
+    ORDER BY loginTime DESC LIMIT #{start},#{pageSize}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.hl.p2p.query.IpLogQueryObject">
+    SELECT COUNT(id) FROM iplog <include refid="condition"/>
   </select>
 </mapper>

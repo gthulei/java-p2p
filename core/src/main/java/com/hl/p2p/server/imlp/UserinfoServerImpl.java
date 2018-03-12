@@ -6,6 +6,9 @@ import com.hl.p2p.server.IUserinfoServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 用户信息
+ */
 @Service
 public class UserinfoServerImpl implements IUserinfoServer{
 

@@ -6,6 +6,9 @@ import com.hl.p2p.server.IAccountServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * 账户信息
+ */
 @Service
 public class AccountServerImpl implements IAccountServer{
 

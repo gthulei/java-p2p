@@ -107,7 +107,7 @@
 							</div>
 							<div class="pull-left el-head">
 								<p>用户名:${userinfo.realname}</p>
-								<p>最后登录时间：xxxxxxxxxxxx</p>
+								<p>最后登录时间：${lasetTime.logintime?string("yyyy-MM-dd HH:mm:ss")}</p>
 							</div>
 							<div class="pull-left"
 								style="text-align: center; width: 400px; margin: 30px auto 0px auto;">
