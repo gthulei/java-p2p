@@ -39,5 +39,10 @@ public class LoginController {
     return JsonResult.resultError("0000130", "用户名或密码不正确");
   }
 
-
+  @RequestMapping(value = "/escLogin.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult escLogin(){
+    loginInfoServer.escLogin();
+    return JsonResult.resultSuccess(null);
+  }
 }

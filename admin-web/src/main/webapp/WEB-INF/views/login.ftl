@@ -29,7 +29,7 @@ $(function(){
 	$("#loginForm").ajaxForm({success:function(data){
 		if(data.succeed){
       $.messager.popup(data.errorMessage);
-      window.location.href="/index";
+      window.location.href="/home";
 		}else{
 			$.messager.popup(data.errorMessage);
 		}
