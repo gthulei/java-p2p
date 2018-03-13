@@ -14,7 +14,7 @@
 			<li><a href="/permission_list.do"><span>权限管理</span></a></li>
 			<li><a href="#"><span>角色管理</span></a></li>
 			<li><a href="#"><span>菜单管理</span></a></li>
-			<li class="ipLog"><a href="/ipLog.do"><span>登录历史</span></a></li>
+			<li class="ipLog"><a href="/ipLog"><span>登录历史</span></a></li>
 		</ul>
 	</li>
 	<li class="list-group-item">
