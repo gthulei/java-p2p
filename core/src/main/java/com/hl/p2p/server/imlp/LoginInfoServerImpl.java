@@ -38,7 +38,7 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
   @Override
   public int register(String userName, String password) {
     // 用户名是否存在
-    int i = logininfoMapper.selectCountByUserName(userName);
+    int i = logininfoMapper.selectCountByUserName(userName,Logininfo.USER_CLIENT);
     if (i <= 0){
       Logininfo logininfo = new Logininfo();
       logininfo.setUsername(userName);
@@ -64,36 +64,51 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
     return -1;
   }
 
+  @Override
+  public boolean adminRegister(String userName, String password) {
+    // 用户名是否存在
+    int i = logininfoMapper.selectCountByUserName(userName,Logininfo.USER_MANAGER);
+    if (i <= 0){
+      Logininfo logininfo = new Logininfo();
+      logininfo.setUsername(userName);
+      logininfo.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+      logininfo.setState(logininfo.STATE_NORMAL);
+      logininfo.setUsertype(logininfo.USER_MANAGER);
+      logininfoMapper.insert(logininfo);
+      return true;
+    }
+    return false;
+  }
+
   // 登录
   @Override
   public boolean login(String userName, String password, String ip, int userType) {
-    Logininfo login = logininfoMapper.login(userName, DigestUtils.md5DigestAsHex(password.getBytes()));
-    int i = logininfoMapper.selectCountByUserName(userName);
+    Logininfo login = logininfoMapper.login(userName, DigestUtils.md5DigestAsHex(password.getBytes()),userType);
     Iplog iplog = new Iplog();
     iplog.setIp(ip);
     iplog.setUsername(userName);
     iplog.setLogintype(userType);
     iplog.setLogintime(new Date());
     if(login != null){
+      iplog.setLoginstate(Iplog.LOG_SUCCESS);
+      iIplogServer.addIplog(iplog);
       // 存Session
-       if (i > 0){
-         iplog.setLoginstate(Iplog.LOG_SUCCESS);
-         iIplogServer.addIplog(iplog);
-       }
       UserContext.putCurrent(login);
       return true;
     }
-    if (i > 0){
-      iplog.setLoginstate(Iplog.LOG_ERROR);
-      iIplogServer.addIplog(iplog);
-    }
-
+    iplog.setLoginstate(Iplog.LOG_ERROR);
+    iIplogServer.addIplog(iplog);
     return false;
   }
 
   @Override
   public void escLogin() {
     UserContext.removeCurrent();
+  }
+
+  @Override
+  public boolean selectAdminCount() {
+    return logininfoMapper.selectAdminCount() <=0;
   }
 
 }

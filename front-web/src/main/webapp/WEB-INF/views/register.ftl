@@ -55,7 +55,8 @@
 					dataType:"json",
 					success:function(data){
 						if(data.succeed){
-							$.messager.confirm(data.errorMessage)
+							$.messager.confirm(data.errorMessage);
+              window.location.href="/login";
 						}else{
 							$.messager.popup(data.errorMessage)
 						}

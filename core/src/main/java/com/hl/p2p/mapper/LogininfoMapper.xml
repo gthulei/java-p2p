@@ -33,15 +33,18 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
 
-  <select id="selectCountByUserName"  resultType="java.lang.Integer" parameterType="string">
+  <select id="selectCountByUserName"  resultType="java.lang.Integer">
     select COUNT(id)
     from logininfo
-    where username = #{userName}
+    where username = #{userName} AND usertype=#{usertype}
   </select>
 
-  <select id="login" resultMap="BaseResultMap" parameterType="string">
+  <select id="login" resultMap="BaseResultMap">
     SELECT  <include refid="base_column"/>
-    FROM  logininfo WHERE username = #{userName} AND password = #{passWord}
+    FROM  logininfo WHERE username = #{userName} AND password = #{passWord} AND usertype=#{usertype}
   </select>
 
+  <select id="selectAdminCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM logininfo WHERE usertype=0
+  </select>
 </mapper>
