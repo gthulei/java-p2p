@@ -3,6 +3,7 @@ package com.hl.p2p.controller;
 import com.hl.p2p.query.IpLogQueryObject;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IIplogServer;
+import com.hl.p2p.utils.RequireLogin;
 import cpm.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ public class IpLogController {
   @Autowired
   private IIplogServer iIplogServer;
 
+  @RequireLogin
   @RequestMapping("/ipLog")
   public String ipLog(@ModelAttribute("qo") IpLogQueryObject qo, Model model){
     qo.setUsername(UserContext.getCurrent().getUsername());
@@ -23,6 +25,7 @@ public class IpLogController {
     return "iplog_list";
   }
 
+  @RequireLogin
   @RequestMapping(value = "/ipLogPage.json",method = RequestMethod.POST)
   @ResponseBody
   public PageResult query(IpLogQueryObject qo){

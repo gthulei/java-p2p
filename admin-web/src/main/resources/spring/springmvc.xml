@@ -6,7 +6,13 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
+	<!-- 配置拦截器 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*"/>
+			<bean class="com.hl.p2p.admin.listener.LoginIntercept" />
+		</mvc:interceptor>
+	</mvc:interceptors>
 	<!-- 配置包扫描器 -->
 	<context:component-scan base-package="com.hl.p2p.admin"></context:component-scan>
 	<!-- 处理请求返回json字符串的中文乱码问题 -->

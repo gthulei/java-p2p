@@ -4,6 +4,7 @@ import com.hl.p2p.pojo.Logininfo;
 import com.hl.p2p.server.IAccountServer;
 import com.hl.p2p.server.IIplogServer;
 import com.hl.p2p.server.IUserinfoServer;
+import com.hl.p2p.utils.RequireLogin;
 import cpm.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ public class personalController {
   @Autowired
   private IIplogServer iIplogServer;
 
+  @RequireLogin
   @RequestMapping("/personal")
   public String doPersonal(Model model){
     Logininfo user = UserContext.getCurrent();
