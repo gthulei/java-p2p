@@ -1,8 +1,6 @@
 package com.hl.p2p.pojo;
 
-import cpm.hl.p2p.utils.BidConst;
-import lombok.Getter;
-import lombok.Setter;
+import com.hl.p2p.utils.BidConst;
 
 import java.math.BigDecimal;
 

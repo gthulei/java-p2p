@@ -9,7 +9,7 @@ import com.hl.p2p.server.IAccountServer;
 import com.hl.p2p.server.IIplogServer;
 import com.hl.p2p.server.ILoginInfoServer;
 import com.hl.p2p.server.IUserinfoServer;
-import cpm.hl.p2p.utils.UserContext;
+import com.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;

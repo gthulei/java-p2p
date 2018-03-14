@@ -4,7 +4,7 @@ import com.hl.p2p.query.IpLogQueryObject;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IIplogServer;
 import com.hl.p2p.utils.RequireLogin;
-import cpm.hl.p2p.utils.UserContext;
+import com.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +24,7 @@ public class IpLogController {
     model.addAttribute("pageResult",result);
     return "iplog_list";
   }
+
 
   @RequireLogin
   @RequestMapping(value = "/ipLogPage.json",method = RequestMethod.POST)

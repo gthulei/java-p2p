@@ -9,4 +9,6 @@ public interface IUserinfoServer {
   boolean addUserinfo(Userinfo userinfo);
 
   Userinfo getUserinfoById(long id);
+
+  boolean bindPhone(String phonenumber);
 }

@@ -4,7 +4,7 @@ import com.hl.p2p.query.IpLogQueryObject;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IIplogServer;
 import com.hl.p2p.utils.RequireLogin;
-import cpm.hl.p2p.utils.UserContext;
+import com.hl.p2p.utils.UserContext;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -13,22 +13,22 @@
 		$("#showBindEmailModal").click(function() {
 			$("#bindEmailModal").modal("show");
 		});
-		
+
 		//给邮箱的保存按钮添加点击事件发送ajax请求
 		$("#bindEmail").click(function() {
 			//提交整个表单 (url 是默认的action)
 			$("#bindEmailForm").ajaxSubmit({
 				success : function(data) {
-					if (data.success) {
+					if (data.succeed) {
 						window.location.reload(); //刷新当前页面  关闭模式窗
 					} else {
-						$.messager.popup(data.msg);
+						$.messager.popup(data.errorMessage);
 					}
 				}
 			})
 		});
-		
-		
+
+
 		//点击马上绑定
 		$("#showBindPhoneModal").click(function() {
 			$("#bindPhoneModal").modal("show");
@@ -37,18 +37,24 @@
 		$("#sendVerifyCode").click(function() {
 			var phoneNumber = $("#phoneNumber").val(); //获取到手机号后发送ajax请求
 			var _this = $(this);
+			var re = /^1[1-9][0-9]\d{8}$/;
+			if(!re.test(phoneNumber)){
+        $.messager.popup("手机号码格式不正确");
+        return;
+			}
 			_this.attr("disabled", true); //点击之后立刻禁用按钮
 			if (phoneNumber) {
 				$.ajax({
 					type : "POST",
-					url : "/sendVerifyCode.do",
+					url : "/sendVerifyCode.json",
 					dataType : "json",
 					data : { //发送到服务器的数据
 						phoneNumber : phoneNumber
 					},
 					success : function(data) {
-						if (data.success) { //做倒计时
-							var count = 5;
+						if (data.succeed) { //做倒计时
+              $.messager.popup(data.errorMessage);
+							var count = 60;
 							var timer = window.setInterval(function() {
 								count--;
 								if (count <= 0) {
@@ -60,7 +66,7 @@
 								}
 							}, 1000);
 						} else {
-							$.messager.popup(data.msg);
+							$.messager.popup(data.errorMessage);
 							_this.attr("disabled", false);
 						}
 					}
@@ -72,10 +78,10 @@
 			//提交整个表单
 			$("#bindPhoneForm").ajaxSubmit({
 				success : function(data) {
-					if (data.success) {
+					if (data.succeed) {
 						window.location.reload(); //刷新当前页面  关闭模式窗
 					} else {
-						$.messager.popup(data.msg);
+						$.messager.popup(data.errorMessage);
 					}
 				}
 			})
@@ -165,9 +171,13 @@
 										</div>
 										<div class="el-accoun-auth-right">
 											<h5>手机认证</h5>
-											<p>
-												未认证 <a href="javascript:;" id="showBindPhoneModal">马上绑定</a>
-											</p>
+											<#if !userinfo.isBindPhone>
+											  <p>
+                          未认证 <a href="javascript:;" id="showBindPhoneModal">马上绑定</a>
+                        </p>
+                      <#else >
+                        <p>已认证</p>
+											</#if>
 										</div>
 										<div class="clearfix"></div>
 										<p class="info">可以收到系统操作信息,并增加使用安全性</p>
@@ -212,6 +222,47 @@
 			</div>
 		</div>
 	</div>
+	<#if !userinfo.isBindPhone>
+	 	  <div class="modal fade" id="bindPhoneModal" tabindex="-1" role="dialog"
+           aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"
+                      aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="exampleModalLabel">绑定手机</h4>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal" id="bindPhoneForm" method="post"
+                    action="/bindPhone.json">
+                <div class="form-group">
+                  <label for="phoneNumber" class="col-sm-2 control-label">手机号:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" id="phoneNumber"
+                           name="phoneNumber" />
+                    <button id="sendVerifyCode" class="btn btn-primary"
+                            type="button" autocomplate="off">发送验证码</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="verifyCode" class="col-sm-2 control-label">验证码:</label>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" id="verifyCode"
+                           name="code" />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" class="btn btn-primary" id="bindPhone">保存</button>
+            </div>
+          </div>
+        </div>
+      </div>
+	</#if>
 	<#include "base/floor.ftl" />
 </body>
 </html>

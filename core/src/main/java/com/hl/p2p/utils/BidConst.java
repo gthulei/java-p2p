@@ -1,4 +1,4 @@
-package cpm.hl.p2p.utils;
+package com.hl.p2p.utils;
 
 import java.math.BigDecimal;
 
@@ -16,6 +16,11 @@ public class BidConst {
   //定义显示精度
   public static final int DISPLAY_SCALE = 2;
 
+  //60秒种只能发送一次短信
+  public static final int SEND_TIME = 60;
+
+  //180秒短信过期
+  public static final int SEND_TIME_EX = 180;
 
   //定义一个系统级别的0
   public static final BigDecimal ZERO = new BigDecimal("0.0000");

@@ -1,7 +1,7 @@
 package com.hl.p2p.admin.listener;
 
 import com.hl.p2p.utils.RequireLogin;
-import cpm.hl.p2p.utils.UserContext;
+import com.hl.p2p.utils.UserContext;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
