@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.GeneralSecurityException;
+
 @Controller
 public class SendVerifyCodeController {
 
@@ -30,6 +32,23 @@ public class SendVerifyCodeController {
       return JsonResult.resultSuccess("验证码发送成功");
     }catch (Exception e){
       return JsonResult.resultError("000019",e.getMessage());
+    }
+  }
+
+  @RequestMapping(value = "/sendEmail.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult sendEmail(String email) {
+    if(StringUtils.isBlank(email)){
+      return JsonResult.resultError("0000019","邮箱不能为空");
+    }
+    if (!ValidUtils.isEmail(email)){
+      return JsonResult.resultError("0000019","邮箱格式不正确");
+    }
+    try {
+      sendVerifyCodeServer.sendEmail(email);
+      return JsonResult.resultSuccess("发送成功");
+    }catch (Exception e){
+      return JsonResult.resultError("0000050",e.getMessage());
     }
   }
 

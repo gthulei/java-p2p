@@ -45,7 +45,7 @@
       houseCondition_id = #{houseconditionId,jdbcType=BIGINT},
       realauthid = #{realauthid,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT} AND version=${version}
+    where id = #{id,jdbcType=BIGINT} AND version=#{version}
   </update>
 
   <sql id="base_column">

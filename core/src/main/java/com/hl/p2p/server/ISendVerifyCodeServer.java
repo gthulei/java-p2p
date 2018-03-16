@@ -8,4 +8,6 @@ public interface ISendVerifyCodeServer {
 
  void isVerifyCode(VerifyCodeVo vo);
 
+ void sendEmail(String email);
+
 }

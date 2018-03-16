@@ -46,6 +46,7 @@ public class personalController {
     return "personal";
   }
 
+  @RequireLogin
   @RequestMapping(value = "/bindPhone.json",method = RequestMethod.POST)
   @ResponseBody
   public JsonResult bindPhone(VerifyCodeVo vo){
@@ -63,5 +64,17 @@ public class personalController {
     }catch (Exception e){
       return JsonResult.resultError("0000050",e.getMessage());
     }
+  }
+
+  @RequestMapping("/bindEmail")
+  public String bindEmail(Model model,String uuid){
+    try {
+      userinfoServer.bindEmail(uuid);
+      model.addAttribute("succeed",true);
+    }catch (Exception e){
+      model.addAttribute("message",e.getMessage());
+    }
+    System.out.print(uuid);
+    return "checkmail_result";
   }
 }

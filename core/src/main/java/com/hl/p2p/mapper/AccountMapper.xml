@@ -34,7 +34,7 @@
       unReceivePrincipal = #{unreceiveprincipal,jdbcType=DECIMAL},
       unReturnAmount = #{unreturnamount,jdbcType=DECIMAL},
       remainBorrowLimit = #{remainborrowlimit,jdbcType=DECIMAL}
-    where id = #{id,jdbcType=BIGINT} ANT version=${version}
+    where id = #{id,jdbcType=BIGINT} ANT version=#{version}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select id, tradePassword, usableAmount, freezedAmount, borrowLimitAmount, version, 

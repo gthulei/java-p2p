@@ -11,4 +11,6 @@ public interface IUserinfoServer {
   Userinfo getUserinfoById(long id);
 
   boolean bindPhone(String phonenumber);
+
+  void bindEmail(String uuid);
 }
