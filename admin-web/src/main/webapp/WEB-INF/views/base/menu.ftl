@@ -9,8 +9,8 @@
 	<li class="list-group-item">
 		<a href="#" data-toggle="collapse" data-target="#permissionmanage_detail"><span>安全管理</span></a>
 		<ul class="in" id="permissionmanage_detail">
-			<li class="systemDictionary"><a href="/systemDictionary_list.do"><span>系统数据字典目录</span></a></li>
-			<li class="systemDictionaryItem"><a href="/systemDictionaryItem_list.do"><span>系统数据字典明细</span></a></li>
+			<li class="systemDictionary"><a href="/systemDictionary_list"><span>系统数据字典目录</span></a></li>
+			<li class="systemDictionaryItem"><a href="/systemDictionaryItem_list"><span>系统数据字典明细</span></a></li>
 			<li><a href="/permission_list.do"><span>权限管理</span></a></li>
 			<li><a href="#"><span>角色管理</span></a></li>
 			<li><a href="#"><span>菜单管理</span></a></li>

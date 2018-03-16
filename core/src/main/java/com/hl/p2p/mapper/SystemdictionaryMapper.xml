@@ -7,9 +7,9 @@
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="intro" property="intro" jdbcType="VARCHAR" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from systemdictionary
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id}
   </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Systemdictionary" >
     insert into systemdictionary (id, sn, title, 
@@ -24,13 +24,35 @@
       intro = #{intro,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <sql id="base_column">
+    id, sn, title, intro
+  </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, sn, title, intro
+    select <include refid="base_column"/>
     from systemdictionary
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, sn, title, intro
+  <sql id="where">
+    <where>
+      <if test="keyword!=null">
+        and sn like concat(concat("%",#{keyword}),"%")
+        OR title like concat(concat("%",#{keyword}),"%")
+      </if>
+    </where>
+  </sql>
+  <select id="querySystemdictionaryList" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.SystemdictionaryQueryObject">
+    select <include refid="base_column"/>
+    from systemdictionary <include refid="where"/>
+    ORDER BY id DESC LIMIT #{start},#{pageSize}
+  </select>
+
+  <select id="selectByCount" resultType="java.lang.Integer">
+    select COUNT(id)
     from systemdictionary
+  </select>
+
+  <select id="selectByPrimarySn" resultType="java.lang.Integer" parameterType="string">
+    select COUNT(id)
+    from systemdictionary WHERE sn=#{sn}
   </select>
 </mapper>
