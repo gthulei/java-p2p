@@ -3,40 +3,58 @@
 <mapper namespace="com.hl.p2p.mapper.SystemdictionaryitemMapper" >
   <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Systemdictionaryitem" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="parentId" property="parentid" jdbcType="BIGINT" />
+    <result column="parentId" property="parentId" jdbcType="BIGINT" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="tvalue" property="tvalue" jdbcType="VARCHAR" />
     <result column="sequence" property="sequence" jdbcType="TINYINT" />
     <result column="intro" property="intro" jdbcType="VARCHAR" />
   </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from systemdictionaryitem
-    where id = #{id,jdbcType=BIGINT}
+    where id=#{id}
   </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Systemdictionaryitem" >
     insert into systemdictionaryitem (id, parentId, title, 
       tvalue, sequence, intro
       )
-    values (#{id,jdbcType=BIGINT}, #{parentid,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{parentId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR},
       #{tvalue,jdbcType=VARCHAR}, #{sequence,jdbcType=TINYINT}, #{intro,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Systemdictionaryitem" >
     update systemdictionaryitem
-    set parentId = #{parentid,jdbcType=BIGINT},
+    set parentId = #{parentId,jdbcType=BIGINT},
       title = #{title,jdbcType=VARCHAR},
       tvalue = #{tvalue,jdbcType=VARCHAR},
       sequence = #{sequence,jdbcType=TINYINT},
       intro = #{intro,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, parentId, title, tvalue, sequence, intro
-    from systemdictionaryitem
-    where id = #{id,jdbcType=BIGINT}
+
+  <sql id="where">
+    <where>
+      <if test="keyword!=null and keyword!=''">
+        and title like concat(concat("%",#{keyword}),"%")
+        OR tvalue like concat(concat("%",#{keyword}),"%")
+        OR intro like concat(concat("%",#{keyword}),"%")
+      </if>
+      AND parentId=#{parentId}
+    </where>
+  </sql>
+  <select id="querySystemdictionaryitemList" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.SystemdictionaryQueryObject">
+    select id, parentId, title,
+    tvalue, sequence, intro
+    from systemdictionaryitem <include refid="where"/>
+    ORDER BY sequence DESC LIMIT #{start},#{pageSize}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, parentId, title, tvalue, sequence, intro
-    from systemdictionaryitem
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM systemdictionaryitem <include refid="where"/>
   </select>
+
+  <select id="selectByPrimaryKey" resultType="java.lang.Integer" parameterType="long">
+    SELECT COUNT(id) FROM systemdictionaryitem WHERE id=#{id}
+  </select>
+
 </mapper>

@@ -13,28 +13,28 @@
 		$(function(){
 			//给修改按钮绑定事件
 			$(".edit_Btn").click(function(){
-				var json = $(this).data("jsonstring");
+				var json = $(this).attr("edit_data").split(",");
 				$("#editForm")[0].reset();
-				$("#systemDictionaryId").val(json.id);
-				$("#editFormParentId").val(json.parentId);
-				$("#sequence").val(json.sequence);
-				$("#title").val(json.title);
+				$("#systemDictionaryId").val(json[0]);
+				$("#sequence").val(json[2]);
+				$("#title").val(json[1]);
+				$("#editFormParentId").val(json[3]);
 				$("#systemDictionaryItemModal").modal("show");
 			});
 			
-			<#--$('#pagination').twbsPagination({-->
-				<#--totalPages : ${pageResult.totalPage},-->
-				<#--startPage : ${pageResult.currentPage},-->
-				<#--visiblePages : 5,-->
-				<#--first : "首页",-->
-				<#--prev : "上一页",-->
-				<#--next : "下一页",-->
-				<#--last : "最后一页",-->
-				<#--onPageClick : function(event, page) {-->
-					<#--$("#currentPage").val(page);-->
-					<#--$("#searchForm").submit();-->
-				<#--}-->
-			<#--});-->
+			$('#pagination').twbsPagination({
+				totalPages : ${pageResult.totalCount},
+				startPage : ${pageResult.currentPage},
+				visiblePages : 5,
+				first : "首页",
+				prev : "上一页",
+				next : "下一页",
+				last : "最后一页",
+				onPageClick : function(event, page) {
+					$("#currentPage").val(page);
+					$("#searchForm").submit();
+				}
+			});
 			
 			//查询按钮绑定事件
 			$("#query").click(function(){			
@@ -46,26 +46,50 @@
 			$("#saveBtn").click(function(){
 				$("#editForm").ajaxSubmit({
 					success:function(data){
-						if(data.success){
+						if(data.succeed){
 							$.messager.confirm("提示","编辑成功",function(){
-								$("#searchForm").submit();
-							})	
+                window.location.reload();
+							})
 						}else{
-							$.messager.popup(data.msg) ;
+							$.messager.popup(data.errorMessage) ;
 						}
-					}					
+					}
 				});
 			});
+
+			//删除
+      $(".del_Btn").click(function(){
+        var v = $(this).attr("del_data").split(",");
+        $.messager.confirm("提示","是否删除名称为["+v[1]+"]的数据？",function(){
+          $.ajax({
+            type: "POST",
+            url: "/systemDictionaryItemIdDel.json",
+            dataType: "json",
+            data: {
+              id: v[0]
+            },
+            success: function (data) {
+              if (data.succeed) {
+                $.messager.popup(data.errorMessage);
+                window.location.reload();
+              } else {
+                $.messager.popup(data.errorMessage);
+              }
+            }
+          })
+        });
+      })
 			
 			//给分组添加点击查询事件 点击之后选中该分组
 			$(".group_item").click(function(){
-				$("#parentId").val($(this).data("dataid"));
+				$("#parentId").val($(this).attr("data-dataid"));
+				$("#editFormParentId").val($(this).attr("data-dataid"));
 				$("#currentPage").val(1);
 				$("#searchForm").submit();
 			}) ;
 			
 			//页面刷新之后选中分类的目录
-			$('.group_item[data-dataid=${(qo.parentId)!-1}]').closest("li").addClass("active");
+			$('.group_item[data-dataid=${(id)}]').closest("li").addClass("active");
 			
 			//给添加字典明细绑定事件
 			$("#addSystemDictionaryItemBtn").click(function(){
@@ -97,12 +121,12 @@
 				</div>
 				<div class="col-sm-12">
 					<!-- 提交分页的表单 -->
-					<form id="searchForm" class="form-inline" method="post" action="/systemDictionaryItem_list.do">
+					<form id="searchForm" class="form-inline" method="post" action="/systemDictionaryItem_list">
 						<input type="hidden" id="currentPage" name="currentPage" value=""/>
-						<input type="hidden" id="parentId" name="parentId" value='' />
+						<input type="hidden" id="parentId" name="parentId" value="${(id)!''}" />
 						<div class="form-group">
 						    <label>关键字</label>
-						    <input class="form-control" type="text" name="keyword" value="">
+						    <input class="form-control" type="text" name="keyword" value="${(qo.keyword)!''}"}>
 						</div>
 						<div class="form-group">
 							<button id="query" class="btn btn-success"><i class="icon-search"></i> 查询</button>
@@ -115,9 +139,9 @@
 								<li class="list-group-item">
 									<a href="#" data-toggle="collapse" data-target="#systemDictionary_group_detail"><span>数据字典分组</span></a>
 									<ul class="in" id="systemDictionary_group_detail">
-										<#--<#list systemDictionaryGroups as vo>-->
-										   <#--<li><a class="group_item" data-dataid="${vo.id}" href="javascript:;"><span>${vo.title}</span></a></li>-->
-										<#--</#list>-->
+										<#list systemDictionaryGroups as vo>
+										   <li><a class="group_item" data-dataid="${vo.id}" href="javascript:;"><span>${vo.title}</span></a></li>
+										</#list>
 									</ul>
 								</li>
 							</ul>
@@ -132,15 +156,16 @@
 									</tr>
 								</thead>
 								<tbody>
-								<#--<#list pageResult.listData as vo>-->
-									<#--<tr>-->
-										<#--<td>${vo.title}</td>-->
-										<#--<td>${vo.sequence!""}</td>-->
-										<#--<td>-->
-											<#--<a href="javascript:void(-1);" class="edit_Btn" data-jsonstring='${vo.jsonString}' >修改</a> &nbsp; -->
-										<#--</td>-->
-									<#--</tr>-->
-								<#--</#list>-->
+								<#list pageResult.data as vo>
+									<tr>
+										<td>${vo.title}</td>
+										<td>${vo.sequence!""}</td>
+										<td>
+											<a href="javascript:void(-1);" class="edit_Btn" edit_data="${vo.id},${vo.title},${vo.sequence},${vo.parentId}">修改</a>
+                      <a href="javascript:void(-1);" class="del_Btn" del_data="${vo.id},${vo.title}" style="color: red">删除</a>
+										</td>
+									</tr>
+								</#list>
 								</tbody>
 							</table>
 							
@@ -163,8 +188,8 @@
 	        <h4 class="modal-title">编辑/增加</h4>
 	      </div>
 	      <div class="modal-body">
-	       	  <form id="editForm" class="form-horizontal" method="post" action="systemDictionaryUpdate.json" style="margin: -3px 118px">
-				    <input id="systemDictionaryId" type="hidden" name="id" value="" />
+	       	  <form id="editForm" class="form-horizontal" method="post" action="/systemDictionaryItemUpdate.json" style="margin: -3px 118px">
+				    <input id="systemDictionaryId" type="hidden" name="id" value=""/>
 			    	<input type="hidden" id="editFormParentId" name="parentId" value="" />
 				   	<div class="form-group">
 					    <label class="col-sm-3 control-label">名称</label>

@@ -34,7 +34,7 @@
   </select>
   <sql id="where">
     <where>
-      <if test="keyword!=null">
+      <if test="keyword!=null and keyword!=''">
         and sn like concat(concat("%",#{keyword}),"%")
         OR title like concat(concat("%",#{keyword}),"%")
       </if>
@@ -46,13 +46,17 @@
     ORDER BY id DESC LIMIT #{start},#{pageSize}
   </select>
 
-  <select id="selectByCount" resultType="java.lang.Integer">
+  <select id="selectByCount" resultType="java.lang.Integer" parameterType="string">
     select COUNT(id)
-    from systemdictionary
+    from systemdictionary <include refid="where"/>
   </select>
 
   <select id="selectByPrimarySn" resultType="java.lang.Integer" parameterType="string">
     select COUNT(id)
     from systemdictionary WHERE sn=#{sn}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT <include refid="base_column"/> FROM systemdictionary
   </select>
 </mapper>

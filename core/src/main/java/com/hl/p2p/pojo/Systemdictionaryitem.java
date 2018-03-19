@@ -3,7 +3,7 @@ package com.hl.p2p.pojo;
 public class Systemdictionaryitem {
     private Long id;
 
-    private Long parentid;
+    private Long parentId;
 
     private String title;
 
@@ -13,20 +13,20 @@ public class Systemdictionaryitem {
 
     private String intro;
 
-    public Long getId() {
+  public Long getParentId() {
+    return parentId;
+  }
+
+  public void setParentId(Long parentId) {
+    this.parentId = parentId;
+  }
+
+  public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getParentid() {
-        return parentid;
-    }
-
-    public void setParentid(Long parentid) {
-        this.parentid = parentid;
     }
 
     public String getTitle() {

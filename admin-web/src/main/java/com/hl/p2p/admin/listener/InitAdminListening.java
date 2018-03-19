@@ -17,7 +17,6 @@ public class InitAdminListening implements ApplicationListener<ContextRefreshedE
 
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
-    System.out.print(">>>>>>spring 启动加载>>>>>>");
     if (loginInfoServer.selectAdminCount()){
       loginInfoServer.adminRegister("admin", "123456");
     }
