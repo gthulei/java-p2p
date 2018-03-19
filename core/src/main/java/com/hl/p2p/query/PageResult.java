@@ -39,7 +39,11 @@ public class PageResult {
   }
 
   public void setTotalCount(int totalCount) {
-    this.totalCount = totalCount % this.pageSize == 0 ? totalCount / this.pageSize : totalCount / this.pageSize +1;
+    if (totalCount==0){
+     this.totalCount=1;
+    }else {
+      this.totalCount = totalCount % this.pageSize == 0 ? totalCount / this.pageSize : totalCount / this.pageSize +1;
+    }
   }
 
   public List getData() {
