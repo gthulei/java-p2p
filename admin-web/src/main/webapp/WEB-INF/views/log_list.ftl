@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>蓝源Eloan-P2P平台(系统管理平台)</title>
+  <title>HL-P2P平台(系统管理平台)</title>
 <#include "base/header.ftl"/>
 
   <script type="text/javascript" src="/js/jquery/jquery-2.1.3.js"></script>
@@ -27,6 +27,10 @@
         totalPages: ${pageResult.totalCount} ,
         visiblePages : 10 , //表示页面上面最多可以显示几页
         startPage: ${pageResult.currentPage},
+        first : "首页",
+        prev : "上一页",
+        next : "下一页",
+        last : "最后一页",
         onPageClick:function(eventm,page){
           $("#currentPage").val(page);
           $("#searchForm").submit() ;

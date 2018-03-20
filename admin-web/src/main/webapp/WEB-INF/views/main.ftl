@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>蓝源Eloan-P2P平台(系统管理平台)</title>
+<title>HL-P2P平台(系统管理平台)</title>
 <#include "base/header.ftl"/>
 </head>
 <body>

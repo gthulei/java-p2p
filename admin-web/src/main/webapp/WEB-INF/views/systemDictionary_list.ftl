@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>蓝源Eloan-P2P平台(系统管理平台)</title>
+	<title>HL-P2P平台(系统管理平台)</title>
 	<#include "base/header.ftl"/>
 	<script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
 	<script type="text/javascript" src="/js/plugins/jquery-validation/jquery.validate.js"></script>

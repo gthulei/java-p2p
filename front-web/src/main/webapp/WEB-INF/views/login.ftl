@@ -4,7 +4,7 @@
 	<#include "base/links.ftl">
   <script type="text/javascript" src="/js/plugins/jquery-validation/jquery.validate.js"></script>
   <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
-  <title>蓝源Eloan-P2P平台->用户登录</title>
+  <title>HL-P2P平台->用户登录</title>
 </head>
 <style type="text/css">
 	.el-login-form{

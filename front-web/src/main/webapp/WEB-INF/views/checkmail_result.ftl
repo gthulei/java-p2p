@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>蓝源Eloan-P2P平台->邮件激活</title>
+  <title>HL-P2P平台->邮件激活</title>
 	<#include "base/links.ftl">
   <script type="text/javascript" src="/js/plugins/jquery-validation/jquery.validate.js"></script>
   <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>

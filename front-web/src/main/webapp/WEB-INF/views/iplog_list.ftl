@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>蓝源Eloan-P2P平台</title>
+		<title>HL-P2P平台</title>
 		<#include "base/links.ftl" />
 		<link type="text/css" rel="stylesheet" href="/css/account.css" />
 		<script type="text/javascript" src="/js/plugins/jquery.twbsPagination.min.js"></script>

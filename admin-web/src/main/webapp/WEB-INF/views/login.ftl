@@ -42,7 +42,7 @@ $(function(){
 </head>
 <body>
 	<div class="container cm-container">
-		<h3 class="text-center">蓝源Eloan-P2P平台(系统管理平台)</h3>
+		<h3 class="text-center">HL-P2P平台(系统管理平台)</h3>
 		<hr />
 		<div class="login">
 			<form id="loginForm" action="/login.json" method="post">
