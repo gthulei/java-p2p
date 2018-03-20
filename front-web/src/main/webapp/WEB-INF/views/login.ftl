@@ -17,6 +17,9 @@
 		width: 220px;
 		display: inline;
 	}
+	.container{
+		margin-bottom: 50px;
+	}
 </style>
 
 <script type="text/javascript">
