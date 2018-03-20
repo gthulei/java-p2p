@@ -157,9 +157,16 @@
                   </div>
                   <div class="el-accoun-auth-right">
                     <h5>实名认证</h5>
-                    <p>
-                      未认证 <a href="javascript:;">马上认证 </a>
-                    </p>
+                    <#if !userinfo.isRealAuth>
+                      <p>
+                        未认证 <a href="/realAuth">马上认证 </a>
+                      </p>
+                    <#else >
+                      <p>
+                        已认证
+                      </p>
+                    </#if>
+
                   </div>
                   <div class="clearfix"></div>
                   <p class="info">实名认证之后才能在平台投资</p>

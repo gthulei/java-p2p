@@ -13,4 +13,6 @@ public interface IUserinfoServer {
   boolean bindPhone(String phonenumber);
 
   void bindEmail(String uuid);
+
+  void saveBaseinfo(Userinfo userinfo);
 }

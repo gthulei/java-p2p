@@ -19,4 +19,6 @@ public interface SystemdictionaryitemMapper {
 
     List<Systemdictionaryitem> querySystemdictionaryitemList(SystemdictionaryQueryObject qo);
 
+    List<Systemdictionaryitem> selectBysn(String sn);
+
 }

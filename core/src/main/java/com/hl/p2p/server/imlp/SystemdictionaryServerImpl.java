@@ -88,4 +88,9 @@ public class SystemdictionaryServerImpl implements ISystemdictionaryServer{
     return systemdictionaryitemMapper.deleteByPrimaryKey(id) >0;
   }
 
+  @Override
+  public List<Systemdictionaryitem> selectSystemdictionaryitemSn(String sn) {
+    return systemdictionaryitemMapper.selectBysn(sn);
+  }
+
 }

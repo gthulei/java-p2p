@@ -23,4 +23,6 @@ public interface ISystemdictionaryServer {
 
   boolean systemDictionaryItemIdDel(long id);
 
+  List<Systemdictionaryitem> selectSystemdictionaryitemSn(String sn);
+
 }

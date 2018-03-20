@@ -4,13 +4,11 @@ import com.hl.p2p.mapper.EmailactiveMapper;
 import com.hl.p2p.mapper.UserinfoMapper;
 import com.hl.p2p.pojo.Emailactive;
 import com.hl.p2p.pojo.Userinfo;
-import com.hl.p2p.server.ISendVerifyCodeServer;
 import com.hl.p2p.server.IUserinfoServer;
 import com.hl.p2p.utils.BidConst;
 import com.hl.p2p.utils.BitStatesUtils;
 import com.hl.p2p.utils.DateUtil;
 import com.hl.p2p.utils.UserContext;
-import com.hl.p2p.vo.VerifyCodeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +77,17 @@ public class UserinfoServerImpl implements IUserinfoServer {
       user.addState(BitStatesUtils.OP_BIND_EMAIL);
       this.updateUserInfo(user);
     }
+  }
+
+  @Override
+  public void saveBaseinfo(Userinfo userinfo) {
+    Userinfo user = this.getUserinfoById(UserContext.getCurrent().getId());
+    user.addState(BitStatesUtils.OP_BASIC_INFO);
+    user.setMarriageId(userinfo.getMarriageId());
+    user.setEducationbackgroundId(userinfo.getEducationbackgroundId());
+    user.setIncomegradeId(userinfo.getIncomegradeId());
+    user.setKidcountId(userinfo.getKidcountId());
+    user.setHouseconditionId(userinfo.getHouseconditionId());
+    this.updateUserInfo(user);
   }
 }
