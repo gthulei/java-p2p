@@ -1,5 +1,6 @@
 package com.hl.p2p.server;
 
+import com.hl.p2p.pojo.Realauth;
 import com.hl.p2p.pojo.Userinfo;
 
 public interface IUserinfoServer {
@@ -16,5 +17,7 @@ public interface IUserinfoServer {
 
   void saveBaseinfo(Userinfo userinfo);
 
-  void addRealauthId(long realauthid);
+  void addRealauthId(long realauthid ,String idCard);
+
+  void bindRealauth(Realauth realauth);
 }

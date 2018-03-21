@@ -3,7 +3,9 @@ package com.hl.p2p.server.imlp;
 import com.hl.p2p.mapper.EmailactiveMapper;
 import com.hl.p2p.mapper.UserinfoMapper;
 import com.hl.p2p.pojo.Emailactive;
+import com.hl.p2p.pojo.Realauth;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.server.IRealauthServer;
 import com.hl.p2p.server.IUserinfoServer;
 import com.hl.p2p.utils.BidConst;
 import com.hl.p2p.utils.BitStatesUtils;
@@ -25,6 +27,9 @@ public class UserinfoServerImpl implements IUserinfoServer {
 
   @Autowired
   private EmailactiveMapper emailactiveMapper;
+
+  @Autowired
+  private IRealauthServer realauthServer;
 
   @Override
   public void updateUserInfo(Userinfo userinfo) {
@@ -92,10 +97,28 @@ public class UserinfoServerImpl implements IUserinfoServer {
   }
 
   @Override
-  public void addRealauthId(long realauthid) {
+  public void addRealauthId(long realauthid,String idCard) {
     Userinfo user = this.getUserinfoById(UserContext.getCurrent().getId());
     user.setRealauthid(realauthid);
+    user.setIdnumber(idCard);
     this.updateUserInfo(user);
 
+  }
+
+  @Override
+  public void bindRealauth(Realauth realauth) {
+    Userinfo user = this.getUserinfoById(realauth.getApplierId());
+    Realauth realauths = realauthServer.getRealauthByid(realauth.getId());
+    // 审核通过
+    if(realauth.getState() == realauth.STATE_AUDIT){
+      user.addState(BitStatesUtils.OP_REAL_AUTH);
+      realauths.setState(realauth.STATE_AUDIT);
+    }else {
+      realauths.setState(realauth.STATE_REFUSE);
+    }
+    realauths.setAudittime(new Date());
+    realauths.setAuditorId(UserContext.getCurrent().getId());
+    realauthServer.updateRealauth(realauths);
+    this.updateUserInfo(user);
   }
 }

@@ -4,13 +4,11 @@ import java.util.Date;
 
 public class Realauth {
 
-  public final static int STATE_NORMAL = 0;//正常
+  public final static int STATE_NORMAL = 0;//待审核
 
-  public final static int STATE_AUDIT = 1;//审核中
+  public final static int STATE_AUDIT = 1;//审核通过
 
   public final static int STATE_REFUSE = 2;//审核拒绝
-
-  public final static int STATE_SUCCESS = 3;//认证成功
 
   private Long id;
 
@@ -46,13 +44,11 @@ public class Realauth {
 
   public String getAudit() {
     if (this.state == 0) {
-      return "未审核";
+      return "待审核";
     } else if (this.state == 1) {
-      return "审核中";
-    } else if (this.state == 2) {
-      return "审核拒绝";
+      return "审核通过";
     } else {
-      return "认证成功";
+      return "审核拒绝";
     }
   }
 

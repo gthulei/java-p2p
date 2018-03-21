@@ -35,16 +35,16 @@ public class RealAuthController {
 
   @RequireLogin
   @RequestMapping("/realAuth")
-  public String realAuth(Model model){
+  public String realAuth(Model model) {
     Logininfo logininfo = UserContext.getCurrent();
     Userinfo userinfo = userinfoServer.getUserinfoById(logininfo.getId());
     model.addAttribute("user", logininfo);
-    if(userinfo.getRealauthid() !=null && userinfo.getRealauthid()!=0){
+    if(userinfo.getRealauthid() !=null){
       boolean b = false;
       if(userinfo.getIsRealAuth()){
         b = true;
-        model.addAttribute("realAuth",realauthServer.getRealauth(userinfo.getRealauthid()));
       }
+      model.addAttribute("realAuth",realauthServer.getRealauth(userinfo.getRealauthid()));
       model.addAttribute("auditing",b);
 
       return "realAuth_result";
@@ -53,19 +53,19 @@ public class RealAuthController {
   }
 
   @RequireLogin
-  @RequestMapping(value = "/realAuthSave.json",method = RequestMethod.POST)
+  @RequestMapping(value = "/realAuthSave.json", method = RequestMethod.POST)
   @ResponseBody
-  public JsonResult fildUpload(Realauth realauth, @RequestParam("file") MultipartFile[] file, HttpServletRequest request){
+  public JsonResult fildUpload(Realauth realauth, @RequestParam("file") MultipartFile[] file, HttpServletRequest request) {
     try {
       List<String> list = FileUploadUtil.fileUpload(file, request);
       realauth.setImage1(list.get(0));
       realauth.setImage2(list.get(1));
       realauth.setApplierId(UserContext.getCurrent().getId());
-      realauth.setState(realauth.STATE_AUDIT);
+      realauth.setState(realauth.STATE_NORMAL);
       realauthServer.addRealauth(realauth);
       return JsonResult.resultSuccess("保存成功");
-    }catch (Exception e){
-      return JsonResult.resultError("0000019",e.getMessage());
+    } catch (Exception e) {
+      return JsonResult.resultError("0000019", e.getMessage());
     }
   }
 }

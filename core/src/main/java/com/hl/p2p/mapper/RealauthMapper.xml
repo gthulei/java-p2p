@@ -46,10 +46,41 @@
       applier_id = #{applierId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
+  <sql id="base_column">
+    id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark,
     auditTime, applyTime, auditor_id, applier_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="base_column"/>
     from realauth
     where applier_id = #{applierid}
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select <include refid="base_column"/>
+    from realauth
+    where id = #{id}
+  </select>
+
+  <sql id="condition">
+    <where>
+      <if test="beginDate!=null">
+        AND applyTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND applyTime &lt;= #{endDate}
+      </if>
+      <if test="state>-1">
+        AND  state = #{state}
+      </if>
+    </where>
+  </sql>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.RealauthQueryObject">
+    select <include refid="base_column"/>
+    from realauth <include refid="condition"/>
+    ORDER BY state DESC LIMIT #{start},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.hl.p2p.query.RealauthQueryObject">
+    SELECT COUNT(id) FROM realauth <include refid="condition"/>
   </select>
 </mapper>
