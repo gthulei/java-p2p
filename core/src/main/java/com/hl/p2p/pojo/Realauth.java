@@ -3,143 +3,168 @@ package com.hl.p2p.pojo;
 import java.util.Date;
 
 public class Realauth {
-    private Long id;
 
-    private String realname;
+  public final static int STATE_NORMAL = 0;//正常
 
-    private Byte sex;
+  public final static int STATE_AUDIT = 1;//审核中
 
-    private String birthdate;
+  public final static int STATE_REFUSE = 2;//审核拒绝
 
-    private String idnumber;
+  public final static int STATE_SUCCESS = 3;//认证成功
 
-    private String address;
+  private Long id;
 
-    private Byte state;
+  private String realname;//真实姓名
 
-    private String image1;
+  private int sex = 0; //性别
 
-    private String image2;
+  private String birthdate;//生日
 
-    private String remark;
+  private String idnumber;//身份证号码
 
-    private Date audittime;
+  private String address;//身份证地址
 
-    private Date applytime;
+  private int state;// 审核状态
 
-    private Long auditorId;
+  private String image1;//身份证正面照
 
-    private Long applierId;
+  private String image2;//身份证反面照
 
-    public Long getId() {
-        return id;
+  private String remark; //审核时的备注信息
+
+  private Date audittime;  //审核操作时间
+
+  private Date applytime = new Date(); //申请时间
+
+  private Long auditorId;//审核人id
+
+  private Long applierId; // 申请人id
+
+  public String getGender() {
+    return this.sex == 0 ? "男" : "女";
+  }
+
+  public String getAudit() {
+    if (this.state == 0) {
+      return "未审核";
+    } else if (this.state == 1) {
+      return "审核中";
+    } else if (this.state == 2) {
+      return "审核拒绝";
+    } else {
+      return "认证成功";
     }
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getRealname() {
-        return realname;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setRealname(String realname) {
-        this.realname = realname == null ? null : realname.trim();
-    }
+  public String getRealname() {
+    return realname;
+  }
 
-    public Byte getSex() {
-        return sex;
-    }
+  public void setRealname(String realname) {
+    this.realname = realname == null ? null : realname.trim();
+  }
 
-    public void setSex(Byte sex) {
-        this.sex = sex;
-    }
+  public int getSex() {
+    return sex;
+  }
 
-    public String getBirthdate() {
-        return birthdate;
-    }
+  public void setSex(int sex) {
+    this.sex = sex;
+  }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate == null ? null : birthdate.trim();
-    }
+  public String getBirthdate() {
+    return birthdate;
+  }
 
-    public String getIdnumber() {
-        return idnumber;
-    }
+  public void setBirthdate(String birthdate) {
+    this.birthdate = birthdate == null ? null : birthdate.trim();
+  }
 
-    public void setIdnumber(String idnumber) {
-        this.idnumber = idnumber == null ? null : idnumber.trim();
-    }
+  public String getIdnumber() {
+    return idnumber;
+  }
 
-    public String getAddress() {
-        return address;
-    }
+  public void setIdnumber(String idnumber) {
+    this.idnumber = idnumber == null ? null : idnumber.trim();
+  }
 
-    public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public Byte getState() {
-        return state;
-    }
+  public void setAddress(String address) {
+    this.address = address == null ? null : address.trim();
+  }
 
-    public void setState(Byte state) {
-        this.state = state;
-    }
+  public int getState() {
+    return state;
+  }
 
-    public String getImage1() {
-        return image1;
-    }
+  public void setState(int state) {
+    this.state = state;
+  }
 
-    public void setImage1(String image1) {
-        this.image1 = image1 == null ? null : image1.trim();
-    }
+  public String getImage1() {
+    return image1;
+  }
 
-    public String getImage2() {
-        return image2;
-    }
+  public void setImage1(String image1) {
+    this.image1 = image1 == null ? null : image1.trim();
+  }
 
-    public void setImage2(String image2) {
-        this.image2 = image2 == null ? null : image2.trim();
-    }
+  public String getImage2() {
+    return image2;
+  }
 
-    public String getRemark() {
-        return remark;
-    }
+  public void setImage2(String image2) {
+    this.image2 = image2 == null ? null : image2.trim();
+  }
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+  public String getRemark() {
+    return remark;
+  }
 
-    public Date getAudittime() {
-        return audittime;
-    }
+  public void setRemark(String remark) {
+    this.remark = remark == null ? null : remark.trim();
+  }
 
-    public void setAudittime(Date audittime) {
-        this.audittime = audittime;
-    }
+  public Date getAudittime() {
+    return audittime;
+  }
 
-    public Date getApplytime() {
-        return applytime;
-    }
+  public void setAudittime(Date audittime) {
+    this.audittime = audittime;
+  }
 
-    public void setApplytime(Date applytime) {
-        this.applytime = applytime;
-    }
+  public Date getApplytime() {
+    return applytime;
+  }
 
-    public Long getAuditorId() {
-        return auditorId;
-    }
+  public void setApplytime(Date applytime) {
+    this.applytime = applytime;
+  }
 
-    public void setAuditorId(Long auditorId) {
-        this.auditorId = auditorId;
-    }
+  public Long getAuditorId() {
+    return auditorId;
+  }
 
-    public Long getApplierId() {
-        return applierId;
-    }
+  public void setAuditorId(Long auditorId) {
+    this.auditorId = auditorId;
+  }
 
-    public void setApplierId(Long applierId) {
-        this.applierId = applierId;
-    }
+  public Long getApplierId() {
+    return applierId;
+  }
+
+  public void setApplierId(Long applierId) {
+    this.applierId = applierId;
+  }
 }

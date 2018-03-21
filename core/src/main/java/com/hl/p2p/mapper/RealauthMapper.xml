@@ -17,11 +17,7 @@
     <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
     <result column="applier_id" property="applierId" jdbcType="BIGINT" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from realauth
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.hl.p2p.pojo.Realauth" >
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Realauth" useGeneratedKeys="true" keyProperty="id">
     insert into realauth (id, realname, sex, 
       birthDate, idNumber, address, 
       state, image1, image2, 
@@ -54,11 +50,6 @@
     select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
     auditTime, applyTime, auditor_id, applier_id
     from realauth
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, realname, sex, birthDate, idNumber, address, state, image1, image2, remark, 
-    auditTime, applyTime, auditor_id, applier_id
-    from realauth
+    where applier_id = #{applierid}
   </select>
 </mapper>

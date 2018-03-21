@@ -15,4 +15,6 @@ public interface IUserinfoServer {
   void bindEmail(String uuid);
 
   void saveBaseinfo(Userinfo userinfo);
+
+  void addRealauthId(long realauthid);
 }

@@ -90,4 +90,12 @@ public class UserinfoServerImpl implements IUserinfoServer {
     user.setHouseconditionId(userinfo.getHouseconditionId());
     this.updateUserInfo(user);
   }
+
+  @Override
+  public void addRealauthId(long realauthid) {
+    Userinfo user = this.getUserinfoById(UserContext.getCurrent().getId());
+    user.setRealauthid(realauthid);
+    this.updateUserInfo(user);
+
+  }
 }
