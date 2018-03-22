@@ -11,6 +11,8 @@ import com.hl.p2p.utils.DateUtil;
 import com.hl.p2p.utils.HttpClientUtil;
 import com.hl.p2p.utils.UserContext;
 import com.hl.p2p.vo.VerifyCodeVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ import java.util.*;
  */
 @Service
 public class SendVerifyCodeServerImpl implements ISendVerifyCodeServer {
+
+  private final static Logger logger = LoggerFactory.getLogger(com.hl.p2p.server.ISendVerifyCodeServer.class);
 
   @Value("${sms.username}")
   private String username;
@@ -52,7 +56,7 @@ public class SendVerifyCodeServerImpl implements ISendVerifyCodeServer {
     } else {
       // 生成一个验证码
       String code = UUID.randomUUID().toString().substring(0, 4);
-      System.out.print(code);
+      logger.info("短信验证码"+code);
       // 对接短信网关
       Map<String, String> map = new HashMap<>();
       map.put("username", username);
