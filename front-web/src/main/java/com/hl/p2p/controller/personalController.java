@@ -74,7 +74,6 @@ public class personalController {
     }catch (Exception e){
       model.addAttribute("message",e.getMessage());
     }
-    System.out.print(uuid);
     return "checkmail_result";
   }
 }

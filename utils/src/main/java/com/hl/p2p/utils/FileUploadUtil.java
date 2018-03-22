@@ -24,7 +24,7 @@ public class FileUploadUtil {
           String contentType = f.getContentType();
           // 获得文件后缀名称
           String imageName = contentType.substring(contentType.indexOf("/") + 1);
-          path = "/static/images/" + uuid + "." + imageName;
+          path = "/WEB-INF/upload/" + uuid + "." + imageName;
           try {
             f.transferTo(new File(pathRoot + path));
             list.add(path);
