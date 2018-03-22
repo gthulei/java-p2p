@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 登录注相关服务
@@ -109,6 +110,11 @@ public class LoginInfoServerImpl implements ILoginInfoServer {
   @Override
   public boolean selectAdminCount() {
     return logininfoMapper.selectAdminCount() <=0;
+  }
+
+  @Override
+  public List<Logininfo> selectLogInfoList(String username) {
+    return logininfoMapper.selectByUserName(username);
   }
 
 }

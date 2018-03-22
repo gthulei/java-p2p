@@ -5,6 +5,7 @@ import com.hl.p2p.mapper.UserinfoMapper;
 import com.hl.p2p.pojo.Emailactive;
 import com.hl.p2p.pojo.Realauth;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.pojo.Vedioauth;
 import com.hl.p2p.server.IRealauthServer;
 import com.hl.p2p.server.IUserinfoServer;
 import com.hl.p2p.utils.BidConst;
@@ -120,5 +121,15 @@ public class UserinfoServerImpl implements IUserinfoServer {
     realauths.setAuditorId(UserContext.getCurrent().getId());
     realauthServer.updateRealauth(realauths);
     this.updateUserInfo(user);
+  }
+
+  @Override
+  public void vedioauth(Vedioauth vo) {
+    // 审核通过
+    if(vo.getState() == vo.STATE_AUDIT){
+      Userinfo user = this.getUserinfoById(vo.getApplierId());
+      user.addState(BitStatesUtils.OP_VEDIO_AUTH);
+      this.updateUserInfo(user);
+    }
   }
 }

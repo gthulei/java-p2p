@@ -10,10 +10,9 @@
     <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
     <result column="applier_id" property="applierId" jdbcType="BIGINT" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from vedioauth
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+  <sql id="base_column">
+    id, state, remark, auditTime, applyTime, auditor_id, applier_id
+  </sql>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Vedioauth" >
     insert into vedioauth (id, state, remark, 
       auditTime, applyTime, auditor_id, 
@@ -22,23 +21,30 @@
       #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=BIGINT}, 
       #{applierId,jdbcType=BIGINT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Vedioauth" >
-    update vedioauth
-    set state = #{state,jdbcType=TINYINT},
-      remark = #{remark,jdbcType=VARCHAR},
-      auditTime = #{audittime,jdbcType=TIMESTAMP},
-      applyTime = #{applytime,jdbcType=TIMESTAMP},
-      auditor_id = #{auditorId,jdbcType=BIGINT},
-      applier_id = #{applierId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id
-    from vedioauth
-    where id = #{id,jdbcType=BIGINT}
+  <sql id="where">
+    <where>
+      <if test="beginDate!=null">
+        AND applyTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND applyTime &lt;= #{endDate}
+      </if>
+      <if test="state>-1">
+        AND  state = #{state}
+      </if>
+      <if test="keyword!=null and keyword!=''">
+        and auditor_id like concat(concat("%",#{keyword}),"%")
+        OR applier_id like concat(concat("%",#{keyword}),"%")
+        OR state like concat(concat("%",#{keyword}),"%")
+      </if>
+    </where>
+  </sql>
+  <select id="selectVedioPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.VedioQueryObject">
+    SELECT <include refid="base_column"/>
+    FROM vedioauth <include refid="where"/>
+    ORDER BY state DESC LIMIT #{start},#{pageSize}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id
-    from vedioauth
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM vedioauth <include refid="where"/>
   </select>
 </mapper>

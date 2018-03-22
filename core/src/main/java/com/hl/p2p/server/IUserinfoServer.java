@@ -2,6 +2,7 @@ package com.hl.p2p.server;
 
 import com.hl.p2p.pojo.Realauth;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.pojo.Vedioauth;
 
 public interface IUserinfoServer {
 
@@ -20,4 +21,6 @@ public interface IUserinfoServer {
   void addRealauthId(long realauthid ,String idCard);
 
   void bindRealauth(Realauth realauth);
+
+  void vedioauth(Vedioauth vo);
 }

@@ -3,6 +3,8 @@ package com.hl.p2p.mapper;
 import com.hl.p2p.pojo.Logininfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface LogininfoMapper {
 
     int insert(Logininfo record);
@@ -16,4 +18,6 @@ public interface LogininfoMapper {
     Logininfo login(@Param("userName") String userName, @Param("passWord") String passWord, @Param("usertype") int usertype);
 
     int selectAdminCount();
+
+    List<Logininfo> selectByUserName(String username);
 }

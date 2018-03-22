@@ -25,9 +25,10 @@ public class FileUploadUtil {
           // 获得文件后缀名称
           String imageName = contentType.substring(contentType.indexOf("/") + 1);
           path = "/WEB-INF/upload/" + uuid + "." + imageName;
+          String PATH = "/upload/" + uuid + "." + imageName;
           try {
             f.transferTo(new File(pathRoot + path));
-            list.add(path);
+            list.add(PATH);
           } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("图片上次失败");

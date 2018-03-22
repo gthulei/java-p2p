@@ -1,5 +1,9 @@
 package com.hl.p2p.server;
 
+import com.hl.p2p.pojo.Logininfo;
+
+import java.util.List;
+
 public interface ILoginInfoServer {
 
   int register(String userName, String password);
@@ -11,4 +15,6 @@ public interface ILoginInfoServer {
   void escLogin();
 
   boolean selectAdminCount();
+
+  List<Logininfo> selectLogInfoList(String username);
 }

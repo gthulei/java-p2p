@@ -47,4 +47,8 @@
   <select id="selectAdminCount" resultType="java.lang.Integer">
     SELECT COUNT(id) FROM logininfo WHERE usertype=0
   </select>
+  <select id="selectByUserName" resultMap="BaseResultMap" resultType="string">
+    SELECT  <include refid="base_column"/>
+    FROM  logininfo WHERE username LIKE concat(concat(#{keyword}),"%")
+  </select>
 </mapper>
