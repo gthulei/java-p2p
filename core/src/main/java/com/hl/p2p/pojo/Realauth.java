@@ -10,11 +10,22 @@ public class Realauth extends BaseAuth{
 
   private String idnumber;//身份证号码
 
+  public Realauth() {
+  }
+
   private String address;//身份证地址
 
   private String image1;//身份证正面照
 
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
   private String image2;//身份证反面照
+
+  public Realauth(int state, Long applierId) {
+    super(state, applierId);
+  }
 
   public String getGender() {
     return this.sex == 0 ? "男" : "女";

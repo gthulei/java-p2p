@@ -38,11 +38,12 @@ public class VedioAuthController {
   @RequestMapping(value = "/vedioAuthAudit.json",method = RequestMethod.POST)
   @ResponseBody
   public JsonResult vedioAuthAudit(Vedioauth vedioauth){
-    boolean b = vedioauthServer.addVedioauth(vedioauth);
-    if(b){
+    try {
+      vedioauthServer.addVedioauth(vedioauth);
       return JsonResult.resultSuccess("审核成果");
+    }catch (Exception e){
+      return JsonResult.resultError("0000019",e.getMessage());
     }
-    return JsonResult.resultError("0000019","审核失败");
   }
 
   @RequestMapping(value = "/vedioAuthAutocomplate.json",method = RequestMethod.POST)

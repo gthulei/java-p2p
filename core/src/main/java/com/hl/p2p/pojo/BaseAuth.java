@@ -24,6 +24,14 @@ public class BaseAuth {
 
   private Long applierId; // 申请人id
 
+  public BaseAuth() {
+  }
+
+  public BaseAuth(int state, Long applierId) {
+    this.state = state;
+    this.applierId = applierId;
+  }
+
   public String getAudit() {
     if (this.state == 0) {
       return "待审核";

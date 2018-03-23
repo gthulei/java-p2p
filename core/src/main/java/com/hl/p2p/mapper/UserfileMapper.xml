@@ -13,42 +13,55 @@
     <result column="file" property="file" jdbcType="VARCHAR" />
     <result column="filetype_id" property="filetypeId" jdbcType="BIGINT" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from userfile
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.hl.p2p.pojo.Userfile" >
-    insert into userfile (id, state, remark, 
-      auditTime, applyTime, auditor_id, 
-      applier_id, score, file, 
-      filetype_id)
-    values (#{id,jdbcType=BIGINT}, #{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=BIGINT}, 
-      #{applierId,jdbcType=BIGINT}, #{score,jdbcType=TINYINT}, #{file,jdbcType=VARCHAR}, 
-      #{filetypeId,jdbcType=BIGINT})
+  <insert id="insetList">
+    insert into userfile (applyTime,state,applier_id,file)
+      values
+    <foreach collection="list" item="v" separator=",">
+      (#{v.applytime},#{v.state},#{v.applierId}, #{v.file})
+    </foreach>
   </insert>
+  <sql id="base_up">
+    <if test="state!=null">
+      state = #{state},
+    </if>
+    <if test="remark!=null">
+      remark = #{remark},
+    </if>
+    <if test="audittime!=null">
+      auditTime = #{audittime},
+    </if>
+    <if test="auditorId!=null">
+      auditor_id = #{auditorId},
+    </if>
+    <if test="applierId!=null">
+      applier_id = #{applierId},
+    </if>
+    <if test="score!=null">
+      score = #{score},
+    </if>
+    <if test="filetypeId!=null">
+      filetype_id = #{filetypeId}
+    </if>
+  </sql>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Userfile" >
     update userfile
-    set state = #{state,jdbcType=TINYINT},
-      remark = #{remark,jdbcType=VARCHAR},
-      auditTime = #{audittime,jdbcType=TIMESTAMP},
-      applyTime = #{applytime,jdbcType=TIMESTAMP},
-      auditor_id = #{auditorId,jdbcType=BIGINT},
-      applier_id = #{applierId,jdbcType=BIGINT},
-      score = #{score,jdbcType=TINYINT},
-      file = #{file,jdbcType=VARCHAR},
-      filetype_id = #{filetypeId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
+    set <include refid="base_up"/>
+    where id = #{id}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, file, 
+
+  <sql id="base_column">
+    id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, file,
     filetype_id
-    from userfile
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, file, 
-    filetype_id
-    from userfile
+  </sql>
+
+  <select id="selectFiletype" resultMap="BaseResultMap">
+    SELECT <include refid="base_column"/>
+    FROM userfile WHERE applier_id =#{id} AND filetype_id
+    <if test="!type">
+      IS NULL
+    </if>
+    <if test="type">
+      IS NOT NULL
+    </if>
   </select>
 </mapper>

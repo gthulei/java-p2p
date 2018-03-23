@@ -14,6 +14,7 @@ public class FileUploadUtil {
     //获得物理路径webapp所在路径
     String pathRoot = request.getSession().getServletContext().getRealPath("");
     String path = "";
+    String url ="";
     List<String> list = new ArrayList<>();
     if (file.length > 0) {
       for (MultipartFile f : file) {
@@ -25,10 +26,10 @@ public class FileUploadUtil {
           // 获得文件后缀名称
           String imageName = contentType.substring(contentType.indexOf("/") + 1);
           path = "/WEB-INF/upload/" + uuid + "." + imageName;
-          String PATH = "/upload/" + uuid + "." + imageName;
+          url = "/upload/" + uuid + "." + imageName;
           try {
             f.transferTo(new File(pathRoot + path));
-            list.add(PATH);
+            list.add(url);
           } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("图片上次失败");
