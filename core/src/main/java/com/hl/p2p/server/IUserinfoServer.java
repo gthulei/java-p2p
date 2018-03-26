@@ -23,4 +23,6 @@ public interface IUserinfoServer {
   void bindRealauth(Realauth realauth);
 
   void vedioauth(Vedioauth vo);
+
+  void  updateScore(Long id,Integer score);
 }

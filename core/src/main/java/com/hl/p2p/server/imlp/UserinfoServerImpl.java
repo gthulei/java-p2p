@@ -132,4 +132,11 @@ public class UserinfoServerImpl implements IUserinfoServer {
       this.updateUserInfo(user);
     }
   }
+
+  @Override
+  public void updateScore(Long id,Integer score) {
+    Userinfo user = this.getUserinfoById(id);
+    user.setAuthscore(score);
+    this.updateUserInfo(user);
+  }
 }

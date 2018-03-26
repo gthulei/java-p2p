@@ -22,7 +22,7 @@
       </div>
       <div class="el-borrow-item-content">
         <p>
-          认证后可借金额 <i>¥3000
+          认证后可借金额 <i>¥5000
         </p>
         <a href="#" class="text-primary">申请条件</a>
         <p class="help-block">仅限广州地区</p>
@@ -57,15 +57,15 @@
           </li>
           <li>
             <#if user??>
-            <#if userinfo.authscore??>
-              <a href="/userFile">材料认证分数达到3000分</a>
+            <#if (userinfo.authscore>20)>
+              <a href="/userFile">材料认证分数达到20分</a>
              <span class="glyphicon glyphicon-ok" style="color:#00aa00;"></span>
               <#else >
-              <a href="#">材料认证分数达到3000分</a>
+              <a href="#">材料认证分数达到20分</a>
               <span class="glyphicon glyphicon-remove" style="color:red;"></span>
             </#if>
             <#else >
-                <span>材料认证分数达到3000分</span>
+                <span>材料认证分数达到20分</span>
             </#if>
 
           </li>

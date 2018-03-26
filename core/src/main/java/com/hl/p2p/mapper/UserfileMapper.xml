@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.hl.p2p.mapper.UserfileMapper" >
-  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Userfile" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="state" property="state" jdbcType="TINYINT" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
-    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
-    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
-    <result column="applier_id" property="applierId" jdbcType="BIGINT" />
-    <result column="score" property="score" jdbcType="TINYINT" />
-    <result column="file" property="file" jdbcType="VARCHAR" />
-    <result column="filetype_id" property="filetypeId" jdbcType="BIGINT" />
+<mapper namespace="com.hl.p2p.mapper.UserfileMapper">
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Userfile">
+    <id column="id" property="id" jdbcType="BIGINT"/>
+    <result column="state" property="state" jdbcType="TINYINT"/>
+    <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    <result column="auditTime" property="audittime" jdbcType="TIMESTAMP"/>
+    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP"/>
+    <result column="auditor_id" property="auditorId" jdbcType="BIGINT"/>
+    <result column="applier_id" property="applierId" jdbcType="BIGINT"/>
+    <result column="score" property="score" jdbcType="TINYINT"/>
+    <result column="file" property="file" jdbcType="VARCHAR"/>
+    <result column="filetype_id" property="filetypeId" jdbcType="BIGINT"/>
   </resultMap>
   <insert id="insetList">
     insert into userfile (applyTime,state,applier_id,file)
-      values
+    values
     <foreach collection="list" item="v" separator=",">
       (#{v.applytime},#{v.state},#{v.applierId}, #{v.file})
     </foreach>
   </insert>
   <sql id="base_up">
-    <if test="state!=null">
-      state = #{state},
-    </if>
-    <if test="remark!=null">
-      remark = #{remark},
-    </if>
-    <if test="audittime!=null">
-      auditTime = #{audittime},
-    </if>
-    <if test="auditorId!=null">
-      auditor_id = #{auditorId},
-    </if>
-    <if test="applierId!=null">
-      applier_id = #{applierId},
-    </if>
-    <if test="score!=null">
-      score = #{score},
-    </if>
-    <if test="filetypeId!=null">
-      filetype_id = #{filetypeId}
-    </if>
+    <trim prefix="set" suffixOverrides=",">
+      <if test="state!=null">
+        state = #{state},
+      </if>
+      <if test="remark!=null">
+        remark = #{remark},
+      </if>
+      <if test="audittime!=null">
+        auditTime = #{audittime},
+      </if>
+      <if test="auditorId!=null">
+        auditor_id = #{auditorId},
+      </if>
+      <if test="applierId!=null">
+        applier_id = #{applierId},
+      </if>
+      <if test="score!=null">
+        score = #{score},
+      </if>
+      <if test="filetypeId!=null">
+        filetype_id = #{filetypeId},
+      </if>
+    </trim>
   </sql>
-  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Userfile" >
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Userfile">
     update userfile
-    set <include refid="base_up"/>
+    <include refid="base_up"/>
     where id = #{id}
   </update>
 
@@ -53,9 +55,14 @@
     id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, file,
     filetype_id
   </sql>
-
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
+    SELECT
+    <include refid="base_column"/>
+    FROM userfile WHERE id=#{id}
+  </select>
   <select id="selectFiletype" resultMap="BaseResultMap">
-    SELECT <include refid="base_column"/>
+    SELECT
+    <include refid="base_column"/>
     FROM userfile WHERE applier_id =#{id} AND filetype_id
     <if test="!type">
       IS NULL
@@ -63,5 +70,33 @@
     <if test="type">
       IS NOT NULL
     </if>
+  </select>
+  <sql id="condition">
+    <where>
+      filetype_id IS NOT NULL
+      <if test="beginDate!=null">
+        AND audittime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND audittime &lt;= #{endDate}
+      </if>
+      <if test="state>-1">
+        AND state = #{state}
+      </if>
+    </where>
+  </sql>
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM userfile
+    <include refid="condition"/>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap" resultType="com.hl.p2p.query.UserFileQueryObject">
+    SELECT
+    <include refid="base_column"/>
+    FROM userfile
+    <include refid="condition"/>
+    ORDER BY state DESC LIMIT #{start},#{pageSize}
+  </select>
+  <select id="selectScore" resultType="java.lang.Integer" parameterType="long">
+    SELECT SUM(score) FROM userfile WHERE applier_id = #{id} AND  filetype_id IS NOT NULL
   </select>
 </mapper>

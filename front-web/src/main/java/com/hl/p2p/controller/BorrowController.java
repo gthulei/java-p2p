@@ -2,6 +2,7 @@ package com.hl.p2p.controller;
 
 import com.hl.p2p.pojo.Logininfo;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.server.IUserFileServer;
 import com.hl.p2p.server.IUserinfoServer;
 import com.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class BorrowController {
 
   @Autowired
   private IUserinfoServer userinfoServer;
+
+  @Autowired
+  private IUserFileServer userFileServer;
 
   @RequestMapping("/borrow")
   public String borrow(Model model){
