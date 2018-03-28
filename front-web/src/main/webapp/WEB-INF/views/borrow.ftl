@@ -65,7 +65,7 @@
                 <span class="glyphicon glyphicon-remove" style="color:red;"></span>
               </#if>
               <#else >
-                <a href="/userFile">材料认证分数达到20分${userinfo.authscore}</a>
+                <a href="/userFile">材料认证分数达到20分</a>
                 <span class="glyphicon glyphicon-remove" style="color:red;"></span>
             </#if>
 

@@ -340,7 +340,7 @@ CREATE TABLE `userfile` (
   `applyTime` datetime NOT NULL COMMENT '提交时间',
   `auditor_id` bigint(20) DEFAULT NULL COMMENT '审核人ID',
   `applier_id` bigint(20) NOT NULL COMMENT '申请人ID',
-  `score` tinyint(4) NOT NULL COMMENT '风控分数',
+  `score` tinyint(4) NULL COMMENT '风控分数',
   `file` varchar(255) NOT NULL COMMENT '风控图片',
   `filetype_id` bigint(20) DEFAULT NULL COMMENT '风控类型',
   PRIMARY KEY (`id`)

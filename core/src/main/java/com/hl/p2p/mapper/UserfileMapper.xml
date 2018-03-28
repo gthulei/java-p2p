@@ -27,7 +27,7 @@
     insert into userfile (applyTime,state,applier_id,file)
     values
     <foreach collection="list" item="v" separator=",">
-      (#{v.applytime},#{v.state},#{v.applier.id}, #{v.file})
+      (#{v.applytime},#{v.state},#{v.applier.id},#{v.file})
     </foreach>
   </insert>
   <sql id="base_up">
