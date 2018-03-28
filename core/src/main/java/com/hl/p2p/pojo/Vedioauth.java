@@ -5,7 +5,7 @@ public class Vedioauth extends BaseAuth{
   public Vedioauth() {
   }
 
-  public Vedioauth(int state, Long applierId) {
-    super(state, applierId);
+  public Vedioauth(int state, Logininfo applier) {
+    super(state, applier);
   }
 }

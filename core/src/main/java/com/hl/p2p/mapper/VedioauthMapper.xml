@@ -7,44 +7,56 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
     <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
-    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
-    <result column="applier_id" property="applierId" jdbcType="BIGINT" />
+
+    <association property="applier" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="ap_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+
+    <association property="auditor" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="au_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
   <sql id="base_column">
-    id, state, remark, auditTime, applyTime, auditor_id, applier_id
+    r.id, r.state, r.remark, r.auditTime, r.applyTime, ap.id as ap_id ,ap.username as ap_username ,
+	au.id as au_id ,au.username as au_username
   </sql>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Vedioauth" >
     insert into vedioauth (id, state, remark, 
       auditTime, applyTime, auditor_id, 
       applier_id)
     values (#{id,jdbcType=BIGINT}, #{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=BIGINT}, 
-      #{applierId,jdbcType=BIGINT})
+      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditor.id,jdbcType=BIGINT},
+      #{applier.id,jdbcType=BIGINT})
   </insert>
   <sql id="where">
     <where>
       <if test="beginDate!=null">
-        AND applyTime &gt;= #{beginDate}
+        AND r.applyTime &gt;= #{beginDate}
       </if>
       <if test="endDate!=null">
-        AND applyTime &lt;= #{endDate}
+        AND r.applyTime &lt;= #{endDate}
       </if>
       <if test="state>-1">
-        AND  state = #{state}
+        AND  r.state = #{state}
       </if>
       <if test="keyword!=null and keyword!=''">
-        and auditor_id like concat(concat("%",#{keyword}),"%")
-        OR applier_id like concat(concat("%",#{keyword}),"%")
-        OR state like concat(concat("%",#{keyword}),"%")
+        and r.auditor_id like concat(concat("%",#{keyword}),"%")
+        OR r.applier_id like concat(concat("%",#{keyword}),"%")
+        OR r.state like concat(concat("%",#{keyword}),"%")
       </if>
     </where>
   </sql>
   <select id="selectVedioPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.VedioQueryObject">
     SELECT <include refid="base_column"/>
-    FROM vedioauth <include refid="where"/>
-    ORDER BY state DESC LIMIT #{start},#{pageSize}
+    FROM vedioauth r
+    JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    <include refid="where"/>
+    ORDER BY r.state DESC LIMIT #{start},#{pageSize}
   </select>
   <select id="selectCount" resultType="java.lang.Integer">
-    SELECT COUNT(id) FROM vedioauth <include refid="where"/>
+    SELECT COUNT(r.id) FROM vedioauth r <include refid="where"/>
   </select>
 </mapper>

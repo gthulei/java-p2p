@@ -60,9 +60,9 @@
             if (res.succeed) {
               $("#editform")[0].reset();
               $("#editForm_id").val(res.data.id);
-              $("#applier").text(res.data.applierId);
-              $("#fileType").text(res.data.filetypeId);
-              $("#applierId").val(res.data.applierId);
+              $("#applier").text(res.data.applier.username);
+              $("#fileType").text(res.data.filetype.title);
+              $("#applierId").val(res.data.applier.id);
               $("#image").attr("src","http://127.0.0.1:8080"+res.data.file);
             }
           }
@@ -114,17 +114,16 @@
             <th>分数</th>
             <th>资料类型</th>
             <th>审核人</th>
-            <th></th>
           </tr>
           </thead>
           <tbody>
 						<#list pageResult.data as info>
             <tr>
-              <td>${info.applierId}</td>
+              <td>${info.applier.username}</td>
               <td>${info.audit}</td>
-              <td>${(info.score)!''}</td>
-              <td>${(info.filetypeId)!""}</td>
-              <td>${(info.auditorId)!""}</td>
+              <td>${(info.score)!'-'}</td>
+              <td>${(info.filetype.title)!"-"}</td>
+              <td>${(info.auditor.username)!"-"}</td>
               <td>
 									<#if (info.state == 0)>
                     <a href="javascript:void(-1);" class="auditClass" data-id="${info.id}">审核</a>
@@ -152,7 +151,7 @@
               </div>
               <input type="hidden" name="id" id="editForm_id" value=""/>
               <input type="hidden" name="state" value=""/>
-              <input type="hidden" name="applierId" id="applierId"/>
+              <input type="hidden" name="applier.id" id="applierId"/>
               <div class="form-group">
                 <label class="col-sm-2 control-label" for="name">用户名</label>
                 <div class="col-sm-6">

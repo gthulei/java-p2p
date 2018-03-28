@@ -65,7 +65,7 @@
 			<div class="thumbnail">
 			<img src="http://127.0.0.1:8080${file.file}" />
 			<div class="caption">
-			<h4>${file.filetypeId}</h4>
+			<h4>${file.filetype.title}</h4>
 			<p>得分：${file.score!'-'} &nbsp;&nbsp;状态：${file.audit}</p>
 			</div>
 			</div>

@@ -23,8 +23,8 @@ public class Realauth extends BaseAuth{
 
   private String image2;//身份证反面照
 
-  public Realauth(int state, Long applierId) {
-    super(state, applierId);
+  public Realauth(int state, Logininfo applier) {
+    super(state, applier);
   }
 
   public String getGender() {

@@ -49,13 +49,14 @@
           if (data.succeed) {
             $.messager.popup(data.errorMessage);
             $("#id").val(data.data.id);
-            $("#applierId").val(data.data.applierId);
-            $("#username").text(data.data.realname);
+            $("#applier").val(data.data.applier.id);
+            $("#username").text(data.data.applier.username);
             $("#realName").text(data.data.realname);
             $("#idNumber").text(data.data.idnumber);
             $("#sex").text(data.data.gender);
             $("#bornDate").text(data.data.birthdate);
             $("#address").text(data.data.address);
+            $("#remerk").text(data.data.remark)
             $("#image1").attr("src","http://localhost:8080"+data.data.image1);
             $("#image2").attr("src","http://localhost:8080"+data.data.image2);
           } else {
@@ -72,12 +73,12 @@
 			form.find("[name=state]").val($(this).val()); //将当前对应的value值赋给state
 			$("#myModal").modal("hide");
 			form.ajaxSubmit(function(data){
-				if(data.success ){
+				if(data.succeed){
 					$.messager.confirm("提示","审核成功", function(){
 						window.location.reload();
 					});
 				}else{
-					$.messager.popup(data.msg) ;
+					$.messager.popup(data.errorMessage) ;
 				}
 			});
 		});
@@ -126,6 +127,7 @@
 					<table class="table">
 						<thead>
 							<tr>
+								<th>用户名</th>
 								<th>真实姓名</th>
 								<th>性别</th>
 								<th>身份证号码</th>
@@ -138,12 +140,19 @@
 						<tbody>
 						<#list pageResult.data as info>
 							<tr>
+								<td>${info.applier.username}</td>
 								<td>${info.realname}</td>
 								<td>${info.gender}</td>
 								<td>${info.idnumber}</td>
 								<td>${info.address}</td>
                 <td>${info.audit}</td>
-                <td>${info.auditorId!''}</td>
+                <td>
+	                <#if !info.auditor??>
+		                <span>-</span>
+		                <#else >
+		                <span>${info.auditor.username}</span>
+	                </#if>
+                </td>
                 <td>
 	                <a href="javascript:void(-1);" class="auditClass" data-id="${info.id}">审核</a>
                 </td>
@@ -169,7 +178,14 @@
 						</div>
 						<input type="hidden" name="id" id="id" value="" />
 						<input type="hidden" name="state" id="state" value="" />
-            <input type="hidden" name="applierId" id="applierId" value="" />
+            <input type="hidden" name="applier.id" id="applier" value="" />
+            applier
+            <div class="row">
+              <label class="col-sm-2 control-label" for="name">用户名</label>
+              <div class="col-sm-4">
+                <label class="form-control" name="username" id="username"></label>
+              </div>
+            </div>
 						<div class="row">
 				        	<label class="col-sm-2 control-label" for="name">真实姓名</label>
 				        	<div class="col-sm-4">
@@ -209,7 +225,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label" for="name">审核备注</label>
 				        	<div class="col-sm-6">
-				        		<textarea name="remark" rows="4" cols="60"></textarea>
+				        		<textarea name="remark" rows="4" cols="60" id="remerk"></textarea>
 				        	</div>
 						</div>
 					</fieldset>

@@ -1,6 +1,8 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.UserfileMapper;
+import com.hl.p2p.pojo.Logininfo;
+import com.hl.p2p.pojo.Systemdictionaryitem;
 import com.hl.p2p.pojo.Userfile;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.query.UserFileQueryObject;
@@ -29,8 +31,10 @@ public class UserFileServerImpl implements IUserFileServer{
   @Override
   public boolean addUserFile(List<String> fileList) {
     ArrayList<Userfile> userfiles = new ArrayList<>();
+    Logininfo logininfo = new Logininfo();
+    logininfo.setId(UserContext.getCurrent().getId());
     for (String item : fileList){
-      userfiles.add(new Userfile(Userfile.STATE_AUDIT, UserContext.getCurrent().getId(),item));
+      userfiles.add(new Userfile(Userfile.STATE_AUDIT,logininfo,item));
     }
     return userfileMapper.insetList(userfiles) > 0;
   }
@@ -39,8 +43,10 @@ public class UserFileServerImpl implements IUserFileServer{
   public void updateUserFile(Long[] id,Long[] filetypeId) {
     for (int i = 0;i<id.length;i++){
       Userfile userfile = new Userfile();
+      Systemdictionaryitem systemdictionaryitem = new Systemdictionaryitem();
+      systemdictionaryitem.setId(filetypeId[i]);
       userfile.setId(id[i]);
-      userfile.setFiletypeId(filetypeId[i]);
+      userfile.setFiletype(systemdictionaryitem);
       try {
         userfileMapper.updateByPrimaryKey(userfile);
       }catch (Exception e){
@@ -52,10 +58,12 @@ public class UserFileServerImpl implements IUserFileServer{
 
   @Override
   public void updateUserFileAuth(Userfile userfile) {
-    userfile.setAuditorId(UserContext.getCurrent().getId());
+    Logininfo logininfo = new Logininfo();
+    logininfo.setId(UserContext.getCurrent().getId());
+    userfile.setAuditor(logininfo);
     userfile.setAudittime(new Date());
     userfileMapper.updateByPrimaryKey(userfile);
-    userinfoServer.updateScore(userfile.getApplierId(),userfileMapper.selectScore(userfile.getApplierId()));
+    userinfoServer.updateScore(userfile.getApplier().getId(),userfileMapper.selectScore(userfile.getApplier().getId()));
   }
 
   // 未指定风控类型

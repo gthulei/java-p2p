@@ -1,6 +1,7 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.VedioauthMapper;
+import com.hl.p2p.pojo.Logininfo;
 import com.hl.p2p.pojo.Vedioauth;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.query.VedioQueryObject;
@@ -30,9 +31,13 @@ public class VedioauthServeImpl implements IVedioauthServer{
     Vedioauth vo = new Vedioauth();
     vo.setApplytime(new Date());
     vo.setAudittime(new Date());
-    vo.setApplierId(vedioauth.getApplierId());
-    vo.setAuditorId(UserContext.getCurrent().getId());
+    Logininfo logininfo = new Logininfo();
+    logininfo.setId(UserContext.getCurrent().getId());
+    vo.setAuditor(logininfo);
     vo.setRemark(vedioauth.getRemark());
+    Logininfo ap = new Logininfo();
+    ap.setId(vedioauth.getApplier().getId());
+    vo.setApplier(ap);
     vo.setState(vedioauth.getState());
     userinfoServer.vedioauth(vedioauth);
     return vedioauthMapper.insert(vo)>0;

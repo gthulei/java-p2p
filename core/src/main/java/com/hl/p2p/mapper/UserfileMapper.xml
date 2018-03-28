@@ -7,17 +7,27 @@
     <result column="remark" property="remark" jdbcType="VARCHAR"/>
     <result column="auditTime" property="audittime" jdbcType="TIMESTAMP"/>
     <result column="applyTime" property="applytime" jdbcType="TIMESTAMP"/>
-    <result column="auditor_id" property="auditorId" jdbcType="BIGINT"/>
-    <result column="applier_id" property="applierId" jdbcType="BIGINT"/>
     <result column="score" property="score" jdbcType="TINYINT"/>
     <result column="file" property="file" jdbcType="VARCHAR"/>
-    <result column="filetype_id" property="filetypeId" jdbcType="BIGINT"/>
+    <association property="filetype" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="f_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+    <association property="applier" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="ap_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+
+    <association property="auditor" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="au_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
   <insert id="insetList">
     insert into userfile (applyTime,state,applier_id,file)
     values
     <foreach collection="list" item="v" separator=",">
-      (#{v.applytime},#{v.state},#{v.applierId}, #{v.file})
+      (#{v.applytime},#{v.state},#{v.applier.id}, #{v.file})
     </foreach>
   </insert>
   <sql id="base_up">
@@ -31,17 +41,17 @@
       <if test="audittime!=null">
         auditTime = #{audittime},
       </if>
-      <if test="auditorId!=null">
-        auditor_id = #{auditorId},
+      <if test="auditor!=null">
+        auditor_id = #{auditor.id},
       </if>
-      <if test="applierId!=null">
-        applier_id = #{applierId},
+      <if test="applier!=null">
+        applier_id = #{applier.id},
       </if>
       <if test="score!=null">
         score = #{score},
       </if>
-      <if test="filetypeId!=null">
-        filetype_id = #{filetypeId},
+      <if test="filetype!=null">
+        filetype_id = #{filetype.id},
       </if>
     </trim>
   </sql>
@@ -52,18 +62,26 @@
   </update>
 
   <sql id="base_column">
-    id, state, remark, auditTime, applyTime, auditor_id, applier_id, score, file,
-    filetype_id
+    r.id, r.state, r.remark, r.auditTime, r.applyTime, r.score, r.file, ap.id as ap_id ,ap.username as ap_username ,
+	au.id as au_id ,au.username as au_username, f.id as f_id ,f.title as f_title
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="long">
     SELECT
     <include refid="base_column"/>
-    FROM userfile WHERE id=#{id}
+    FROM userfile r
+    JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    LEFT JOIN systemdictionaryitem f ON r.filetype_id =f.id
+    WHERE r.id=#{id}
   </select>
   <select id="selectFiletype" resultMap="BaseResultMap">
     SELECT
     <include refid="base_column"/>
-    FROM userfile WHERE applier_id =#{id} AND filetype_id
+    FROM userfile r
+    JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    LEFT JOIN systemdictionaryitem f ON r.filetype_id =f.id
+    WHERE r.applier_id =#{id} AND r.filetype_id
     <if test="!type">
       IS NULL
     </if>
@@ -92,9 +110,12 @@
   <select id="selectPage" resultMap="BaseResultMap" resultType="com.hl.p2p.query.UserFileQueryObject">
     SELECT
     <include refid="base_column"/>
-    FROM userfile
+    FROM userfile r
+    JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    LEFT JOIN systemdictionaryitem f ON r.filetype_id =f.id
     <include refid="condition"/>
-    ORDER BY state DESC LIMIT #{start},#{pageSize}
+    ORDER BY r.state ASC LIMIT #{start},#{pageSize}
   </select>
   <select id="selectScore" resultType="java.lang.Integer" parameterType="long">
     SELECT SUM(score) FROM userfile WHERE applier_id = #{id} AND  filetype_id IS NOT NULL

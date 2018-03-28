@@ -151,9 +151,9 @@
           <tbody>
 							<#list pageResult.data as vo>
               <tr>
-                <td>${vo.applierId}</td>
+                <td>${vo.applier.username}</td>
                 <td>${vo.audit}</td>
-                <td>${vo.auditorId}</td>
+                <td>${vo.auditor.username}</td>
                 <td>${(vo.remark)!''}</td>
                 <td>${(vo.audittime?string("yyyy-MM-dd"))!""}
               </tr>
@@ -189,7 +189,7 @@
               <div class="dropdown" id="autocomplate">
                 <input type="text" data-provide="typeahead" class="form-control" id="loginInfoDisplay"
                        autocomplete="off">
-                <input type="text" name="applierId" id="loginInfoValue"/>
+                <input type="text" name="applier.id" id="loginInfoValue"/>
               </div>
             </div>
           </div>

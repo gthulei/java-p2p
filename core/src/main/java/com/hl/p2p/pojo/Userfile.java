@@ -8,10 +8,20 @@ public class Userfile extends BaseAuth{
 
     private Long filetypeId;
 
-    public Userfile(int state, Long applierId, String file) {
-        super(state, applierId);
-        this.file = file;
-    }
+    private Systemdictionaryitem filetype;
+
+  public Systemdictionaryitem getFiletype() {
+    return filetype;
+  }
+
+  public void setFiletype(Systemdictionaryitem filetype) {
+    this.filetype = filetype;
+  }
+
+  public Userfile(int state, Logininfo applier, String file) {
+    super(state, applier);
+    this.file = file;
+  }
 
   public Userfile() {
   }

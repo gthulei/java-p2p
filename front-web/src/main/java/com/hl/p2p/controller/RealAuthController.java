@@ -60,7 +60,9 @@ public class RealAuthController {
       List<String> list = FileUploadUtil.fileUpload(file, request);
       realauth.setImage1(list.get(0));
       realauth.setImage2(list.get(1));
-      realauth.setApplierId(UserContext.getCurrent().getId());
+      Logininfo logininfo = new Logininfo();
+      logininfo.setId(UserContext.getCurrent().getId());
+      realauth.setApplier(logininfo);
       realauth.setState(realauth.STATE_NORMAL);
       realauthServer.addRealauth(realauth);
       return JsonResult.resultSuccess("保存成功");

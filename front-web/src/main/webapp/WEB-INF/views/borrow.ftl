@@ -49,23 +49,24 @@
               <a href="/realAuth">身份认证</a>
               <span class="glyphicon glyphicon-remove" style="color:red;"></span>
               </#if>
-
             <#else >
-              <span>身份认证</span>
+              <a href="/realAuth">身份认证</a>
+              <span class="glyphicon glyphicon-remove" style="color:red;"></span>
             </#if>
 
           </li>
           <li>
-            <#if user??>
-            <#if (userinfo.authscore>20)>
-              <a href="/userFile">材料认证分数达到20分</a>
-             <span class="glyphicon glyphicon-ok" style="color:#00aa00;"></span>
+            <#if userinfo.authscore??>
+              <#if (userinfo.authscore>20)>
+                <a href="#">材料认证分数达到20分</a>
+               <span class="glyphicon glyphicon-ok" style="color:#00aa00;"></span>
+                <#else >
+                <a href="/userFile">材料认证分数达到20分</a>
+                <span class="glyphicon glyphicon-remove" style="color:red;"></span>
+              </#if>
               <#else >
-              <a href="#">材料认证分数达到20分</a>
-              <span class="glyphicon glyphicon-remove" style="color:red;"></span>
-            </#if>
-            <#else >
-                <span>材料认证分数达到20分</span>
+                <a href="/userFile">材料认证分数达到20分${userinfo.authscore}</a>
+                <span class="glyphicon glyphicon-remove" style="color:red;"></span>
             </#if>
 
           </li>

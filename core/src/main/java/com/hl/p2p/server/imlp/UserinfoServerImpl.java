@@ -2,10 +2,7 @@ package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.EmailactiveMapper;
 import com.hl.p2p.mapper.UserinfoMapper;
-import com.hl.p2p.pojo.Emailactive;
-import com.hl.p2p.pojo.Realauth;
-import com.hl.p2p.pojo.Userinfo;
-import com.hl.p2p.pojo.Vedioauth;
+import com.hl.p2p.pojo.*;
 import com.hl.p2p.server.IRealauthServer;
 import com.hl.p2p.server.IUserinfoServer;
 import com.hl.p2p.utils.BidConst;
@@ -108,7 +105,7 @@ public class UserinfoServerImpl implements IUserinfoServer {
 
   @Override
   public void bindRealauth(Realauth realauth) {
-    Userinfo user = this.getUserinfoById(realauth.getApplierId());
+    Userinfo user = this.getUserinfoById(realauth.getApplier().getId());
     Realauth realauths = realauthServer.getRealauthByid(realauth.getId());
     // 审核通过
     if(realauth.getState() == realauth.STATE_AUDIT){
@@ -118,16 +115,24 @@ public class UserinfoServerImpl implements IUserinfoServer {
       realauths.setState(realauth.STATE_REFUSE);
     }
     realauths.setAudittime(new Date());
-    realauths.setAuditorId(UserContext.getCurrent().getId());
-    realauthServer.updateRealauth(realauths);
-    this.updateUserInfo(user);
+    Logininfo logininfo = new Logininfo();
+    logininfo.setId(UserContext.getCurrent().getId());
+    realauths.setAuditor(logininfo);
+    realauths.setRemark(realauth.getRemark());
+    try {
+      realauthServer.updateRealauth(realauths);
+      this.updateUserInfo(user);
+    }catch (Exception e){
+      e.printStackTrace();
+    }
+
   }
 
   @Override
   public void vedioauth(Vedioauth vo) {
     // 审核通过
     if(vo.getState() == vo.STATE_AUDIT){
-      Userinfo user = this.getUserinfoById(vo.getApplierId());
+      Userinfo user = this.getUserinfoById(vo.getApplier().getId());
       user.addState(BitStatesUtils.OP_VEDIO_AUTH);
       this.updateUserInfo(user);
     }

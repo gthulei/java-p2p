@@ -24,12 +24,32 @@ public class BaseAuth {
 
   private Long applierId; // 申请人id
 
+  private Logininfo auditor;//审核人
+
+  private Logininfo applier;//申请人
+
+
+  public Logininfo getAuditor() {
+    return auditor;
+  }
+
+  public void setAuditor(Logininfo auditor) {
+    this.auditor = auditor;
+  }
+
+  public Logininfo getApplier() {
+    return applier;
+  }
+
+  public void setApplier(Logininfo applier) {
+    this.applier = applier;
+  }
+
   public BaseAuth() {
   }
 
-  public BaseAuth(int state, Long applierId) {
-    this.state = state;
-    this.applierId = applierId;
+  public BaseAuth(int state,Logininfo applier) {
+    this.applier = applier;
   }
 
   public String getAudit() {
