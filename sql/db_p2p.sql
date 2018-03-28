@@ -43,7 +43,7 @@ DROP TABLE IF EXISTS `accountflow`;
 CREATE TABLE `accountflow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `accountActionType` tinyint(4) NOT NULL COMMENT '资金变化的类型',
-  `amount` decimal(18,4) NOT NULL '总金额',
+  `amount` decimal(18,4) NOT NULL COMMENT '总金额',
   `note` varchar(255) NOT NULL,
   `balance` decimal(18,4) NOT NULL COMMENT '可用金额',
   `freezed` decimal(18,4) NOT NULL COMMENT '冻结金额',
@@ -196,7 +196,7 @@ CREATE TABLE `paymentschedule` (
 -- ----------------------------
 DROP TABLE IF EXISTS `paymentscheduledetail`;
 CREATE TABLE `paymentscheduledetail` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT, COMMENT '主键'
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `bidamount` decimal(18,4) NOT NULL COMMENT '该投标人总共投标金额',
   `bid_id` bigint(20) NOT NULL COMMENT '对应的投标ID',
   `totalamount` decimal(18,4) NOT NULL COMMENT '本期还款总金额',
@@ -207,7 +207,7 @@ CREATE TABLE `paymentscheduledetail` (
   `bidrequest_id` bigint(20) NOT NULL COMMENT '所属哪个借款',
   `paydate` datetime DEFAULT NULL COMMENT '还款时间',
   `returntype` tinyint(4) NOT NULL COMMENT '还款方式',
-  `paymentschedule_id` bigint(20) NOT NULL COMMENT '所属还款计划'
+  `paymentschedule_id` bigint(20) NOT NULL COMMENT '所属还款计划',
   `fromlogininfo_id` bigint(20) DEFAULT NULL COMMENT '还款人',
   `tologininfo_id` bigint(20) DEFAULT NULL COMMENT '收款人',
   PRIMARY KEY (`id`)
