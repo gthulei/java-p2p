@@ -88,6 +88,7 @@ CREATE TABLE `bidrequest` (
   `note` varchar(255) NOT NULL COMMENT '风控意见',
   `disableDate` datetime DEFAULT NULL COMMENT '招标截止日期',
   `createuser_id` bigint(20) NOT NULL COMMENT '借款人id',
+  `return_type` bigint(4) NOT NULL COMMENT '还款方式',
   `disableDays` tinyint(4) NOT NULL COMMENT '招标天数',
   `minBidAmount` decimal(18,4) NOT NULL COMMENT '最小借款金额',
   `applyTime` datetime DEFAULT NULL COMMENT '申请时间',

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.mapper.BidMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Bid" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="actualRate" property="actualrate" jdbcType="DECIMAL" />
+    <result column="availableAmount" property="availableamount" jdbcType="DECIMAL" />
+    <result column="bidrequest_id" property="bidrequestId" jdbcType="BIGINT" />
+    <result column="bidUser_id" property="biduserId" jdbcType="BIGINT" />
+    <result column="bidTime" property="bidtime" jdbcType="TIMESTAMP" />
+    <result column="bidRequestTitle" property="bidrequesttitle" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Bid" >
+    insert into bid (id, actualRate, availableAmount, 
+      bidrequest_id, bidUser_id, bidTime, 
+      bidRequestTitle)
+    values (#{id,jdbcType=BIGINT}, #{actualrate,jdbcType=DECIMAL}, #{availableamount,jdbcType=DECIMAL}, 
+      #{bidrequestId,jdbcType=BIGINT}, #{biduserId,jdbcType=BIGINT}, #{bidtime,jdbcType=TIMESTAMP}, 
+      #{bidrequesttitle,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Bid" >
+    update bid
+    set actualRate = #{actualrate,jdbcType=DECIMAL},
+      availableAmount = #{availableamount,jdbcType=DECIMAL},
+      bidrequest_id = #{bidrequestId,jdbcType=BIGINT},
+      bidUser_id = #{biduserId,jdbcType=BIGINT},
+      bidTime = #{bidtime,jdbcType=TIMESTAMP},
+      bidRequestTitle = #{bidrequesttitle,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, actualRate, availableAmount, bidrequest_id, bidUser_id, bidTime, bidRequestTitle
+    from bid
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+</mapper>

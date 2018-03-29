@@ -22,7 +22,12 @@
       </div>
       <div class="el-borrow-item-content">
         <p>
-          认证后可借金额 <i>¥5000
+          认证后可借金额 <i>
+					<#if user??>
+						${account.remainborrowlimit}
+						<#else >
+						5000
+					</#if>
         </p>
         <a href="#" class="text-primary">申请条件</a>
         <p class="help-block">仅限广州地区</p>
@@ -50,13 +55,12 @@
               <span class="glyphicon glyphicon-remove" style="color:red;"></span>
               </#if>
             <#else >
-              <a href="/realAuth">身份认证</a>
-              <span class="glyphicon glyphicon-remove" style="color:red;"></span>
+             <span>身份认证</span>
             </#if>
 
           </li>
           <li>
-            <#if userinfo.authscore??>
+            <#if user?? && userinfo.authscore??>
               <#if (userinfo.authscore>20)>
                 <a href="#">材料认证分数达到20分</a>
                <span class="glyphicon glyphicon-ok" style="color:#00aa00;"></span>
@@ -65,8 +69,7 @@
                 <span class="glyphicon glyphicon-remove" style="color:red;"></span>
               </#if>
               <#else >
-                <a href="/userFile">材料认证分数达到20分</a>
-                <span class="glyphicon glyphicon-remove" style="color:red;"></span>
+                <span>材料认证分数达到20分</span>
             </#if>
 
           </li>
