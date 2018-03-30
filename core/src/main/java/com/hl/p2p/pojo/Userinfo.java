@@ -15,21 +15,21 @@ public class Userinfo {
 
     private String phonenumber;//手机号
 
-    private Long incomegradeId; // 收入
-
-    private Long marriageId;// 婚姻情况
-
-    private Long kidcountId; // 子女情况
-
-    private Long educationbackgroundId; // 学历
-
     private Integer authscore; // 用户的风控总分数
-
-    private Long houseconditionId;// 住房
 
     private Long realauthid; //用户实名认证
 
     private String email;//邮箱
+
+    private Systemdictionaryitem incomegrade; // 收入
+
+    private Systemdictionaryitem marriage;// 婚姻情况
+
+    private Systemdictionaryitem kidcount; // 子女情况
+
+    private Systemdictionaryitem educationbackground; // 学历
+
+    private Systemdictionaryitem housecondition;// 住房
 
     // 判断是否已经绑定了手机
     public boolean getIsBindPhone() {
@@ -135,37 +135,6 @@ public class Userinfo {
         this.phonenumber = phonenumber == null ? null : phonenumber.trim();
     }
 
-    public Long getIncomegradeId() {
-        return incomegradeId;
-    }
-
-    public void setIncomegradeId(Long incomegradeId) {
-        this.incomegradeId = incomegradeId;
-    }
-
-    public Long getMarriageId() {
-        return marriageId;
-    }
-
-    public void setMarriageId(Long marriageId) {
-        this.marriageId = marriageId;
-    }
-
-    public Long getKidcountId() {
-        return kidcountId;
-    }
-
-    public void setKidcountId(Long kidcountId) {
-        this.kidcountId = kidcountId;
-    }
-
-    public Long getEducationbackgroundId() {
-        return educationbackgroundId;
-    }
-
-    public void setEducationbackgroundId(Long educationbackgroundId) {
-        this.educationbackgroundId = educationbackgroundId;
-    }
 
     public Integer getAuthscore() {
         return authscore;
@@ -173,14 +142,6 @@ public class Userinfo {
 
     public void setAuthscore(Integer authscore) {
         this.authscore = authscore;
-    }
-
-    public Long getHouseconditionId() {
-        return houseconditionId;
-    }
-
-    public void setHouseconditionId(Long houseconditionId) {
-        this.houseconditionId = houseconditionId;
     }
 
     public Long getRealauthid() {
@@ -197,5 +158,49 @@ public class Userinfo {
 
     public void setEmail(String email) {
         this.email = email == null ? null : email.trim();
+    }
+
+    public void setBitstate(long bitstate) {
+        this.bitstate = bitstate;
+    }
+
+    public Systemdictionaryitem getIncomegrade() {
+        return incomegrade;
+    }
+
+    public void setIncomegrade(Systemdictionaryitem incomegrade) {
+        this.incomegrade = incomegrade;
+    }
+
+    public Systemdictionaryitem getMarriage() {
+        return marriage;
+    }
+
+    public void setMarriage(Systemdictionaryitem marriage) {
+        this.marriage = marriage;
+    }
+
+    public Systemdictionaryitem getKidcount() {
+        return kidcount;
+    }
+
+    public void setKidcount(Systemdictionaryitem kidcount) {
+        this.kidcount = kidcount;
+    }
+
+    public Systemdictionaryitem getEducationbackground() {
+        return educationbackground;
+    }
+
+    public void setEducationbackground(Systemdictionaryitem educationbackground) {
+        this.educationbackground = educationbackground;
+    }
+
+    public Systemdictionaryitem getHousecondition() {
+        return housecondition;
+    }
+
+    public void setHousecondition(Systemdictionaryitem housecondition) {
+        this.housecondition = housecondition;
     }
 }

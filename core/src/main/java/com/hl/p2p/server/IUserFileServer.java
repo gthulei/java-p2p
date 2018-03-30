@@ -19,5 +19,7 @@ public interface IUserFileServer {
   PageResult getUserFileList(UserFileQueryObject qo);
 
   Userfile getUserFileById(Long id);
+
+  List<Userfile> getUserFileByApplierList(Long id);
   
 }

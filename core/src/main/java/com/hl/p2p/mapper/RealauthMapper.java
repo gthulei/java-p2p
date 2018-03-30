@@ -13,6 +13,8 @@ public interface RealauthMapper {
 
     Realauth selectById(Long id);
 
+    Realauth selectByApplierId(Long applierId);
+
     int updateByPrimaryKey(Realauth record);
 
     List<Realauth> selectPage(RealauthQueryObject qo);

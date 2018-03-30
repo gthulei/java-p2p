@@ -8,11 +8,11 @@
   <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
   <script>
     $(function () {
-      $('#educationBackground').find("option[value=${userinfo.educationbackgroundId!'off'}]").attr("selected", true);
-      $('#incomeGrade').find("option[value=${userinfo.incomegradeId!'off'}]").attr("selected", true);
-      $('#marriage').find("option[value=${userinfo.marriageId!'off'}]").attr("selected", true);
-      $('#houseCondition').find("option[value=${userinfo.houseconditionId!'off'}]").attr("selected", true);
-      $('#kidCount').find("option[value=${userinfo.kidcountId!'off'}]").attr("selected", true);
+      $('#educationBackground').find("option[value=${userinfo.educationbackground.id!'off'}]").attr("selected", true);
+      $('#incomeGrade').find("option[value=${userinfo.incomegrade.id!'off'}]").attr("selected", true);
+      $('#marriage').find("option[value=${userinfo.marriage.id!'off'}]").attr("selected", true);
+      $('#houseCondition').find("option[value=${userinfo.housecondition.id!'off'}]").attr("selected", true);
+      $('#kidCount').find("option[value=${userinfo.kidcount.id!'off'}]").attr("selected", true);
 
       //提交表单
       $("#submitBtn").click(function () {
@@ -127,7 +127,7 @@
               个人学历
             </label>
             <div class="col-sm-8">
-              <select class="form-control" id="educationBackground" name="educationbackgroundId" style="width: 180px" autocomplate="off">
+              <select class="form-control" id="educationBackground" name="educationbackground.id" style="width: 180px" autocomplate="off">
                 <option value="off">请选择学历</option>
 										<#list educationBackgrounds as item>
 										  <option value="${item.id}">${item.title}</option>
@@ -141,7 +141,7 @@
               月收入
             </label>
             <div class="col-sm-8">
-              <select class="form-control" id="incomeGrade" name="incomegradeId" style="width: 180px" autocomplate="off">
+              <select class="form-control" id="incomeGrade" name="incomegrade.id" style="width: 180px" autocomplate="off">
                 <option value="off">请选择月收入</option>
 									<#list incomeGrades as item>
 										  <option value="${item.id}">${item.title}</option>
@@ -155,7 +155,7 @@
               婚姻情况
             </label>
             <div class="col-sm-8">
-              <select class="form-control" id="marriage" name="marriageId" style="width: 180px" autocomplate="off">
+              <select class="form-control" id="marriage" name="marriage.id" style="width: 180px" autocomplate="off">
                 <option value="off">请选择婚姻情况</option>
                 <#list marriages as item>
                   <option value="${item.id}">${item.title}</option>
@@ -168,7 +168,7 @@
               住房条件
             </label>
             <div class="col-sm-8">
-              <select class="form-control" id="houseCondition" name="houseconditionId" style="width: 180px" autocomplate="off">
+              <select class="form-control" id="houseCondition" name="housecondition.id" style="width: 180px" autocomplate="off">
                 <option value="off">请选择住房条件</option>
 										<#list houseConditions as item>
                       <option value="${item.id}">${item.title}</option>
@@ -181,7 +181,7 @@
               子女情况
             </label>
             <div class="col-sm-8">
-              <select class="form-control" id="kidCount" name="kidcountId" style="width: 180px" autocomplate="off">
+              <select class="form-control" id="kidCount" name="kidcount.id" style="width: 180px" autocomplate="off">
                 <option value="off">请选择子女情况</option>
               <#list kidCounts as item>
                       <option value="${item.id}">${item.title}</option>

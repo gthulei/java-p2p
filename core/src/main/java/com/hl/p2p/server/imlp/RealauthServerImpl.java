@@ -57,4 +57,9 @@ public class RealauthServerImpl implements IRealauthServer{
     result.setData(realauths);
     return result;
   }
+
+  @Override
+  public Realauth getRealauthApplier(Long applierId) {
+    return realauthMapper.selectByApplierId(applierId);
+  }
 }

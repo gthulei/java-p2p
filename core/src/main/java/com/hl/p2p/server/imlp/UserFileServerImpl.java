@@ -89,4 +89,9 @@ public class UserFileServerImpl implements IUserFileServer{
     return userfileMapper.selectByPrimaryKey(id);
   }
 
+  @Override
+  public List<Userfile> getUserFileByApplierList(Long id) {
+    return userfileMapper.selectByApplierList(id);
+  }
+
 }

@@ -74,6 +74,15 @@
     LEFT JOIN systemdictionaryitem f ON r.filetype_id =f.id
     WHERE r.id=#{id}
   </select>
+  <select id="selectByApplierList" resultMap="BaseResultMap" parameterType="long">
+    SELECT
+    <include refid="base_column"/>
+    FROM userfile r
+    JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    LEFT JOIN systemdictionaryitem f ON r.filetype_id =f.id
+    WHERE r.applier_id=#{id}
+  </select>
   <select id="selectFiletype" resultMap="BaseResultMap">
     SELECT
     <include refid="base_column"/>

@@ -16,6 +16,8 @@ public interface UserfileMapper {
 
     Userfile selectByPrimaryKey(Long id);
 
+    List<Userfile> selectByApplierList(Long id);
+
     int selectCount(UserFileQueryObject qo);
 
     List<Userfile> selectPage(UserFileQueryObject qo);

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hl.p2p.utils.BidConst;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class Bidrequest {
 
   private String note = ""; //风控意见
 
-  private Date disabledate = new Date(); //招标截止日期
+  private Date disabledate; //招标截止日期
 
   private Logininfo createuser; //借款人
 
@@ -57,6 +58,16 @@ public class Bidrequest {
 
   private Date publishtime;//publishTime
 
+  //获取到进度条
+  public BigDecimal getPersent(){
+    return this.currentsum.divide(this.bidrequestamount, BidConst.DISPLAY_SCALE, RoundingMode.HALF_UP);
+
+  }
+
+  // 标的剩余金额
+  public BigDecimal getRemainAmount(){
+    return this.bidrequestamount.subtract(this.currentsum);
+  }
 
   public String getBidRequestStateDisplay() {
     switch (this.bidrequeststate) {

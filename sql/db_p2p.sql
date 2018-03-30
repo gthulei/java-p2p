@@ -103,7 +103,6 @@ CREATE TABLE `bidrequest` (
 DROP TABLE IF EXISTS `bidrequestaudithistory`;
 CREATE TABLE `bidrequestaudithistory` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `state` tinyint(4) NOT NULL COMMENT '审核的状态',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `auditTime` datetime DEFAULT NULL COMMENT '审核时间',
   `applyTime` datetime NOT NULL COMMENT '借款时间',

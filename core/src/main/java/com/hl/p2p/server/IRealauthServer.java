@@ -15,4 +15,6 @@ public interface IRealauthServer {
    Realauth getRealauthByid(long id);
 
    PageResult getRealauthPage(RealauthQueryObject qo);
+
+   Realauth getRealauthApplier(Long applierId);
 }

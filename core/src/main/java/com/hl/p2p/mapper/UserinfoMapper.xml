@@ -8,14 +8,35 @@
     <result column="realName" property="realname" jdbcType="VARCHAR" />
     <result column="idNumber" property="idnumber" jdbcType="VARCHAR" />
     <result column="phoneNumber" property="phonenumber" jdbcType="VARCHAR" />
-    <result column="incomeGrade_id" property="incomegradeId" jdbcType="BIGINT" />
-    <result column="marriage_id" property="marriageId" jdbcType="BIGINT" />
-    <result column="kidCount_id" property="kidcountId" jdbcType="BIGINT" />
-    <result column="educationBackground_id" property="educationbackgroundId" jdbcType="BIGINT" />
-    <result column="authScore" property="authscore" jdbcType="INTEGER" />
-    <result column="houseCondition_id" property="houseconditionId" jdbcType="BIGINT" />
-    <result column="realauthid" property="realauthid" jdbcType="BIGINT" />
     <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="authScore" property="authscore" jdbcType="INTEGER" />
+    <result column="realauthid" property="realauthid" jdbcType="BIGINT" />
+
+    <association property="incomegrade" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="in_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+
+    <association property="marriage" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="ma_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+
+    <association property="kidcount" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="kid_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+
+    <association property="educationbackground" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="edu_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+
+    <association property="housecondition" javaType="com.hl.p2p.pojo.Systemdictionaryitem" columnPrefix="hou_">
+      <id column="id" property="id"/>
+      <result column="title" property="title"/>
+    </association>
+
   </resultMap>
 
   <insert id="insert" parameterType="com.hl.p2p.pojo.Userinfo" >
@@ -26,8 +47,8 @@
       realauthid, email)
     values (#{id,jdbcType=BIGINT}, 0, #{bitstate,jdbcType=BIGINT},
       #{realname,jdbcType=VARCHAR}, #{idnumber,jdbcType=VARCHAR}, #{phonenumber,jdbcType=VARCHAR}, 
-      #{incomegradeId,jdbcType=BIGINT}, #{marriageId,jdbcType=BIGINT}, #{kidcountId,jdbcType=BIGINT}, 
-      #{educationbackgroundId,jdbcType=BIGINT}, #{authscore,jdbcType=INTEGER}, #{houseconditionId,jdbcType=BIGINT}, 
+      #{incomegrade.id}, #{marriage.id}, #{kidcount.id,jdbcType=BIGINT},
+      #{educationbackground.id}, #{authscore,jdbcType=INTEGER}, #{housecondition.id},
       #{realauthid,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Userinfo" >
@@ -37,26 +58,35 @@
       realName = #{realname,jdbcType=VARCHAR},
       idNumber = #{idnumber,jdbcType=VARCHAR},
       phoneNumber = #{phonenumber,jdbcType=VARCHAR},
-      incomeGrade_id = #{incomegradeId,jdbcType=BIGINT},
-      marriage_id = #{marriageId,jdbcType=BIGINT},
-      kidCount_id = #{kidcountId,jdbcType=BIGINT},
-      educationBackground_id = #{educationbackgroundId,jdbcType=BIGINT},
+      incomeGrade_id = #{incomegrade.id},
+      marriage_id = #{marriage.id},
+      kidCount_id = #{kidcount.id},
+      educationBackground_id = #{educationbackground.id},
       authScore = #{authscore,jdbcType=INTEGER},
-      houseCondition_id = #{houseconditionId,jdbcType=BIGINT},
+      houseCondition_id = #{housecondition.id},
       realauthid = #{realauthid,jdbcType=BIGINT},
       email = #{email,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT} AND version=#{version}
   </update>
 
   <sql id="base_column">
-    id, version, bitState, realName, idNumber, phoneNumber, incomeGrade_id, marriage_id,
-    kidCount_id, educationBackground_id, authScore, houseCondition_id, realauthid, email
+    u.id, u.version, u.bitState, u.realName, u.idNumber, u.phoneNumber,  u.email, u.authScore, u.realauthid,
+    ioc.id AS in_id,ioc.title AS in_title,
+    ma.id AS ma_id,ma.title AS ma_title,
+    edu.id AS edu_id,edu.title AS edu_title,
+    kid.id AS kid_id,kid.title AS kid_title,
+    hou.id AS hou_id,hou.title AS hou_title
   </sql>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select <include refid="base_column" />
-    from userinfo
-    where id = #{id,jdbcType=BIGINT}
+    from userinfo u
+    LEFT JOIN systemdictionaryitem ioc ON u.incomeGrade_id=ioc.id
+    LEFT JOIN systemdictionaryitem ma ON u.marriage_id=ma.id
+    LEFT JOIN systemdictionaryitem kid ON u.kidCount_id=kid.id
+    LEFT JOIN systemdictionaryitem edu ON u.educationBackground_id=edu.id
+    LEFT JOIN systemdictionaryitem hou ON u.houseCondition_id=hou.id
+    where u.id = #{id,jdbcType=BIGINT}
   </select>
 
 

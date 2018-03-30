@@ -86,11 +86,11 @@ public class UserinfoServerImpl implements IUserinfoServer {
   public void saveBaseinfo(Userinfo userinfo) {
     Userinfo user = this.getUserinfoById(UserContext.getCurrent().getId());
     user.addState(BitStatesUtils.OP_BASIC_INFO);
-    user.setMarriageId(userinfo.getMarriageId());
-    user.setEducationbackgroundId(userinfo.getEducationbackgroundId());
-    user.setIncomegradeId(userinfo.getIncomegradeId());
-    user.setKidcountId(userinfo.getKidcountId());
-    user.setHouseconditionId(userinfo.getHouseconditionId());
+    user.setMarriage(userinfo.getMarriage());
+    user.setEducationbackground(userinfo.getEducationbackground());
+    user.setIncomegrade(userinfo.getIncomegrade());
+    user.setKidcount(userinfo.getKidcount());
+    user.setHousecondition(userinfo.getHousecondition());
     this.updateUserInfo(user);
   }
 

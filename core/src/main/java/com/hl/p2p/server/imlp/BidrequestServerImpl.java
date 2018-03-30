@@ -1,19 +1,15 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.BidrequestMapper;
-import com.hl.p2p.pojo.Account;
-import com.hl.p2p.pojo.Bid;
-import com.hl.p2p.pojo.Bidrequest;
-import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.pojo.*;
 import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IAccountServer;
 import com.hl.p2p.server.IBidrequestServer;
+import com.hl.p2p.server.IBidrequestaudithistoryServer;
 import com.hl.p2p.server.IUserinfoServer;
-import com.hl.p2p.utils.BidConst;
-import com.hl.p2p.utils.BitStatesUtils;
-import com.hl.p2p.utils.CalculatetUtil;
-import com.hl.p2p.utils.UserContext;
+import com.hl.p2p.utils.*;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +30,9 @@ public class BidrequestServerImpl implements IBidrequestServer{
 
   @Autowired
   private IAccountServer accountServer;
+
+  @Autowired
+  private IBidrequestaudithistoryServer bidrequestaudithistoryServer;
 
   /**
    * 发标
@@ -143,8 +142,38 @@ public class BidrequestServerImpl implements IBidrequestServer{
   @Override
   public void borrowFullAudit(Long id, int state,String remark) {
     Bidrequest bidrequest = bidrequestMapper.selectByPrimaryKey(id);
-    bidrequest.setBidrequeststate(state);
-    bidrequest.setNote(remark);
-    bidrequestMapper.updateByPrimaryKey(bidrequest);
+    Userinfo userinfo = userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId());
+    // 判断有没有在申请中的标
+    if(userinfo.getHasBidRequestInProcess()){
+      Bidrequestaudithistory bidrequestaudithistory = new Bidrequestaudithistory();
+      bidrequestaudithistory.setRemark(remark);
+      bidrequestaudithistory.setAudittime(new Date());
+      bidrequestaudithistory.setApplytime(bidrequest.getApplytime());
+      bidrequestaudithistory.setAuditor(UserContext.getCurrent());
+      Logininfo logininfo = new Logininfo();
+      logininfo.setId(userinfo.getId());
+      bidrequestaudithistory.setApplier(logininfo);
+      bidrequestaudithistory.setBidrequestid(userinfo.getId());
+      bidrequestaudithistory.setAudittype(Bidrequestaudithistory.PUBLISH_AUDIT);//设置发标请审核
+      //审核历史
+      bidrequestaudithistoryServer.add(bidrequestaudithistory);
+      // 审核成功
+      if(state==BidConst.BIDREQUEST_STATE_BIDDING){
+        bidrequest.setPublishtime(new Date());
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_BIDDING);
+        bidrequest.setNote(remark);
+        // 到期时间
+        bidrequest.setDisabledate(DateUtils.addDays(bidrequest.getPublishtime(),bidrequest.getDisabledays()));
+      }else {
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_PUBLISH_REFUSE);
+        // 移除在申请中的状态
+        userinfo.removeState(BitStatesUtils.OP_HAS_BIDREQUEST_PROCESS) ;
+        this.userinfoServer.updateUserInfo(userinfo);
+      }
+      //审核
+      bidrequestMapper.updateByPrimaryKey(bidrequest);
+    }
   }
 }

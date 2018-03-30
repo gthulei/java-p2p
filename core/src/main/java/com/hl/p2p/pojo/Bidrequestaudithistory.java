@@ -2,10 +2,13 @@ package com.hl.p2p.pojo;
 
 import java.util.Date;
 
-public class Bidrequestaudithistory {
-    private Long id;
+public class Bidrequestaudithistory extends BaseAuth{
 
-    private Byte state;
+    public static  final int PUBLISH_AUDIT = 0 ; //发标审核
+    public static  final int FULL_AUDIT1 = 1 ; //满标一审
+    public static  final int FULL_AUDIT2 = 2 ; //满标二审
+
+    private Long id;
 
     private String remark;
 
@@ -13,13 +16,18 @@ public class Bidrequestaudithistory {
 
     private Date applytime;
 
-    private Long auditorId;
-
-    private Long applierId;
-
     private Long bidrequestid;
 
-    private Byte audittype;
+    private int audittype;//标的审核
+
+    public String getAuditTypeDisplay(){
+        switch (this.audittype) {
+            case PUBLISH_AUDIT: return "发标审核";
+            case FULL_AUDIT1: return "满标一审";
+            case FULL_AUDIT2: return "满标二审";
+            default: return "" ;
+        }
+    }
 
     public Long getId() {
         return id;
@@ -27,14 +35,6 @@ public class Bidrequestaudithistory {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Byte getState() {
-        return state;
-    }
-
-    public void setState(Byte state) {
-        this.state = state;
     }
 
     public String getRemark() {
@@ -61,22 +61,6 @@ public class Bidrequestaudithistory {
         this.applytime = applytime;
     }
 
-    public Long getAuditorId() {
-        return auditorId;
-    }
-
-    public void setAuditorId(Long auditorId) {
-        this.auditorId = auditorId;
-    }
-
-    public Long getApplierId() {
-        return applierId;
-    }
-
-    public void setApplierId(Long applierId) {
-        this.applierId = applierId;
-    }
-
     public Long getBidrequestid() {
         return bidrequestid;
     }
@@ -85,11 +69,11 @@ public class Bidrequestaudithistory {
         this.bidrequestid = bidrequestid;
     }
 
-    public Byte getAudittype() {
+    public int getAudittype() {
         return audittype;
     }
 
-    public void setAudittype(Byte audittype) {
+    public void setAudittype(int audittype) {
         this.audittype = audittype;
     }
 }
