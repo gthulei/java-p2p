@@ -60,8 +60,8 @@
 
           </li>
           <li>
-            <#if user?? && userinfo.authscore??>
-              <#if (userinfo.authscore>20)>
+            <#if user??>
+              <#if  userinfo.authscore?? && (userinfo.authscore>20)>
                 <a href="#">材料认证分数达到20分</a>
                <span class="glyphicon glyphicon-ok" style="color:#00aa00;"></span>
                 <#else >

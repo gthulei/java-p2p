@@ -66,11 +66,37 @@
       return_type = #{returnType,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT} AND version =#{version}
   </update>
+  <sql id="base_column">
+    b.id, b.version, b.bidRequestType, b.bidRequestState, b.bidRequestAmount, b.currentRate,
+    b.monthes2Return, b.bidCount, b.totalRewardAmount, b.currentSum, b.title, b.description, b.note,
+    b.disableDate, b.disableDays, b.minBidAmount, b.applyTime, b.publishTime, b.return_type,
+    u.id AS u_id,u.username AS u_username
+  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select id, version, bidRequestType, bidRequestState, bidRequestAmount, currentRate, 
-    monthes2Return, bidCount, totalRewardAmount, currentSum, title, description, note, 
-    disableDate, createuser_id, disableDays, minBidAmount, applyTime, publishTime, return_type
-    from bidrequest
-    where id = #{id,jdbcType=BIGINT}
+    select <include refid="base_column"/>
+    from bidrequest b
+    LEFT JOIN logininfo u ON b.createuser_id=u.id
+    where b.id = #{id,jdbcType=BIGINT}
   </select>
+  <sql id="where">
+    <where>
+      <if test="bidrequeststate!=null">
+        b.bidRequestState = #{bidrequeststate}
+      </if>
+    </where>
+  </sql>
+
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.BidRequestQueryObject">
+    SELECT <include refid="base_column"/>
+    from bidrequest b
+    LEFT JOIN logininfo u ON b.createuser_id=u.id
+    <include refid="where"/>
+    ORDER BY b.bidRequestState DESC LIMIT #{start},#{pageSize}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    SELECT COUNT(id) FROM bidrequest
+    <include refid="where"/>
+  </select>
+
 </mapper>

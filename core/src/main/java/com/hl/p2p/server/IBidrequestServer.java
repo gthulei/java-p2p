@@ -2,6 +2,8 @@ package com.hl.p2p.server;
 
 import com.hl.p2p.pojo.Bidrequest;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.query.BidRequestQueryObject;
+import com.hl.p2p.query.PageResult;
 
 public interface IBidrequestServer {
 
@@ -12,4 +14,9 @@ public interface IBidrequestServer {
   Bidrequest get(Long id);
 
   boolean canApply(Userinfo user);
+
+  PageResult getApplyList(BidRequestQueryObject qo);
+
+  void borrowFullAudit(Long id,int state,String remark);
+
 }

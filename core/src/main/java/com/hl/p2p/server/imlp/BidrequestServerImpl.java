@@ -5,6 +5,8 @@ import com.hl.p2p.pojo.Account;
 import com.hl.p2p.pojo.Bid;
 import com.hl.p2p.pojo.Bidrequest;
 import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.query.BidRequestQueryObject;
+import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IAccountServer;
 import com.hl.p2p.server.IBidrequestServer;
 import com.hl.p2p.server.IUserinfoServer;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 发标借款
@@ -112,5 +115,36 @@ public class BidrequestServerImpl implements IBidrequestServer{
     return user.getIsRealAuth() && user.getIsVedioAuth()
       && user.getIsBasicInfo()
       && user.getAuthscore() >= BidConst.CREDIT_BORROW_SCORE;
+  }
+
+  /**
+   * 查询发标列表
+   * @param qo
+   * @return
+   */
+  @Override
+  public PageResult getApplyList(BidRequestQueryObject qo) {
+    int i = bidrequestMapper.selectCount();
+    qo.setBidrequeststate(BidConst.BIDREQUEST_STATE_PUBLISH_PENDING);
+    List<Bidrequest> resule = bidrequestMapper.selectPage(qo);
+    PageResult pageResult = new PageResult();
+    pageResult.setPageSize(qo.getPageSize());
+    pageResult.setCurrentPage(qo.getCurrentPage());
+    pageResult.setTotalCount(i);
+    pageResult.setData(resule);
+    return pageResult;
+  }
+
+  /**
+   * 满标前审核
+   * @param id
+   * @param state
+   */
+  @Override
+  public void borrowFullAudit(Long id, int state,String remark) {
+    Bidrequest bidrequest = bidrequestMapper.selectByPrimaryKey(id);
+    bidrequest.setBidrequeststate(state);
+    bidrequest.setNote(remark);
+    bidrequestMapper.updateByPrimaryKey(bidrequest);
   }
 }
