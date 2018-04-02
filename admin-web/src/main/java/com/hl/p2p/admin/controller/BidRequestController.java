@@ -40,6 +40,7 @@ public class BidRequestController {
   @RequireLogin
   @RequestMapping("/bidrequest_publishaudit_list")
   public String publishaudit(@ModelAttribute("qo") BidRequestQueryObject qo, Model model){
+    qo.setQuertState(1);
     model.addAttribute("pageResult",bidrequestServer.getApplyList(qo));
     return "publish_audit";
   }

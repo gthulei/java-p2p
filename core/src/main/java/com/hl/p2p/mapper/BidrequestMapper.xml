@@ -80,8 +80,11 @@
   </select>
   <sql id="where">
     <where>
-      <if test="bidrequeststate!=null">
-        b.bidRequestState = #{bidrequeststate}
+      <if test="quertState==1">
+        AND b.bidRequestState = #{bidrequeststate}
+      </if>
+      <if test="quertState==2">
+       AND b.bidRequestState IN(1,7,4,5)
       </if>
     </where>
   </sql>
@@ -91,7 +94,7 @@
     from bidrequest b
     LEFT JOIN logininfo u ON b.createuser_id=u.id
     <include refid="where"/>
-    ORDER BY b.bidRequestState DESC LIMIT #{start},#{pageSize}
+    ORDER BY b.bidRequestState ASC LIMIT #{start},#{pageSize}
   </select>
 
   <select id="selectCount" resultType="java.lang.Integer">
