@@ -66,7 +66,7 @@
 						进行中借款
 					</span>
 					<div class="pull-right">
-						<a class="btn btn-link " href="/invest.do">
+						<a class="btn btn-link " href="/invest">
 							进入投资列表
 						</a>
 					</div>

@@ -126,8 +126,6 @@ public class BidrequestServerImpl implements IBidrequestServer{
     int i = bidrequestMapper.selectCount();
     if (qo.getQuertState()==1){
       qo.setBidrequeststate(BidConst.BIDREQUEST_STATE_PUBLISH_PENDING);
-    }else if(qo.getBidrequeststate()==2){
-
     }
     List<Bidrequest> resule = bidrequestMapper.selectPage(qo);
     PageResult pageResult = new PageResult();
