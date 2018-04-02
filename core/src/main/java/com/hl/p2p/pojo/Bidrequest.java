@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Bidrequest {
@@ -41,6 +42,16 @@ public class Bidrequest {
   private Date disabledate; //招标截止日期
 
   private Logininfo createuser; //借款人
+
+  private List<Bid> bids;
+
+  public List<Bid> getBids() {
+    return bids;
+  }
+
+  public void setBids(List<Bid> bids) {
+    this.bids = bids;
+  }
 
   public Logininfo getCreateuser() {
     return createuser;

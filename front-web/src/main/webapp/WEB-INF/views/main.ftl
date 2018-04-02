@@ -101,7 +101,7 @@
 											${data.persent} %
 										</div>
 									</td>
-									<td><a class="btn btn-danger btn-sm" href="/borrow_info.do?id=${data.id}">查看</a></td>
+									<td><a class="btn btn-danger btn-sm" href="/borrowDes?id=${data.id}">查看</a></td>
 								</tr>
 							</#list>
 						<#else>

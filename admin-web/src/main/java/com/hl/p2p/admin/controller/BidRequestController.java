@@ -66,15 +66,15 @@ public class BidRequestController {
   @RequireLogin
   @RequestMapping("/borrow_info")
   public String borrowInfo(@RequestParam("id") Long id,Model model){
-    Bidrequest bidrequest = bidrequestServer.get(id);
+    Bidrequest result = bidrequestServer.get(id);
     // 标地信息
-    model.addAttribute("bidRequest",bidrequest);
+    model.addAttribute("bidRequest",result);
     // 标用户信息
-    model.addAttribute("userInfo",userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId()));
+    model.addAttribute("userInfo",userinfoServer.getUserinfoById(result.getCreateuser().getId()));
     // 标认证信息
-    model.addAttribute("realAuth",realauthServer.getRealauthApplier(bidrequest.getCreateuser().getId()));
+    model.addAttribute("realAuth",realauthServer.getRealauthApplier(result.getCreateuser().getId()));
     // 风控信息
-    model.addAttribute("userFiles",userFileServer.getUserFileByApplierList(bidrequest.getCreateuser().getId()));
+    model.addAttribute("userFiles",userFileServer.getUserFileByApplierList(result.getCreateuser().getId()));
     //审核历史
     List<Bidrequestaudithistory> historyList = bidrequestaudithistoryServer.getHistoryList();
     model.addAttribute("audits",historyList);

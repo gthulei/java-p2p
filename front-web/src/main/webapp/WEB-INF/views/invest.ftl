@@ -70,7 +70,7 @@
         </div>
       </td>
       <td><a class="btn btn-danger btn-sm"
-             href="/borrow_info?id=${data.id}">查看</a></td>
+             href="/borrowDes?id=${data.id}">查看</a></td>
     </tr>
 					</#list>
 				<#else>

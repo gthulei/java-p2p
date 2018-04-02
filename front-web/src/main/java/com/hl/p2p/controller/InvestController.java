@@ -3,7 +3,6 @@ package com.hl.p2p.controller;
 import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IBidrequestServer;
-import com.hl.p2p.utils.RequireLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ public class InvestController {
   @Autowired
   private IBidrequestServer bidrequestServer;
 
-  @RequireLogin
   @RequestMapping("/invest")
   public String invest(Model model, @ModelAttribute("qo") BidRequestQueryObject qo){
     PageResult result = bidrequestServer.getApplyList(qo);
