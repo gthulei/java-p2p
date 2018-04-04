@@ -1,15 +1,31 @@
 package com.hl.p2p.pojo;
 
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Companybankinfo {
     private Long id;
 
-    private String bankname;
+    private String bankname;//开户行
 
-    private String accountname;
+    private String accountname;//开户人
 
-    private String banknumber;
+    private String banknumber;//卡号
 
-    private String bankforkname;
+    private String bankforkname;//支行名称
+
+    public String getJsonString(){
+        Map<String, Object> json = new HashMap<>();
+        json.put("id",id);
+        json.put("bankName",bankname);
+        json.put("accountName",accountname);
+        json.put("accountNumber",banknumber);
+        json.put("forkName",bankforkname);
+        return JSONObject.toJSONString(json);
+
+    }
 
     public Long getId() {
         return id;

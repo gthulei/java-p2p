@@ -26,13 +26,11 @@
       bankforkname = #{bankforkname,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectCompanybankPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.CompanybankQueryObject">
     select id, bankname, accountname, banknumber, bankforkname
-    from companybankinfo
-    where id = #{id,jdbcType=BIGINT}
+    from companybankinfo LIMIT #{start},#{pageSize}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, bankname, accountname, banknumber, bankforkname
-    from companybankinfo
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(id) from companybankinfo
   </select>
 </mapper>

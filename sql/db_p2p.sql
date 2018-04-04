@@ -124,7 +124,6 @@ CREATE TABLE `companybankinfo` (
   `accountname` varchar(255) DEFAULT NULL COMMENT '开户人姓名',
   `banknumber` varchar(255) DEFAULT NULL COMMENT '开户人银行账号',
   `bankforkname` varchar(255) DEFAULT NULL COMMENT '开户支行',
-  `logininfo_id` bigint(20) NOT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
