@@ -7,18 +7,28 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
     <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
-    <result column="auditor_id" property="auditorId" jdbcType="BIGINT" />
-    <result column="applier_id" property="applierId" jdbcType="BIGINT" />
-    <result column="tradeCode" property="tradecode" jdbcType="VARCHAR" />
     <result column="tradeTime" property="tradetime" jdbcType="TIMESTAMP" />
+    <result column="tradeCode" property="tradecode" jdbcType="TIMESTAMP" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="note" property="note" jdbcType="VARCHAR" />
-    <result column="bankinfo_id" property="bankinfoId" jdbcType="BIGINT" />
+
+    <association property="bankinfo" javaType="com.hl.p2p.pojo.Companybankinfo" columnPrefix="bank_">
+      <id column="id" property="id"/>
+      <result column="banknumber" property="banknumber"/>
+      <result column="accountname" property="accountname"/>
+      <result column="bankname" property="bankname"/>
+      <result column="bankforkname" property="bankforkname"/>
+    </association>
+    <association property="applier" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="ap_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+
+    <association property="auditor" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="au_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from rechargeoffline
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Rechargeoffline" >
     insert into rechargeoffline (id, state, remark, 
       auditTime, applyTime, auditor_id, 
@@ -26,9 +36,9 @@
       amount, note, bankinfo_id
       )
     values (#{id,jdbcType=BIGINT}, #{state,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
-      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditorId,jdbcType=BIGINT}, 
-      #{applierId,jdbcType=BIGINT}, #{tradecode,jdbcType=VARCHAR}, #{tradetime,jdbcType=TIMESTAMP}, 
-      #{amount,jdbcType=DECIMAL}, #{note,jdbcType=VARCHAR}, #{bankinfoId,jdbcType=BIGINT}
+      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditor.id,jdbcType=BIGINT},
+      #{applier.id,jdbcType=BIGINT}, #{tradecode,jdbcType=VARCHAR}, #{tradetime,jdbcType=TIMESTAMP},
+      #{amount,jdbcType=DECIMAL}, #{note,jdbcType=VARCHAR}, #{bankinfo.id,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Rechargeoffline" >
@@ -37,24 +47,53 @@
       remark = #{remark,jdbcType=VARCHAR},
       auditTime = #{audittime,jdbcType=TIMESTAMP},
       applyTime = #{applytime,jdbcType=TIMESTAMP},
-      auditor_id = #{auditorId,jdbcType=BIGINT},
-      applier_id = #{applierId,jdbcType=BIGINT},
+      auditor_id = #{auditor.id,jdbcType=BIGINT},
+      applier_id = #{applier.id,jdbcType=BIGINT},
       tradeCode = #{tradecode,jdbcType=VARCHAR},
       tradeTime = #{tradetime,jdbcType=TIMESTAMP},
       amount = #{amount,jdbcType=DECIMAL},
       note = #{note,jdbcType=VARCHAR},
-      bankinfo_id = #{bankinfoId,jdbcType=BIGINT}
+      bankinfo_id = #{bankinfo.id,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, tradeCode, 
-    tradeTime, amount, note, bankinfo_id
-    from rechargeoffline
-    where id = #{id,jdbcType=BIGINT}
+  <sql id="condition">
+    <where>
+      <if test="beginDate!=null">
+        AND r.tradeTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND r.tradeTime &lt;= #{endDate}
+      </if>
+      <if test="state>-1">
+        AND  r.state = #{state}
+      </if>
+      <if test="tradeCode!=null and tradeCode!=''">
+        AND  r.tradeCode = #{tradeCode}
+      </if>
+      <if test="bankId>1">
+        AND  r.bankinfo_id = #{bankId}
+      </if>
+    </where>
+  </sql>
+  <sql id="base_column">
+    r.id, r.state, r.remark, r.auditTime, r.applyTime, r.tradeCode,
+    r.tradeTime, r.amount, r.note,
+    ap.id as ap_id ,ap.username as ap_username,
+	  au.id as au_id ,au.username as au_username,
+	  bank.id as bank_id ,bank.banknumber as bank_banknumber,
+	  bank.bankforkname as bank_bankforkname,
+	  bank.accountname as bank_accountname,
+	  bank.bankname as bank_bankname
+  </sql>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select <include refid="base_column"/>
+    from rechargeoffline r
+    LEFT JOIN logininfo ap ON r.applier_id = ap.id
+    LEFT JOIN logininfo au ON r.auditor_id =au.id
+    LEFT JOIN companybankinfo bank ON r.bankinfo_id=bank.id
+    <include refid="condition"/>
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, state, remark, auditTime, applyTime, auditor_id, applier_id, tradeCode, 
-    tradeTime, amount, note, bankinfo_id
-    from rechargeoffline
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(id) from rechargeoffline  r <include refid="condition"/>
   </select>
 </mapper>

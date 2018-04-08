@@ -16,4 +16,6 @@ public interface CompanybankinfoMapper {
     List<Companybankinfo> selectCompanybankPage(CompanybankQueryObject qo);
 
     int selectCount();
+
+    List<Companybankinfo> selectCompanybankAll();
 }

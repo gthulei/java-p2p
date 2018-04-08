@@ -26,11 +26,18 @@
       bankforkname = #{bankforkname,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <sql id="base_column">
+    id, bankname, accountname, banknumber, bankforkname
+  </sql>
   <select id="selectCompanybankPage" resultMap="BaseResultMap" parameterType="com.hl.p2p.query.CompanybankQueryObject">
-    select id, bankname, accountname, banknumber, bankforkname
+    select <include refid="base_column"/>
     from companybankinfo LIMIT #{start},#{pageSize}
   </select>
   <select id="selectCount" resultType="java.lang.Integer">
     select count(id) from companybankinfo
+  </select>
+  <select id="selectCompanybankAll" resultMap="BaseResultMap">
+    select <include refid="base_column"/>
+    from companybankinfo
   </select>
 </mapper>

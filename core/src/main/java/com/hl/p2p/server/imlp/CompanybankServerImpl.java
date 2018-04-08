@@ -39,4 +39,9 @@ public class CompanybankServerImpl implements ICompanybankServer {
     pageResult.setData(companybankinfos);
     return pageResult;
   }
+
+  @Override
+  public List<Companybankinfo> getCompanybankList() {
+    return companybankinfoMapper.selectCompanybankAll();
+  }
 }

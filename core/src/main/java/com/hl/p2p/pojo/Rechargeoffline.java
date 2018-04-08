@@ -1,22 +1,16 @@
 package com.hl.p2p.pojo;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Rechargeoffline {
+public class Rechargeoffline extends BaseAuth{
     private Long id;
 
-    private Byte state;
-
     private String remark;
-
-    private Date audittime;
-
-    private Date applytime;
-
-    private Long auditorId;
-
-    private Long applierId;
 
     private String tradecode;
 
@@ -26,7 +20,28 @@ public class Rechargeoffline {
 
     private String note;
 
-    private Long bankinfoId;
+    private Companybankinfo bankinfo;
+
+    public String getJsonString(){
+        Map<String, Object> json  = new HashMap<>();
+        json.put("id", id);
+        json.put("username", this.getApplier().getUsername());
+        json.put("tradecode", tradecode);
+        json.put("tradetime", tradetime);
+        json.put("amount", amount);
+        json.put("note", note);
+
+        return JSONObject.toJSONString(json);
+    }
+
+
+    public Companybankinfo getBankinfo() {
+        return bankinfo;
+    }
+
+    public void setBankinfo(Companybankinfo bankinfo) {
+        this.bankinfo = bankinfo;
+    }
 
     public Long getId() {
         return id;
@@ -36,52 +51,12 @@ public class Rechargeoffline {
         this.id = id;
     }
 
-    public Byte getState() {
-        return state;
-    }
-
-    public void setState(Byte state) {
-        this.state = state;
-    }
-
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
-    }
-
-    public Date getAudittime() {
-        return audittime;
-    }
-
-    public void setAudittime(Date audittime) {
-        this.audittime = audittime;
-    }
-
-    public Date getApplytime() {
-        return applytime;
-    }
-
-    public void setApplytime(Date applytime) {
-        this.applytime = applytime;
-    }
-
-    public Long getAuditorId() {
-        return auditorId;
-    }
-
-    public void setAuditorId(Long auditorId) {
-        this.auditorId = auditorId;
-    }
-
-    public Long getApplierId() {
-        return applierId;
-    }
-
-    public void setApplierId(Long applierId) {
-        this.applierId = applierId;
     }
 
     public String getTradecode() {
@@ -116,11 +91,4 @@ public class Rechargeoffline {
         this.note = note == null ? null : note.trim();
     }
 
-    public Long getBankinfoId() {
-        return bankinfoId;
-    }
-
-    public void setBankinfoId(Long bankinfoId) {
-        this.bankinfoId = bankinfoId;
-    }
 }
