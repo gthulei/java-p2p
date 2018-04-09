@@ -4,15 +4,13 @@ import com.hl.p2p.mapper.BidrequestMapper;
 import com.hl.p2p.pojo.*;
 import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.query.PageResult;
-import com.hl.p2p.server.IAccountServer;
-import com.hl.p2p.server.IBidrequestServer;
-import com.hl.p2p.server.IBidrequestaudithistoryServer;
-import com.hl.p2p.server.IUserinfoServer;
+import com.hl.p2p.server.*;
 import com.hl.p2p.utils.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +30,13 @@ public class BidrequestServerImpl implements IBidrequestServer{
   private IAccountServer accountServer;
 
   @Autowired
+  private IAccountflowServer accountflowServer;
+
+  @Autowired
   private IBidrequestaudithistoryServer bidrequestaudithistoryServer;
+
+  @Autowired
+  private IBidServer bidServer;
 
   /**
    * 发标
@@ -176,6 +180,56 @@ public class BidrequestServerImpl implements IBidrequestServer{
       }
       //审核
       bidrequestMapper.updateByPrimaryKey(bidrequest);
+    }
+  }
+
+  /**
+   * 前端投标
+   */
+  @Override
+  public void borrowBid(Long bidRequestId,BigDecimal amount) {
+    Bidrequest bidrequest = bidrequestMapper.selectByPrimaryKey(bidRequestId);
+    // 账户信息
+    Account accountInfo = accountServer.getAccountInfoById(UserContext.getCurrent().getId());
+
+    if(bidrequest.getBidrequeststate()==BidConst.BIDREQUEST_STATE_BIDDING//招标中
+      && !bidrequest.getCreateuser().getId().equals(UserContext.getCurrent().getId())//判断是否招标本人
+      && amount.compareTo(bidrequest.getMinbidamount())>=0//最小投标金额
+      && amount.compareTo(bidrequest.getRemainAmount())<=0//当前标的剩余金额
+      && amount.compareTo(accountInfo.getUsableamount())<=0//账户可用余额
+      ){
+      //用户投标对象
+      Bid bid = new Bid();
+      bid.setActualrate(bidrequest.getCurrentrate());
+      bid.setAvailableamount(amount);
+      bid.setBidrequestId(bidRequestId);
+      bid.setBidrequesttitle(bidrequest.getTitle());
+      bid.setBidtime(new Date());
+      bid.setBiduser(UserContext.getCurrent());
+      // 投标总金额
+      bidrequest.setCurrentsum(bidrequest.getCurrentsum().add(amount));
+      // 次数
+      bidrequest.setBidcount(bidrequest.getBidcount()+1);
+      // 满标
+      if(bidrequest.getBidrequestamount().equals(bidrequest.getCurrentsum())){
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
+      }
+      // 账户
+      accountInfo.setFreezedamount(accountInfo.getFreezedamount().add(amount));
+      accountInfo.setUsableamount(accountInfo.getUsableamount().subtract(amount));
+      // 账户流水
+      Accountflow accountflow = new Accountflow();
+      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_SUCCESSFUL);
+      accountflow.setNote("投标");
+      accountflow.setAmount(accountflow.getAmount().subtract(amount));
+      accountflow.setBalance(accountflow.getBalance().subtract(amount));
+      accountflow.setFreezed(accountflow.getFreezed().add(amount));
+      accountflow.setActiontime(new Date());
+      accountflow.setAccountId(accountInfo.getId());
+      bidServer.saveBid(bid);
+      bidrequestMapper.updateByPrimaryKey(bidrequest);
+      accountServer.updateAccount(accountInfo);
+      accountflowServer.saveAccountflow(accountflow);
     }
   }
 }

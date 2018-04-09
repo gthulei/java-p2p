@@ -73,6 +73,7 @@ public class RechargeofflineServerImpl implements IRechargeofflineServer {
         accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_RECHARGE_OFFLINE);
         accountflow.setActiontime(new Date());
         accountflow.setAccountId(accountInfo.getId());
+        accountflow.setAmount(result.getAmount());
         accountflow.setBalance(result.getAmount());
         accountflow.setNote("线下充值");
         accountflowServer.saveAccountflow(accountflow);

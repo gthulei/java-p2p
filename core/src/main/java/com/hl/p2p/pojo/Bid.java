@@ -14,7 +14,7 @@ public class Bid {
 
     private Long bidrequestId; // 来自于哪个借款标
 
-    private Long biduserId;  // 投标人id(loginInfo)
+    private Logininfo biduser;  // 投标人
 
     private Date bidtime;  // 投标时间
 
@@ -52,12 +52,12 @@ public class Bid {
         this.bidrequestId = bidrequestId;
     }
 
-    public Long getBiduserId() {
-        return biduserId;
+    public Logininfo getBiduser() {
+        return biduser;
     }
 
-    public void setBiduserId(Long biduserId) {
-        this.biduserId = biduserId;
+    public void setBiduser(Logininfo biduser) {
+        this.biduser = biduser;
     }
 
     public Date getBidtime() {

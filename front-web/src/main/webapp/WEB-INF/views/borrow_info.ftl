@@ -48,11 +48,11 @@
 						$.messager.popup("投资金额已超过借款标金额");
 						return;
 					}
-					$.post("/borrow_bid.do",{
+					$.post("/borrowBid.json",{
 						bidRequestId : ${bidRequest.id},
 						amount:amount
 					},function(data){
-						if(data.success){
+						if(data.succeed){
 							$.messager.popup("恭喜你,投标成功");
 							location.reload();
 						}else{
@@ -172,7 +172,7 @@
 						<tr>
 							<td colspan="2">
 							<div style="margin-bottom: 10px;" class="progress">
-								<div style="width: ${bidRequest.persent}" class="progress-bar progress-bar-info progress-bar-striped"></div>
+								<div style="width: ${bidRequest.persent*100}%" class="progress-bar progress-bar-info progress-bar-striped"></div>
 							</div>
 							</td>
 						</tr>

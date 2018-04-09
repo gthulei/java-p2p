@@ -6,16 +6,20 @@
     <result column="actualRate" property="actualrate" jdbcType="DECIMAL" />
     <result column="availableAmount" property="availableamount" jdbcType="DECIMAL" />
     <result column="bidrequest_id" property="bidrequestId" jdbcType="BIGINT" />
-    <result column="bidUser_id" property="biduserId" jdbcType="BIGINT" />
     <result column="bidTime" property="bidtime" jdbcType="TIMESTAMP" />
     <result column="bidRequestTitle" property="bidrequesttitle" jdbcType="VARCHAR" />
+
+    <association property="biduser" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="u_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Bid" >
     insert into bid (id, actualRate, availableAmount, 
       bidrequest_id, bidUser_id, bidTime, 
       bidRequestTitle)
     values (#{id,jdbcType=BIGINT}, #{actualrate,jdbcType=DECIMAL}, #{availableamount,jdbcType=DECIMAL}, 
-      #{bidrequestId,jdbcType=BIGINT}, #{biduserId,jdbcType=BIGINT}, #{bidtime,jdbcType=TIMESTAMP}, 
+      #{bidrequestId,jdbcType=BIGINT}, #{biduser.id,jdbcType=BIGINT}, #{bidtime,jdbcType=TIMESTAMP},
       #{bidrequesttitle,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Bid" >
@@ -23,14 +27,14 @@
     set actualRate = #{actualrate,jdbcType=DECIMAL},
       availableAmount = #{availableamount,jdbcType=DECIMAL},
       bidrequest_id = #{bidrequestId,jdbcType=BIGINT},
-      bidUser_id = #{biduserId,jdbcType=BIGINT},
+      bidUser_id = #{biduser.id,jdbcType=BIGINT},
       bidTime = #{bidtime,jdbcType=TIMESTAMP},
       bidRequestTitle = #{bidrequesttitle,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, actualRate, availableAmount, bidrequest_id, bidUser_id, bidTime, bidRequestTitle
-    from bid
-    where id = #{id,jdbcType=BIGINT}
-  </select>
+  <sql id="base_column">
+    b.id, b.actualRate, b.availableAmount, b.bidrequest_id, b.bidTime, b.bidRequestTitle,
+    u.id as u_id ,u.username as u_username
+  </sql>
+
 </mapper>

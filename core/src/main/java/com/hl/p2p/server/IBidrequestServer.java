@@ -5,6 +5,8 @@ import com.hl.p2p.pojo.Userinfo;
 import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.query.PageResult;
 
+import java.math.BigDecimal;
+
 public interface IBidrequestServer {
 
   boolean apply(Bidrequest bidrequest);
@@ -19,4 +21,5 @@ public interface IBidrequestServer {
 
   void borrowFullAudit(Long id,int state,String remark);
 
+  void borrowBid(Long bidRequestId,BigDecimal amount);
 }

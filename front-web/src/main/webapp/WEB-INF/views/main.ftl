@@ -98,7 +98,7 @@
 									<td>${data.monthes2return}月</td>
 									<td>
 										<div class="">
-											${data.persent} %
+											${data.persent*100} %
 										</div>
 									</td>
 									<td><a class="btn btn-danger btn-sm" href="/borrowDes?id=${data.id}">查看</a></td>

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -109,6 +110,23 @@ public class BorrowController {
     }
 
     return "borrow_info";
+  }
+
+  /**
+   * 投标
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping(value = "/borrowBid.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult borrowBid(Long bidRequestId,BigDecimal amount){
+    try {
+      bidrequestServer.borrowBid(bidRequestId,amount);
+      return JsonResult.resultSuccess("投标成功");
+    }catch (Exception e){
+      return JsonResult.resultError("0000019",e.getMessage());
+    }
+
   }
 
 }
