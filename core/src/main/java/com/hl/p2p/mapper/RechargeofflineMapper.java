@@ -13,5 +13,7 @@ public interface RechargeofflineMapper {
 
     int updateByPrimaryKey(Rechargeoffline record);
 
+    Rechargeoffline selectByPrimaryKey(Long id);
+
     int selectCount(RechargeQueryObject qo);
 }

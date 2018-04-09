@@ -50,7 +50,7 @@
 			form.find("[name=state]").val($(this).val());
 			$("#myModal").modal("hide");
 			form.ajaxSubmit(function(data){
-				if(data.success){
+				if(data.succeed){
 					$.messager.confirm("提示","审核成功!",function(){
 						window.location.reload();
 					});
@@ -167,7 +167,7 @@
 		  <div class="modal-dialog modal-lg" role="document">
 		    <div class="modal-content">
 		      <div class="modal-body">
-		      	<form class="form-horizontal" id="editform" method="post" action="/rechargeOffline_audit.do">
+		      	<form class="form-horizontal" id="editform" method="post" action="/rechargeOfflineAudit.json">
 					<fieldset>
 						<div id="legend" class="">
 							<legend>线下充值审核</legend>

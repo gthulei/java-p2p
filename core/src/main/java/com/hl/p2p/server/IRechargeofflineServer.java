@@ -9,4 +9,6 @@ public interface IRechargeofflineServer {
   boolean rechargeofflineAppry(Rechargeoffline rechargeoffline);
 
   PageResult getRechargeofflinePage(RechargeQueryObject qo);
+
+  void updateRechargeoffline(Long id,int state,String remark);
 }

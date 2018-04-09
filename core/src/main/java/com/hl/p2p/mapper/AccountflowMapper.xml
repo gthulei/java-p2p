@@ -11,10 +11,7 @@
     <result column="actionTime" property="actiontime" jdbcType="TIMESTAMP" />
     <result column="account_id" property="accountId" jdbcType="BIGINT" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from accountflow
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
   <insert id="insert" parameterType="com.hl.p2p.pojo.Accountflow" >
     insert into accountflow (id, accountActionType, amount, 
       note, balance, freezed, 
@@ -23,22 +20,7 @@
       #{note,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{freezed,jdbcType=DECIMAL}, 
       #{actiontime,jdbcType=TIMESTAMP}, #{accountId,jdbcType=BIGINT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Accountflow" >
-    update accountflow
-    set accountActionType = #{accountactiontype,jdbcType=TINYINT},
-      amount = #{amount,jdbcType=DECIMAL},
-      note = #{note,jdbcType=VARCHAR},
-      balance = #{balance,jdbcType=DECIMAL},
-      freezed = #{freezed,jdbcType=DECIMAL},
-      actionTime = #{actiontime,jdbcType=TIMESTAMP},
-      account_id = #{accountId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, accountActionType, amount, note, balance, freezed, actionTime, account_id
-    from accountflow
-    where id = #{id,jdbcType=BIGINT}
-  </select>
+
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, accountActionType, amount, note, balance, freezed, actionTime, account_id
     from accountflow

@@ -17,7 +17,7 @@ public class AccountServerImpl implements IAccountServer{
 
   @Override
   public void updateAccount(Account account) {
-    int result = accountMapper.insert(account);
+    int result = accountMapper.updateByPrimaryKey(account);
     //表示乐观锁失败
     if (result == 0) {
       throw new RuntimeException("乐观锁失败,Account:" + account.getId());
