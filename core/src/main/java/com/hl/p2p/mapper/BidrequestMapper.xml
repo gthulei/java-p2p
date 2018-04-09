@@ -26,6 +26,9 @@
       <id column="id" property="id"/>
       <result column="username" property="username"/>
     </association>
+
+    <collection property="bids" ofType="com.hl.p2p.pojo.Bid" select="com.hl.p2p.mapper.BidMapper.selectBidList" column="id">
+    </collection>
   </resultMap>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Bidrequest">
     insert into bidrequest (id, version, bidRequestType, 

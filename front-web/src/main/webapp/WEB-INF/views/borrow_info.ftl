@@ -384,29 +384,29 @@
 							</tr>
 						</thead>
 						<tbody>
-							<#--<#if bidRequest.bids?size &gt; 0>-->
-								<#--<#list bidRequest.bids as bid>-->
-									<#--<tr>-->
-										<#--<td>${bid.bidUser.username}</td>-->
-										<#--<td>-->
-											<#--${bid.actualRate}%-->
-										<#--</td>-->
-										<#--<td style="padding-right:60px;" class="text-info">-->
-											<#--${bid.availableAmount}-->
-										<#--</td>-->
-										<#--<td>-->
-											<#--${bid.bidTime?string("yyyy-MM-dd HH:mm:ss")}-->
-										<#--</td>-->
-										<#--<td>手动投标</td>-->
-									<#--</tr>-->
-								<#--</#list>-->
-							<#--<#else>-->
-								<#--<tr>-->
-									<#--<td colspan="6">-->
-										<#--<p class="text-primary text-center">暂时没有投标数据</p>-->
-									<#--</td>-->
-								<#--</tr>-->
-							<#--</#if>-->
+							<#if bidRequest.bids?size &gt; 0>
+								<#list bidRequest.bids as bid>
+									<tr>
+										<td>${bid.biduser.username}</td>
+										<td>
+											${bid.actualrate}%
+										</td>
+										<td style="padding-right:60px;" class="text-info">
+											${bid.availableamount}
+										</td>
+										<td>
+											${bid.bidtime?string("yyyy-MM-dd HH:mm:ss")}
+										</td>
+										<td>手动投标</td>
+									</tr>
+								</#list>
+							<#else>
+								<tr>
+									<td colspan="6">
+										<p class="text-primary text-center">暂时没有投标数据</p>
+									</td>
+								</tr>
+							</#if>
 						</tbody>
 					</table>
 				</div>

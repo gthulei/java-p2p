@@ -36,5 +36,9 @@
     b.id, b.actualRate, b.availableAmount, b.bidrequest_id, b.bidTime, b.bidRequestTitle,
     u.id as u_id ,u.username as u_username
   </sql>
-
+<select id="selectBidList" resultMap="BaseResultMap">
+  select <include refid="base_column" />
+  from bid b join logininfo u on u.id =b.bidUser_id
+  where b.bidRequest_id = #{id}
+</select>
 </mapper>

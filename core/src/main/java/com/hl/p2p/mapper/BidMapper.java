@@ -7,7 +7,7 @@ public interface BidMapper {
 
     int insert(Bid record);
 
-    Bid selectByPrimaryKey(Long id);
+    List<Bid> selectBidList();
 
     int updateByPrimaryKey(Bid record);
 }
