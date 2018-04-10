@@ -8,11 +8,11 @@
   <script type="text/javascript" src="/js/plugins/jquery.form.js"></script>
   <script>
     $(function () {
-      $('#educationBackground').find("option[value=${userinfo.educationbackground.id!'off'}]").attr("selected", true);
-      $('#incomeGrade').find("option[value=${userinfo.incomegrade.id!'off'}]").attr("selected", true);
-      $('#marriage').find("option[value=${userinfo.marriage.id!'off'}]").attr("selected", true);
-      $('#houseCondition').find("option[value=${userinfo.housecondition.id!'off'}]").attr("selected", true);
-      $('#kidCount').find("option[value=${userinfo.kidcount.id!'off'}]").attr("selected", true);
+      $('#educationBackground').find("option[value=${(userinfo.educationbackground.id)!'off'}]").attr("selected", true);
+      $('#incomeGrade').find("option[value=${(userinfo.incomegrade.id)!'off'}]").attr("selected", true);
+      $('#marriage').find("option[value=${(userinfo.marriage.id)!'off'}]").attr("selected", true);
+      $('#houseCondition').find("option[value=${(userinfo.housecondition.id)!'off'}]").attr("selected", true);
+      $('#kidCount').find("option[value=${(userinfo.kidcount.id)!'off'}]").attr("selected", true);
 
       //提交表单
       $("#submitBtn").click(function () {
