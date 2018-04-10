@@ -292,6 +292,15 @@ public class BidrequestServerImpl implements IBidrequestServer{
     }
     // 再统一去修改投标人对应的账户
     for (Account bidAccount : map.values()) {
+      // 账户流水
+      Accountflow accountflow = new Accountflow();
+      accountflow.setBalance(accountflow.getBalance().add(bidAccount.getUsableamount()));
+      accountflow.setFreezed(accountflow.getFreezed().subtract(bidAccount.getFreezedamount()));
+      accountflow.setActiontime(new Date());
+      accountflow.setAccountId(bidAccount.getId());
+      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
+      accountflow.setNote("满标一审拒绝");
+      accountflowServer.saveAccountflow(accountflow);
       this.accountServer.updateAccount(bidAccount);
     }
   }
