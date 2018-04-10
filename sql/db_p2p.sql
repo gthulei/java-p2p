@@ -43,7 +43,6 @@ DROP TABLE IF EXISTS `accountflow`;
 CREATE TABLE `accountflow` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `accountActionType` tinyint(4) NOT NULL COMMENT '资金变化的类型',
-  `amount` decimal(18,4) NOT NULL COMMENT '总金额',
   `note` varchar(255) NOT NULL,
   `balance` decimal(18,4) NOT NULL COMMENT '可用金额',
   `freezed` decimal(18,4) NOT NULL COMMENT '冻结金额',

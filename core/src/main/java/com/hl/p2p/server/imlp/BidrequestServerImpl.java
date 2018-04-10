@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 发标借款
@@ -38,6 +40,17 @@ public class BidrequestServerImpl implements IBidrequestServer{
   @Autowired
   private IBidServer bidServer;
 
+  public Bidrequestaudithistory bidVo(Bidrequest bidrequest,Userinfo userinfo){
+    Bidrequestaudithistory bidrequestaudithistory = new Bidrequestaudithistory();
+    bidrequestaudithistory.setAudittime(new Date());
+    bidrequestaudithistory.setApplytime(bidrequest.getApplytime());
+    bidrequestaudithistory.setAuditor(UserContext.getCurrent());
+    Logininfo logininfo = new Logininfo();
+    logininfo.setId(userinfo.getId());
+    bidrequestaudithistory.setApplier(logininfo);
+    bidrequestaudithistory.setBidrequestid(userinfo.getId());
+    return bidrequestaudithistory;
+  }
   /**
    * 发标
    * @param bidrequest
@@ -128,9 +141,6 @@ public class BidrequestServerImpl implements IBidrequestServer{
   @Override
   public PageResult getApplyList(BidRequestQueryObject qo) {
     int i = bidrequestMapper.selectCount();
-    if (qo.getQuertState()==1){
-      qo.setBidrequeststate(BidConst.BIDREQUEST_STATE_PUBLISH_PENDING);
-    }
     List<Bidrequest> resule = bidrequestMapper.selectPage(qo);
     PageResult pageResult = new PageResult();
     pageResult.setPageSize(qo.getPageSize());
@@ -151,15 +161,8 @@ public class BidrequestServerImpl implements IBidrequestServer{
     Userinfo userinfo = userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId());
     // 判断有没有在申请中的标
     if(userinfo.getHasBidRequestInProcess()){
-      Bidrequestaudithistory bidrequestaudithistory = new Bidrequestaudithistory();
+      Bidrequestaudithistory bidrequestaudithistory = this.bidVo(bidrequest, userinfo);
       bidrequestaudithistory.setRemark(remark);
-      bidrequestaudithistory.setAudittime(new Date());
-      bidrequestaudithistory.setApplytime(bidrequest.getApplytime());
-      bidrequestaudithistory.setAuditor(UserContext.getCurrent());
-      Logininfo logininfo = new Logininfo();
-      logininfo.setId(userinfo.getId());
-      bidrequestaudithistory.setApplier(logininfo);
-      bidrequestaudithistory.setBidrequestid(userinfo.getId());
       bidrequestaudithistory.setAudittype(Bidrequestaudithistory.PUBLISH_AUDIT);//设置发标请审核
       //审核历史
       bidrequestaudithistoryServer.add(bidrequestaudithistory);
@@ -179,7 +182,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
         this.userinfoServer.updateUserInfo(userinfo);
       }
       //审核
-      bidrequestMapper.updateByPrimaryKey(bidrequest);
+      this.update(bidrequest);
     }
   }
 
@@ -214,22 +217,83 @@ public class BidrequestServerImpl implements IBidrequestServer{
       if(bidrequest.getBidrequestamount().equals(bidrequest.getCurrentsum())){
         bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
       }
+      // 账户流水
+      Accountflow accountflow = new Accountflow();
+      accountflow.setBalance(accountInfo.getUsableamount().subtract(amount));
+      accountflow.setFreezed(accountInfo.getFreezedamount().add(amount));
+      accountflow.setActiontime(new Date());
+      accountflow.setAccountId(accountInfo.getId());
+      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_SUCCESSFUL);
+      accountflow.setNote("投标");
       // 账户
       accountInfo.setFreezedamount(accountInfo.getFreezedamount().add(amount));
       accountInfo.setUsableamount(accountInfo.getUsableamount().subtract(amount));
-      // 账户流水
-      Accountflow accountflow = new Accountflow();
-      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_SUCCESSFUL);
-      accountflow.setNote("投标");
-      accountflow.setAmount(accountflow.getAmount().subtract(amount));
-      accountflow.setBalance(accountflow.getBalance().subtract(amount));
-      accountflow.setFreezed(accountflow.getFreezed().add(amount));
-      accountflow.setActiontime(new Date());
-      accountflow.setAccountId(accountInfo.getId());
       bidServer.saveBid(bid);
       bidrequestMapper.updateByPrimaryKey(bidrequest);
       accountServer.updateAccount(accountInfo);
       accountflowServer.saveAccountflow(accountflow);
     }
   }
+
+  /**
+   * 满标一审
+   * @param id
+   * @param state
+   * @param remark
+   */
+  @Override
+  public void borrowFullAuditOne(Long id, int state, String remark) {
+    Bidrequest bidrequest = bidrequestMapper.selectByPrimaryKey(id);
+    Userinfo userinfo = userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId());
+    // 是否符合审核条件
+    if(bidrequest.getBidrequeststate() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1){
+      // 审核记录
+      Bidrequestaudithistory bidrequestaudithistory = this.bidVo(bidrequest, userinfo);
+      bidrequestaudithistory.setRemark(remark);
+      bidrequestaudithistory.setAudittype(Bidrequestaudithistory.FULL_AUDIT1);//满标一核
+      //审核历史
+      bidrequestaudithistoryServer.add(bidrequestaudithistory);
+      // 审核成功
+      if(state==BidConst.BIDREQUEST_STATE_BIDDING){
+        bidrequest.setPublishtime(new Date());
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2);
+        bidrequest.setNote(remark);
+      }else {
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_REJECTED);
+        // 移除在申请中的状态
+        userinfo.removeState(BitStatesUtils.OP_HAS_BIDREQUEST_PROCESS) ;
+        this.userinfoServer.updateUserInfo(userinfo);
+        //退款
+        this.returnMoney(bidrequest);
+      }
+      //更新标审核信息
+      this.update(bidrequest);
+    }
+  }
+
+  /**
+   * 退款处理
+   * @param bidrequest
+   */
+  public void returnMoney(Bidrequest bidrequest){
+    Map<Long, Account> map = new HashMap<>();
+    for(Bid bid :bidrequest.getBids()){
+      Long amountId = bid.getBiduser().getId();//投资人ID
+      Account account = map.get(amountId);
+      // 不存在去查询，已存在直接取
+      if (account==null){
+        account = accountServer.getAccountInfoById(amountId);
+        map.put(amountId,account);
+      }
+      account.setUsableamount(account.getUsableamount().add(bid.getAvailableamount()));
+      account.setFreezedamount(account.getFreezedamount().subtract(bid.getAvailableamount()));
+    }
+    // 再统一去修改投标人对应的账户
+    for (Account bidAccount : map.values()) {
+      this.accountServer.updateAccount(bidAccount);
+    }
+  }
+
 }

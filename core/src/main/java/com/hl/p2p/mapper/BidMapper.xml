@@ -41,4 +41,7 @@
   from bid b join logininfo u on u.id =b.bidUser_id
   where b.bidRequest_id = #{id}
 </select>
+<select id="selectBidSumAmount" resultType="java.math.BigDecimal">
+  select sum(availableAmount)  from bid where bidrequest_id=#{bidrequestid} and bidUser_id=#{userid};
+</select>
 </mapper>

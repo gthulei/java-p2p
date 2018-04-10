@@ -26,7 +26,7 @@
 			<li class="vedioAuth"><a href="/vedioAuth">视频认证审核</a></li>
 			<li class="userFileAuth"><a href="/userFileAuth">认证材料审核</a></li>
 			<li class="bidrequest_publishaudit_list"><a href="/bidrequest_publishaudit_list">发标前审核</a></li>
-			<li class="bidrequest_audit1_list"><a href="/bidrequest_audit1_list">满标一审</a></li>
+			<li class="bidrequest_audit1_list"><a href="/firstInstance">满标一审</a></li>
 			<li class="bidrequest_audit2_list"><a href="/bidrequest_audit2_list">满标二审</a></li>
 			<li class="rechargeOffline"><a href="/rechargeOffline">线下充值审核</a></li>
 			<li class="moneyWithdraw"><a href="/moneyWithdraw">提现审核</a></li>

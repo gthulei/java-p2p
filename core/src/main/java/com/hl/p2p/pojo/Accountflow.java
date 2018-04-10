@@ -10,8 +10,6 @@ public class Accountflow {
 
     private int accountactiontype;
 
-    private BigDecimal amount = BidConst.ZERO;
-
     private String note;
 
     private BigDecimal balance = BidConst.ZERO;
@@ -36,14 +34,6 @@ public class Accountflow {
 
     public void setAccountactiontype(int accountactiontype) {
         this.accountactiontype = accountactiontype;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public String getNote() {

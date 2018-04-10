@@ -80,4 +80,38 @@ public class BidRequestController {
     model.addAttribute("audits",historyList);
     return "borrow_info";
   }
+  /**
+   * 满标一审列表
+   * @param qo
+   * @param model
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping("/firstInstance")
+  public String audit1(@ModelAttribute("qo") BidRequestQueryObject qo, Model model){
+    qo.setQuertState(1);
+    qo.setBidrequeststate(4);
+    model.addAttribute("pageResult",bidrequestServer.getApplyList(qo));
+    return "audit1";
+  }
+
+
+  /**
+   * 满标一审
+   * @param id
+   * @param state
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping(value = "/bidrequestPublishauditOne.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult bidrequestPublishauditOne(Long id,int state,String remark){
+    try {
+      bidrequestServer.borrowFullAuditOne(id,state,remark);
+      return JsonResult.resultSuccess("审核成功");
+    }catch (Exception e){
+      e.printStackTrace();
+      return JsonResult.resultError("0000015",e.getMessage());
+    }
+  }
 }

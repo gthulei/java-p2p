@@ -148,12 +148,12 @@
               </td>
             </tr>
             <tr>
-              <td class="muted" colspan="2">投标进度:<span style="color: #00aa00">${bidRequest.persent}%</span></td>
+              <td class="muted" colspan="2">投标进度:<span style="color: #00aa00">${bidRequest.persent*100}%</span></td>
             </tr>
             <tr>
               <td colspan="2">
                 <div style="margin-bottom: 10px;" class="progress">
-                  <div style="width: ${bidRequest.persent}" class="progress-bar progress-bar-info progress-bar-striped"></div>
+                  <div style="width: ${bidRequest.persent*100}%" class="progress-bar progress-bar-info progress-bar-striped"></div>
                 </div>
               </td>
             </tr>
@@ -356,29 +356,29 @@
             </tr>
             </thead>
             <tbody>
-						<#--<#if bidRequest.bids?size &gt; 0>-->
-						<#--<#list bidRequest.bids as bid>-->
-						<#--<tr>-->
-						<#--<td>${bid.bidUser.username}</td>-->
-						<#--<td>-->
-						<#--${bid.actualRate}%-->
-						<#--</td>-->
-						<#--<td style="padding-right:60px;" class="text-info">-->
-						<#--${bid.availableAmount}-->
-						<#--</td>-->
-						<#--<td>-->
-						<#--${bid.bidTime?string("yyyy-MM-dd HH:mm:ss")}-->
-						<#--</td>-->
-						<#--<td>手动投标</td>-->
-						<#--</tr>-->
-						<#--</#list>-->
-						<#--<#else>-->
-						<#--<tr>-->
-						<#--<td colspan="6">-->
-						<#--<p class="text-primary text-center">暂时没有投标数据</p>-->
-						<#--</td>-->
-						<#--</tr>-->
-						<#--</#if>-->
+						<#if bidRequest.bids?size &gt; 0>
+						<#list bidRequest.bids as bid>
+						<tr>
+						<td>${bid.biduser.username}</td>
+						<td>
+						${bid.actualrate}%
+						</td>
+						<td style="padding-right:60px;" class="text-info">
+						${bid.availableamount}
+						</td>
+						<td>
+						${bid.bidtime?string("yyyy-MM-dd HH:mm:ss")}
+						</td>
+						<td>手动投标</td>
+						</tr>
+						</#list>
+						<#else>
+						<tr>
+						<td colspan="6">
+						<p class="text-primary text-center">暂时没有投标数据</p>
+						</td>
+						</tr>
+						</#if>
             </tbody>
           </table>
         </div>

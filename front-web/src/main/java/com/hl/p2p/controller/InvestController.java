@@ -17,6 +17,9 @@ public class InvestController {
 
   @RequestMapping("/invest")
   public String invest(Model model, @ModelAttribute("qo") BidRequestQueryObject qo){
+    if(qo.getQuertState()==0 || qo.getQuertState()==-1 && qo.getBidrequeststate()==0 ){
+      qo.setQuertState(2);
+    }
     PageResult result = bidrequestServer.getApplyList(qo);
     model.addAttribute("pageResult",result);
     return "invest";

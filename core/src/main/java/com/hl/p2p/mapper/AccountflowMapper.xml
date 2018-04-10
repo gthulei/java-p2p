@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Accountflow" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="accountActionType" property="accountactiontype" jdbcType="TINYINT" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="note" property="note" jdbcType="VARCHAR" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
     <result column="freezed" property="freezed" jdbcType="DECIMAL" />
@@ -13,16 +12,16 @@
   </resultMap>
 
   <insert id="insert" parameterType="com.hl.p2p.pojo.Accountflow" >
-    insert into accountflow (id, accountActionType, amount, 
+    insert into accountflow (id, accountActionType,
       note, balance, freezed, 
       actionTime, account_id)
-    values (#{id,jdbcType=BIGINT}, #{accountactiontype,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, 
+    values (#{id,jdbcType=BIGINT}, #{accountactiontype,jdbcType=TINYINT},
       #{note,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{freezed,jdbcType=DECIMAL}, 
       #{actiontime,jdbcType=TIMESTAMP}, #{accountId,jdbcType=BIGINT})
   </insert>
 
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, accountActionType, amount, note, balance, freezed, actionTime, account_id
+    select id, accountActionType, note, balance, freezed, actionTime, account_id
     from accountflow
   </select>
 </mapper>

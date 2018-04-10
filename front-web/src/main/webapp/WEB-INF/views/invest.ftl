@@ -11,7 +11,7 @@
     $(function () {
       $(".btn").click(function () {
         var $v=$(this).attr('v')
-        $("#bidRequestState").val($v)
+        $("#bidRequestState").val($v);
         if($v>0){
           $("#quertState").val(1)
         }
@@ -32,8 +32,8 @@
   <h4 class="page-title">投资列表</h4>
   <form action="/invest" id="searchForm" method="POST">
     <input type="hidden" name="currentPage" id="currentPage" value="1">
-    <input type="hidden" name="quertState" id="quertState" value="0">
-    <input type="hidden" name="bidRequestState" id="bidRequestState" value="-1">
+    <input type="hidden" name="quertState" id="quertState" value="2">
+    <input type="hidden" name="bidrequeststate" id="bidRequestState" value="-1">
     <div style="margin: 20px 0px;">
       <span class="text-muted">标的状态</span>
       <div style="margin-left: 30px" class="btn-group" data-toggle="buttons">
