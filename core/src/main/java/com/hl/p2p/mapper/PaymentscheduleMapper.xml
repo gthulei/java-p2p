@@ -13,14 +13,17 @@
     <result column="bidRequestType" property="bidrequesttype" jdbcType="TINYINT" />
     <result column="returnType" property="returntype" jdbcType="TINYINT" />
     <result column="bidrequest_id" property="bidrequestId" jdbcType="BIGINT" />
-    <result column="biduser_id" property="biduserId" jdbcType="BIGINT" />
     <result column="bidRequestTitle" property="bidrequesttitle" jdbcType="VARCHAR" />
+    <association property="borrowuser" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="bo_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from paymentschedule
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.hl.p2p.pojo.Paymentschedule" >
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Paymentschedule" useGeneratedKeys="true" keyProperty="id">
     insert into paymentschedule (id, deadLine, payDate, 
       totalAmount, principal, interest, 
       monthIndex, state, bidRequestType, 
@@ -29,7 +32,7 @@
     values (#{id,jdbcType=BIGINT}, #{deadline,jdbcType=TIMESTAMP}, #{paydate,jdbcType=TIMESTAMP}, 
       #{totalamount,jdbcType=DECIMAL}, #{principal,jdbcType=DECIMAL}, #{interest,jdbcType=DECIMAL}, 
       #{monthindex,jdbcType=TINYINT}, #{state,jdbcType=TINYINT}, #{bidrequesttype,jdbcType=TINYINT}, 
-      #{returntype,jdbcType=TINYINT}, #{bidrequestId,jdbcType=BIGINT}, #{biduserId,jdbcType=BIGINT}, 
+      #{returntype,jdbcType=TINYINT}, #{bidrequestId,jdbcType=BIGINT}, #{borrowuser.id,jdbcType=BIGINT},
       #{bidrequesttitle,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Paymentschedule" >
@@ -44,7 +47,7 @@
       bidRequestType = #{bidrequesttype,jdbcType=TINYINT},
       returnType = #{returntype,jdbcType=TINYINT},
       bidrequest_id = #{bidrequestId,jdbcType=BIGINT},
-      biduser_id = #{biduserId,jdbcType=BIGINT},
+      biduser_id = #{borrowuser.id,jdbcType=BIGINT},
       bidRequestTitle = #{bidrequesttitle,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>

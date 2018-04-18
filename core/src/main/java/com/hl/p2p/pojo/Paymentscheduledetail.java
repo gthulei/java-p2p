@@ -16,7 +16,7 @@ public class Paymentscheduledetail {
 
     private BigDecimal interest;
 
-    private Byte monthindex;
+    private int monthindex;
 
     private Date deadline;
 
@@ -24,11 +24,11 @@ public class Paymentscheduledetail {
 
     private Date paydate;
 
-    private Byte returntype;
+    private int returntype;
 
     private Long paymentscheduleId;
 
-    private Long fromlogininfoId;
+    private Logininfo fromlogininfo;
 
     private Long tologininfoId;
 
@@ -80,11 +80,11 @@ public class Paymentscheduledetail {
         this.interest = interest;
     }
 
-    public Byte getMonthindex() {
+    public int getMonthindex() {
         return monthindex;
     }
 
-    public void setMonthindex(Byte monthindex) {
+    public void setMonthindex(int monthindex) {
         this.monthindex = monthindex;
     }
 
@@ -112,11 +112,19 @@ public class Paymentscheduledetail {
         this.paydate = paydate;
     }
 
-    public Byte getReturntype() {
+    public Logininfo getFromlogininfo() {
+        return fromlogininfo;
+    }
+
+    public void setFromlogininfo(Logininfo fromlogininfo) {
+        this.fromlogininfo = fromlogininfo;
+    }
+
+    public int getReturntype() {
         return returntype;
     }
 
-    public void setReturntype(Byte returntype) {
+    public void setReturntype(int returntype) {
         this.returntype = returntype;
     }
 
@@ -126,14 +134,6 @@ public class Paymentscheduledetail {
 
     public void setPaymentscheduleId(Long paymentscheduleId) {
         this.paymentscheduleId = paymentscheduleId;
-    }
-
-    public Long getFromlogininfoId() {
-        return fromlogininfoId;
-    }
-
-    public void setFromlogininfoId(Long fromlogininfoId) {
-        this.fromlogininfoId = fromlogininfoId;
     }
 
     public Long getTologininfoId() {

@@ -1,7 +1,11 @@
 package com.hl.p2p.pojo;
 
+import com.hl.p2p.utils.BidConst;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Paymentschedule {
     private Long id;
@@ -16,19 +20,53 @@ public class Paymentschedule {
 
     private BigDecimal interest;
 
-    private Byte monthindex;
+    private int monthindex;
 
-    private Byte state;
+    private int state;
 
-    private Byte bidrequesttype;
+    private int bidrequesttype;
 
-    private Byte returntype;
+    private int returntype;
 
     private Long bidrequestId;
 
-    private Long biduserId;
+    private Logininfo borrowuser;
 
     private String bidrequesttitle;
+
+    // 本期还款计划对应的还款计划明细
+    private List<Paymentscheduledetail> paymentScheduleDetails = new ArrayList<>();
+
+
+    public String getStateDisplay() {
+        switch (state) {
+            case BidConst.PAYMENT_STATE_NORMAL:
+                return "正常待还";
+            case BidConst.PAYMENT_STATE_DONE:
+                return "已还";
+            case BidConst.PAYMENT_STATE_OVERDUE:
+                return "逾期";
+            default:
+                return "未知";
+        }
+    }
+
+    public List<Paymentscheduledetail> getPaymentScheduleDetails() {
+        return paymentScheduleDetails;
+    }
+
+    public void setPaymentScheduleDetails(List<Paymentscheduledetail> paymentScheduleDetails) {
+        this.paymentScheduleDetails = paymentScheduleDetails;
+    }
+
+    public Logininfo getBorrowuser() {
+        return borrowuser;
+    }
+
+    public void setBorrowuser(Logininfo borrowuser) {
+        this.borrowuser = borrowuser;
+    }
+
 
     public Long getId() {
         return id;
@@ -78,35 +116,35 @@ public class Paymentschedule {
         this.interest = interest;
     }
 
-    public Byte getMonthindex() {
+    public int getMonthindex() {
         return monthindex;
     }
 
-    public void setMonthindex(Byte monthindex) {
+    public void setMonthindex(int monthindex) {
         this.monthindex = monthindex;
     }
 
-    public Byte getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(Byte state) {
+    public void setState(int state) {
         this.state = state;
     }
 
-    public Byte getBidrequesttype() {
+    public int getBidrequesttype() {
         return bidrequesttype;
     }
 
-    public void setBidrequesttype(Byte bidrequesttype) {
+    public void setBidrequesttype(int bidrequesttype) {
         this.bidrequesttype = bidrequesttype;
     }
 
-    public Byte getReturntype() {
+    public int getReturntype() {
         return returntype;
     }
 
-    public void setReturntype(Byte returntype) {
+    public void setReturntype(int returntype) {
         this.returntype = returntype;
     }
 
@@ -118,13 +156,6 @@ public class Paymentschedule {
         this.bidrequestId = bidrequestId;
     }
 
-    public Long getBiduserId() {
-        return biduserId;
-    }
-
-    public void setBiduserId(Long biduserId) {
-        this.biduserId = biduserId;
-    }
 
     public String getBidrequesttitle() {
         return bidrequesttitle;

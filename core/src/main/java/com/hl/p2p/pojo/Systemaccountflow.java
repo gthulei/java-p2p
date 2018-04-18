@@ -1,22 +1,24 @@
 package com.hl.p2p.pojo;
 
+import com.hl.p2p.utils.BidConst;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class Systemaccountflow {
     private Long id;
 
-    private Date createddate;
+    private Date createddate = new Date();
 
-    private Byte accountactiontype;
+    private int accountactiontype;
 
-    private BigDecimal amount;
+    private BigDecimal amount = BidConst.ZERO;
 
     private String note;
 
-    private BigDecimal balance;
+    private BigDecimal balance = BidConst.ZERO;
 
-    private BigDecimal freezedamount;
+    private BigDecimal freezedamount = BidConst.ZERO;
 
     private Long systemaccountId;
 
@@ -38,11 +40,11 @@ public class Systemaccountflow {
         this.createddate = createddate;
     }
 
-    public Byte getAccountactiontype() {
+    public int getAccountactiontype() {
         return accountactiontype;
     }
 
-    public void setAccountactiontype(Byte accountactiontype) {
+    public void setAccountactiontype(int accountactiontype) {
         this.accountactiontype = accountactiontype;
     }
 

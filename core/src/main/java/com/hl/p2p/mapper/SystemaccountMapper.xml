@@ -4,8 +4,7 @@
   <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Systemaccount" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="version" property="version" jdbcType="INTEGER" />
-    <result column="beginDate" property="begindate" jdbcType="TIMESTAMP" />
-    <result column="endDate" property="enddate" jdbcType="TIMESTAMP" />
+    <result column="updateDate" property="updatedate" jdbcType="TIMESTAMP" />
     <result column="createdate" property="createdate" jdbcType="TIMESTAMP" />
     <result column="totalbalance" property="totalbalance" jdbcType="DECIMAL" />
     <result column="freezedamount" property="freezedamount" jdbcType="DECIMAL" />
@@ -14,31 +13,29 @@
     delete from systemaccount
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.hl.p2p.pojo.Systemaccount" >
-    insert into systemaccount (id, version, beginDate, 
-      endDate, createdate, totalbalance, 
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Systemaccount" useGeneratedKeys="true" keyProperty="id">
+    insert into systemaccount (id, version, updateDate, createdate, totalbalance,
       freezedamount)
-    values (#{id,jdbcType=BIGINT}, #{version,jdbcType=INTEGER}, #{begindate,jdbcType=TIMESTAMP}, 
-      #{enddate,jdbcType=TIMESTAMP}, #{createdate,jdbcType=TIMESTAMP}, #{totalbalance,jdbcType=DECIMAL}, 
+    values (#{id,jdbcType=BIGINT}, 0, #{updatedate,jdbcType=TIMESTAMP},
+     #{createdate,jdbcType=TIMESTAMP}, #{totalbalance,jdbcType=DECIMAL},
       #{freezedamount,jdbcType=DECIMAL})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Systemaccount" >
     update systemaccount
-    set version = #{version,jdbcType=INTEGER},
-      beginDate = #{begindate,jdbcType=TIMESTAMP},
-      endDate = #{enddate,jdbcType=TIMESTAMP},
+    set version = version+1,
+      updateDate = #{updatedate,jdbcType=TIMESTAMP},
       createdate = #{createdate,jdbcType=TIMESTAMP},
       totalbalance = #{totalbalance,jdbcType=DECIMAL},
       freezedamount = #{freezedamount,jdbcType=DECIMAL}
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} AND version=#{version}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, version, beginDate, endDate, createdate, totalbalance, freezedamount
+    select id, version, updateDate, createdate, totalbalance, freezedamount
     from systemaccount
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, version, beginDate, endDate, createdate, totalbalance, freezedamount
+    select id, version, updateDate, createdate, totalbalance, freezedamount
     from systemaccount
   </select>
 </mapper>

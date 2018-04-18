@@ -1,5 +1,7 @@
 package com.hl.p2p.pojo;
 
+import com.hl.p2p.utils.BidConst;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,15 +10,13 @@ public class Systemaccount {
 
     private Integer version;
 
-    private Date begindate;
-
-    private Date enddate;
+    private Date updatedate;
 
     private Date createdate;
 
-    private BigDecimal totalbalance;
+    private BigDecimal totalbalance = BidConst.ZERO;
 
-    private BigDecimal freezedamount;
+    private BigDecimal freezedamount = BidConst.ZERO;
 
     public Long getId() {
         return id;
@@ -34,20 +34,12 @@ public class Systemaccount {
         this.version = version;
     }
 
-    public Date getBegindate() {
-        return begindate;
+    public Date getUpdatedate() {
+        return updatedate;
     }
 
-    public void setBegindate(Date begindate) {
-        this.begindate = begindate;
-    }
-
-    public Date getEnddate() {
-        return enddate;
-    }
-
-    public void setEnddate(Date enddate) {
-        this.enddate = enddate;
+    public void setUpdatedate(Date updatedate) {
+        this.updatedate = updatedate;
     }
 
     public Date getCreatedate() {

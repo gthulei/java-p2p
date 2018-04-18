@@ -1,6 +1,8 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.BidrequestMapper;
+import com.hl.p2p.mapper.PaymentscheduleMapper;
+import com.hl.p2p.mapper.PaymentscheduledetailMapper;
 import com.hl.p2p.pojo.*;
 import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.query.PageResult;
@@ -11,10 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * 发标借款
@@ -39,6 +39,18 @@ public class BidrequestServerImpl implements IBidrequestServer{
 
   @Autowired
   private IBidServer bidServer;
+
+  @Autowired
+  private  ISystemaAcountServer systemaAcountServer;
+
+  @Autowired
+  private ISystemaccountflowServer systemaccountflowServer;
+
+  @Autowired
+  private PaymentscheduleMapper paymentScheduleMapper;
+
+  @Autowired
+  private PaymentscheduledetailMapper paymentScheduleDetailMapper;
 
   public Bidrequestaudithistory bidVo(Bidrequest bidrequest,Userinfo userinfo){
     Bidrequestaudithistory bidrequestaudithistory = new Bidrequestaudithistory();
@@ -224,7 +236,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
       accountflow.setActiontime(new Date());
       accountflow.setAccountId(accountInfo.getId());
       accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_SUCCESSFUL);
-      accountflow.setNote("投标");
+      accountflow.setNote(bidrequest.getId()+"投标");
       // 账户
       accountInfo.setFreezedamount(accountInfo.getFreezedamount().add(amount));
       accountInfo.setUsableamount(accountInfo.getUsableamount().subtract(amount));
@@ -250,7 +262,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
       // 审核记录
       Bidrequestaudithistory bidrequestaudithistory = this.bidVo(bidrequest, userinfo);
       bidrequestaudithistory.setRemark(remark);
-      bidrequestaudithistory.setAudittype(Bidrequestaudithistory.FULL_AUDIT1);//满标一核
+      bidrequestaudithistory.setAudittype(Bidrequestaudithistory.FULL_AUDIT1);//满标一审
       //审核历史
       bidrequestaudithistoryServer.add(bidrequestaudithistory);
       // 审核成功
@@ -270,6 +282,171 @@ public class BidrequestServerImpl implements IBidrequestServer{
       }
       //更新标审核信息
       this.update(bidrequest);
+    }
+  }
+
+  /**
+   * 满标二审
+   * @param id
+   * @param state
+   * @param remark
+   */
+  @Override
+  public void borrowFullAuditTwo(Long id, int state, String remark) {
+    Bidrequest bidrequest = bidrequestMapper.selectByPrimaryKey(id);
+    Userinfo userinfo = userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId());
+    // 是否符合审核条件
+    if(bidrequest.getBidrequeststate() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2){
+      // 审核记录
+      Bidrequestaudithistory bidrequestaudithistory = this.bidVo(bidrequest, userinfo);
+      bidrequestaudithistory.setRemark(remark);
+      bidrequestaudithistory.setAudittype(Bidrequestaudithistory.FULL_AUDIT2);//满标二审
+      //审核历史
+      bidrequestaudithistoryServer.add(bidrequestaudithistory);
+      // 审核成功
+      if(state==BidConst.BIDREQUEST_STATE_BIDDING){
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_PAYING_BACK);
+        // 借款人账户余额增加 , 生成同一条账户流水
+        Account account = accountServer.getAccountInfoById(bidrequest.getCreateuser().getId());
+        account.setUsableamount(account.getUsableamount().add(bidrequest.getBidrequestamount()));
+        account.setRemainborrowlimit(account.getRemainborrowlimit().subtract(bidrequest.getBidrequestamount()));
+        account.setUnreturnamount(account.getUnreturnamount().add(bidrequest.getTotalrewardamount())
+          .add(bidrequest.getBidrequestamount()));
+        // 账户流水
+        Accountflow accountflow = new Accountflow();
+        accountflow.setBalance(accountflow.getBalance().add(bidrequest.getBidrequestamount()));
+        accountflow.setActiontime(new Date());
+        accountflow.setAccountId(bidrequest.getId());
+        accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BIDREQUEST_SUCCESSFUL);
+        accountflow.setNote("成功借款");
+        this.accountflowServer.saveAccountflow(accountflow);
+        // 平台手续费
+        BigDecimal borrowChargeFee = CalculatetUtil.calAccountManagementCharge(bidrequest.getBidrequestamount());
+        accountflow.setActiontime(new Date());
+        accountflow.setBalance(accountflow.getBalance().subtract(borrowChargeFee));
+        accountflow.setNote("平台手续费");
+        this.accountflowServer.saveAccountflow(accountflow);
+        account.setUsableamount(account.getUsableamount().subtract(borrowChargeFee));
+        this.accountServer.updateAccount(account);
+        Long systemaccountId = this.systemaAcountServer.seveSystemaAcount(borrowChargeFee);
+        // 系统账户流水
+        Systemaccountflow systemaccountflow = new Systemaccountflow();
+        systemaccountflow.setAmount(systemaccountflow.getAmount().add(borrowChargeFee));
+        systemaccountflow.setBalance(systemaccountflow.getBalance().add(borrowChargeFee));
+        systemaccountflow.setNote("借款管理费");
+        systemaccountflow.setTargetuserId(bidrequest.getCreateuser().getId());
+        systemaccountflow.setAccountactiontype(BidConst.SYSTEM_ACCOUNT_ACTIONTYPE_MANAGE_CHARGE);
+        systemaccountflow.setSystemaccountId(systemaccountId);
+        this.systemaccountflowServer.seveSystemaccountflow(systemaccountflow);
+
+        //满标审核对还款流程 : 生成针对这个借款的还款信息和回款信息
+        List<Paymentschedule> pss = createPaymentSchedule(bidrequest);
+
+        this.freezedMoney(bidrequest);
+        // 还款对象
+      }else {
+        // 设置审核状态
+        bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_REJECTED);
+        // 移除在申请中的状态
+        userinfo.removeState(BitStatesUtils.OP_HAS_BIDREQUEST_PROCESS) ;
+        this.userinfoServer.updateUserInfo(userinfo);
+        //退款
+        this.returnMoney(bidrequest);
+      }
+      this.update(bidrequest);
+    }
+  }
+  /**
+   * 创建针对这个借款的还款信息和汇款信息
+   */
+  private List<Paymentschedule> createPaymentSchedule(Bidrequest bidrequest) {
+    List<Paymentschedule> ret = new ArrayList<>() ;
+    //用于 累加本金
+    BigDecimal totalPrincipal = BidConst.ZERO ;
+    //用于累加利息
+    BigDecimal totalInterest = BidConst.ZERO ;
+    for (int i = 0; i < bidrequest.getMonthes2return(); i++) {
+      //每期都是一个还款对象
+      Paymentschedule ps = new Paymentschedule();
+      ps.setBidrequestId(bidrequest.getId());
+      ps.setBidrequesttitle(bidrequest.getTitle());
+      ps.setBidrequesttype(bidrequest.getBidrequesttype());
+      ps.setBorrowuser(bidrequest.getCreateuser());
+      ps.setDeadline(DateUtils.addMonths(bidrequest.getPublishtime(), i+1));
+      ps.setMonthindex(i+1);
+      ps.setReturntype(bidrequest.getReturnType());
+      ps.setState(BidConst.PAYMENT_STATE_NORMAL);
+      if (i<bidrequest.getMonthes2return() - 1) {
+        //每期要还款的利息
+        ps.setInterest(CalculatetUtil.calMonthlyInterest(bidrequest.getReturnType(), bidrequest.getBidrequestamount(),
+          bidrequest.getCurrentrate(), i+1, bidrequest.getMonthes2return()));
+        // 每期还款总金额，利息 +本金
+        ps.setTotalamount(CalculatetUtil.calMonthToReturnMoney(bidrequest.getReturnType(), bidrequest.getBidrequestamount(),
+          bidrequest.getCurrentrate(), i+1, bidrequest.getMonthes2return()));
+        //本期还款本金   总的还款 - 利息
+        ps.setPrincipal(ps.getTotalamount().subtract(ps.getInterest()));
+
+        totalPrincipal=totalPrincipal.add(ps.getPrincipal());
+        totalInterest=totalInterest.add(ps.getInterest());
+      }else{
+        //最后一期
+        ps.setInterest(bidrequest.getTotalrewardamount().subtract(totalInterest));
+        ps.setPrincipal(bidrequest.getBidrequestamount().subtract(totalPrincipal));
+        ps.setTotalamount(ps.getInterest().add(ps.getPrincipal())) ;
+      }
+      this.paymentScheduleMapper.insert(ps);
+      createPaymentScheduleDetail(ps,bidrequest); //创建每期还款对象对于的汇款明细
+      ret.add(ps);
+    }
+    return ret ;
+  }
+
+  /**
+   * 创建针对每一期还款的回款对象
+   * @param ps
+   * @param bidRequest
+   */
+  private void createPaymentScheduleDetail(Paymentschedule ps, Bidrequest bidRequest) {
+    //用于 累加 本期还款本金
+    BigDecimal totalPrincipal = BidConst.ZERO ;
+    //用于累加 总金额 (本金+利息)
+    BigDecimal totalAmount = BidConst.ZERO ;
+    for (int i = 0; i < bidRequest.getBids().size(); i++) {
+      Bid bid = bidRequest.getBids().get(i);
+      //针对每一个投标创建已个回款对象
+      Paymentscheduledetail psd = new Paymentscheduledetail();
+      psd.setBidamount(bid.getAvailableamount());
+      psd.setBidrequestId(bidRequest.getId());
+      psd.setBidId(bid.getId());
+      psd.setDeadline(ps.getDeadline());
+      psd.setFromlogininfo(bidRequest.getCreateuser());
+      psd.setMonthindex(i+1) ;
+      psd.setTologininfoId(bid.getBiduser().getId());
+      psd.setPaymentscheduleId(ps.getId());
+      psd.setReturntype(bidRequest.getReturnType());
+      if ( i < bidRequest.getBids().size()-1) {
+        // 回款本金 = 投标金额 / 借款金额 * 本期还款本金
+        psd.setPrincipal(bid.getAvailableamount().divide(bidRequest.getBidrequestamount(),
+          BidConst.CAL_SCALE, RoundingMode.HALF_UP).multiply(ps.getPrincipal()
+          .setScale(BidConst.CAL_SCALE, RoundingMode.HALF_UP)));
+        // 汇款利息 = 投标金额/ 借款金额 * 本期还款利息
+        psd.setInterest(bid.getAvailableamount().divide(bidRequest.getBidrequestamount(),
+          BidConst.CAL_SCALE, RoundingMode.HALF_UP).multiply(ps.getInterest()
+          .setScale(BidConst.CAL_SCALE, RoundingMode.HALF_UP)));
+        psd.setTotalamount(psd.getInterest().add(psd.getPrincipal()));
+
+        totalPrincipal=totalPrincipal.add(psd.getPrincipal());   //本金
+        totalAmount=totalAmount.add(psd.getTotalamount());		//本息
+
+      }else{
+        //最后一个回款明细
+        psd.setPrincipal(ps.getPrincipal().subtract(totalPrincipal)); //本期的剩余本金
+        psd.setTotalamount(ps.getTotalamount().subtract(totalAmount)); //本期的剩余本息
+        psd.setInterest(psd.getTotalamount().subtract(psd.getPrincipal()));   //剩余的利息
+      }
+      this.paymentScheduleDetailMapper.insert(psd);
+      ps.getPaymentScheduleDetails().add(psd);
     }
   }
 
@@ -299,7 +476,37 @@ public class BidrequestServerImpl implements IBidrequestServer{
       accountflow.setActiontime(new Date());
       accountflow.setAccountId(bidAccount.getId());
       accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
-      accountflow.setNote("满标一审拒绝");
+      accountflow.setNote(bidrequest.getId()+"满标一审拒绝");
+      accountflowServer.saveAccountflow(accountflow);
+      this.accountServer.updateAccount(bidAccount);
+    }
+  }
+
+  /**
+   * 放款投标人冻结金额减少
+   * @param bidrequest
+   */
+  public void freezedMoney(Bidrequest bidrequest){
+    Map<Long, Account> map = new HashMap<>();
+    for(Bid bid :bidrequest.getBids()){
+      Long amountId = bid.getBiduser().getId();//投资人ID
+      Account account = map.get(amountId);
+      // 不存在去查询，已存在直接取
+      if (account==null){
+        account = accountServer.getAccountInfoById(amountId);
+        map.put(amountId,account);
+      }
+      account.setFreezedamount(account.getFreezedamount().subtract(bid.getAvailableamount()));
+    }
+    // 再统一去修改投标人对应的账户
+    for (Account bidAccount : map.values()) {
+      // 账户流水
+      Accountflow accountflow = new Accountflow();
+      accountflow.setFreezed(accountflow.getFreezed().subtract(bidAccount.getFreezedamount()));
+      accountflow.setActiontime(new Date());
+      accountflow.setAccountId(bidAccount.getId());
+      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
+      accountflow.setNote("放款投标人冻结金额减少");
       accountflowServer.saveAccountflow(accountflow);
       this.accountServer.updateAccount(bidAccount);
     }

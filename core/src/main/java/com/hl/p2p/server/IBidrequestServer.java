@@ -24,4 +24,6 @@ public interface IBidrequestServer {
   void borrowBid(Long bidRequestId,BigDecimal amount);
 
   void borrowFullAuditOne(Long id, int state, String remark);
+
+  void borrowFullAuditTwo(Long id, int state, String remark);
 }

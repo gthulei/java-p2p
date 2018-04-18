@@ -114,4 +114,40 @@ public class BidRequestController {
       return JsonResult.resultError("0000015",e.getMessage());
     }
   }
+
+
+  /**
+   * 满标二审列表
+   * @param qo
+   * @param model
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping("/twoInstance")
+  public String twoInstance(@ModelAttribute("qo") BidRequestQueryObject qo, Model model){
+    qo.setQuertState(1);
+    qo.setBidrequeststate(5);
+    model.addAttribute("pageResult",bidrequestServer.getApplyList(qo));
+    return "audit2";
+  }
+
+  /**
+   * 满标二审
+   * @param id
+   * @param state
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping(value = "/bidrequestPublishauditTwo.json",method = RequestMethod.POST)
+  @ResponseBody
+  public JsonResult bidrequestPublishauditTwo(Long id,int state,String remark){
+    try {
+      bidrequestServer.borrowFullAuditTwo(id,state,remark);
+      return JsonResult.resultSuccess("审核成功");
+    }catch (Exception e){
+      e.printStackTrace();
+      return JsonResult.resultError("0000015",e.getMessage());
+    }
+  }
+
 }

@@ -14,8 +14,11 @@
     <result column="paydate" property="paydate" jdbcType="TIMESTAMP" />
     <result column="returntype" property="returntype" jdbcType="TINYINT" />
     <result column="paymentschedule_id" property="paymentscheduleId" jdbcType="BIGINT" />
-    <result column="fromlogininfo_id" property="fromlogininfoId" jdbcType="BIGINT" />
     <result column="tologininfo_id" property="tologininfoId" jdbcType="BIGINT" />
+    <association property="fromlogininfo" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="bo_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from paymentscheduledetail
@@ -31,7 +34,7 @@
       #{totalamount,jdbcType=DECIMAL}, #{principal,jdbcType=DECIMAL}, #{interest,jdbcType=DECIMAL}, 
       #{monthindex,jdbcType=TINYINT}, #{deadline,jdbcType=TIMESTAMP}, #{bidrequestId,jdbcType=BIGINT}, 
       #{paydate,jdbcType=TIMESTAMP}, #{returntype,jdbcType=TINYINT}, #{paymentscheduleId,jdbcType=BIGINT}, 
-      #{fromlogininfoId,jdbcType=BIGINT}, #{tologininfoId,jdbcType=BIGINT})
+      #{fromlogininfo.id,jdbcType=BIGINT}, #{tologininfoId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Paymentscheduledetail" >
     update paymentscheduledetail
@@ -46,7 +49,7 @@
       paydate = #{paydate,jdbcType=TIMESTAMP},
       returntype = #{returntype,jdbcType=TINYINT},
       paymentschedule_id = #{paymentscheduleId,jdbcType=BIGINT},
-      fromlogininfo_id = #{fromlogininfoId,jdbcType=BIGINT},
+      fromlogininfo_id = #{fromlogininfo.id,jdbcType=BIGINT},
       tologininfo_id = #{tologininfoId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

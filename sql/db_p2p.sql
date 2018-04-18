@@ -261,8 +261,7 @@ DROP TABLE IF EXISTS `systemaccount`;
 CREATE TABLE `systemaccount` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `version` int(11) NOT NULL COMMENT '版本号',
-  `beginDate` datetime DEFAULT NULL COMMENT '开始时间',
-  `endDate` datetime DEFAULT NULL COMMENT '结束时间',
+  `updateDate` datetime DEFAULT NULL COMMENT '更新时间',
   `createdate` datetime NOT NULL COMMENT '创建时间',
   `totalbalance` decimal(18,4) NOT NULL COMMENT '平台账户的可用金额',
   `freezedamount` decimal(18,4) NOT NULL COMMENT '平台账户的冻结金额',
