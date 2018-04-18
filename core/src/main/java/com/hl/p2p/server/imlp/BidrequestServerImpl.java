@@ -340,11 +340,43 @@ public class BidrequestServerImpl implements IBidrequestServer{
         systemaccountflow.setSystemaccountId(systemaccountId);
         this.systemaccountflowServer.seveSystemaccountflow(systemaccountflow);
 
+
+        Map<Long, Account> map = new HashMap<>();
+        for(Bid bid :bidrequest.getBids()){
+          Long amountId = bid.getBiduser().getId();//投资人ID
+          Account investmentAccount = map.get(amountId);
+          // 不存在去查询，已存在直接取
+          if (investmentAccount==null){
+            investmentAccount =this.accountServer.getAccountInfoById(amountId);
+            map.put(amountId,investmentAccount);
+          }
+          investmentAccount.setFreezedamount(investmentAccount.getFreezedamount().subtract(bid.getAvailableamount()));
+        }
         //满标审核对还款流程 : 生成针对这个借款的还款信息和回款信息
         List<Paymentschedule> pss = createPaymentSchedule(bidrequest);
 
-        this.freezedMoney(bidrequest);
-        // 还款对象
+        //增加待收利息和待收本金
+        for (Paymentschedule ps : pss) {
+          for (Paymentscheduledetail psd : ps.getPaymentScheduleDetails()) {
+            Account bidAccount = map.get(psd.getTologininfoId());  //得到收款人的账户
+            //待收本金
+            bidAccount.setUnreceiveprincipal(bidAccount.getUnreceiveprincipal().add(psd.getPrincipal()));
+            bidAccount.setUnreceiveinterest(bidAccount.getUnreceiveinterest().add(psd.getInterest())) ;
+          }
+
+        }
+        for (Account mapAccount : map.values()) {
+          // 账户流水
+          Accountflow investmentAccountflow = new Accountflow();
+          investmentAccountflow.setFreezed(accountflow.getFreezed().subtract(mapAccount.getFreezedamount()));
+          investmentAccountflow.setActiontime(new Date());
+          investmentAccountflow.setAccountId(mapAccount.getId());
+          investmentAccountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
+          investmentAccountflow.setNote("放款投标人冻结金额减少");
+          this.accountflowServer.saveAccountflow(investmentAccountflow);
+          this.accountServer.updateAccount(mapAccount);
+        }
+
       }else {
         // 设置审核状态
         bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_REJECTED);
@@ -477,36 +509,6 @@ public class BidrequestServerImpl implements IBidrequestServer{
       accountflow.setAccountId(bidAccount.getId());
       accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
       accountflow.setNote(bidrequest.getId()+"满标一审拒绝");
-      accountflowServer.saveAccountflow(accountflow);
-      this.accountServer.updateAccount(bidAccount);
-    }
-  }
-
-  /**
-   * 放款投标人冻结金额减少
-   * @param bidrequest
-   */
-  public void freezedMoney(Bidrequest bidrequest){
-    Map<Long, Account> map = new HashMap<>();
-    for(Bid bid :bidrequest.getBids()){
-      Long amountId = bid.getBiduser().getId();//投资人ID
-      Account account = map.get(amountId);
-      // 不存在去查询，已存在直接取
-      if (account==null){
-        account = accountServer.getAccountInfoById(amountId);
-        map.put(amountId,account);
-      }
-      account.setFreezedamount(account.getFreezedamount().subtract(bid.getAvailableamount()));
-    }
-    // 再统一去修改投标人对应的账户
-    for (Account bidAccount : map.values()) {
-      // 账户流水
-      Accountflow accountflow = new Accountflow();
-      accountflow.setFreezed(accountflow.getFreezed().subtract(bidAccount.getFreezedamount()));
-      accountflow.setActiontime(new Date());
-      accountflow.setAccountId(bidAccount.getId());
-      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
-      accountflow.setNote("放款投标人冻结金额减少");
       accountflowServer.saveAccountflow(accountflow);
       this.accountServer.updateAccount(bidAccount);
     }
