@@ -297,6 +297,9 @@ public class BidrequestServerImpl implements IBidrequestServer{
     Userinfo userinfo = userinfoServer.getUserinfoById(bidrequest.getCreateuser().getId());
     // 是否符合审核条件
     if(bidrequest.getBidrequeststate() == BidConst.BIDREQUEST_STATE_APPROVE_PENDING_2){
+      // 移除在申请中的状态
+      userinfo.removeState(BitStatesUtils.OP_HAS_BIDREQUEST_PROCESS) ;
+      this.userinfoServer.updateUserInfo(userinfo);
       // 审核记录
       Bidrequestaudithistory bidrequestaudithistory = this.bidVo(bidrequest, userinfo);
       bidrequestaudithistory.setRemark(remark);
