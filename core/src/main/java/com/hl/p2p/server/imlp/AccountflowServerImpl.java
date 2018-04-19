@@ -108,4 +108,23 @@ public class AccountflowServerImpl implements IAccountflowServer {
     accountflow.setNote(bidrequest.getId()+"满标拒绝");
     return accountflowMapper.insert(accountflow) > 0;
   }
+
+  /**
+   * 提现资金冻结流水
+   * @param userId
+   * @param moneyAmount
+   * @return
+   */
+  @Override
+  public boolean withdrawalFreezeAccountflow(Long userId, BigDecimal moneyAmount) {
+    Accountflow accountflow = new Accountflow();
+    accountflow.setBalance(accountflow.getBalance().subtract(moneyAmount));
+    accountflow.setFreezed(accountflow.getFreezed().add(moneyAmount));
+    accountflow.setActiontime(new Date());
+    accountflow.setAccountId(userId);
+    accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_WITHDRAW_FREEZED);
+    accountflow.setNote("提现资金冻结流水");
+    return accountflowMapper.insert(accountflow) > 0;
+  }
+
 }

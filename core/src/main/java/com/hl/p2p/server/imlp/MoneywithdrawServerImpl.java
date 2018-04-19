@@ -1,14 +1,8 @@
 package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.MoneywithdrawMapper;
-import com.hl.p2p.pojo.Moneywithdraw;
-import com.hl.p2p.pojo.Realauth;
-import com.hl.p2p.pojo.Userbankinfo;
-import com.hl.p2p.pojo.Userinfo;
-import com.hl.p2p.server.IMoneywithdrawServer;
-import com.hl.p2p.server.IRealauthServer;
-import com.hl.p2p.server.IUserbankinfoServer;
-import com.hl.p2p.server.IUserinfoServer;
+import com.hl.p2p.pojo.*;
+import com.hl.p2p.server.*;
 import com.hl.p2p.utils.BidConst;
 import com.hl.p2p.utils.BitStatesUtils;
 import com.hl.p2p.utils.UserContext;
@@ -36,6 +30,11 @@ public class MoneywithdrawServerImpl implements IMoneywithdrawServer {
   @Autowired
   private IRealauthServer realauthServer;
 
+  @Autowired
+  private IAccountServer accountServer;
+
+  @Autowired
+  private IAccountflowServer accountflowServer;
   /**
    * 提现申请
    * @param moneyAmount
@@ -52,7 +51,7 @@ public class MoneywithdrawServerImpl implements IMoneywithdrawServer {
     }
 
     if(moneyAmount.compareTo(BidConst.MIN_WITHDRAW_AMOUNT)<0){
-      throw new RuntimeException("最小提醒金额为"+BidConst.MIN_WITHDRAW_AMOUNT);
+      throw new RuntimeException("最小提现金额为"+BidConst.MIN_WITHDRAW_AMOUNT);
     }
     Moneywithdraw withdraw = new Moneywithdraw();
     withdraw.setBanknumber(userbank.getBanknumber());
@@ -69,8 +68,16 @@ public class MoneywithdrawServerImpl implements IMoneywithdrawServer {
     withdraw.setApplier(UserContext.getCurrent());
     withdraw.setApplytime(new Date());
     withdraw.setRemark("提现申请");
+    // 资金
+    Account accountInfo = accountServer.getAccountInfoById(UserContext.getCurrent().getId());
+    accountInfo.setUsableamount(accountInfo.getUsableamount().subtract(moneyAmount));
+    accountInfo.setFreezedamount(accountInfo.getFreezedamount().add(moneyAmount));
+    accountServer.updateAccount(accountInfo);
+    // 资金流水
+    accountflowServer.withdrawalFreezeAccountflow(userinfo.getId(),moneyAmount);
     moneywithdrawMapper.insert(withdraw);
     userinfo.addState(BitStatesUtils.OP_HAS_WITHDRAW_PROCESS);
     userinfoServer.updateUserInfo(userinfo);
+
   }
 }
