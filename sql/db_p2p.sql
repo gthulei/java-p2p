@@ -52,6 +52,27 @@ CREATE TABLE `accountflow` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `moneywithdraw`
+-- ----------------------------
+DROP TABLE IF EXISTS `moneywithdraw`;
+CREATE TABLE `moneywithdraw` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `banknumber` varchar(255) DEFAULT NULL COMMENT '开户人银行账号',
+  `bankforkname` varchar(50) NOT NULL COMMENT '开户支行',
+  `bankName` varchar(50) DEFAULT NULL COMMENT '银行名称',
+  `realName` varchar(50) NOT NULL COMMENT '真实姓名',
+  `moneyAmount` decimal(18,4) NOT NULL COMMENT '提现金额',
+  `state` tinyint(4) NOT NULL COMMENT '状态',
+  `chargeFee` decimal(18,4) NOT NULL COMMENT '提现手续费',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注', 
+  `auditTime` datetime DEFAULT NULL COMMENT '审核时间',
+  `applyTime` datetime NOT NULL COMMENT '借款时间',
+  `auditor_id` bigint(20) DEFAULT NULL COMMENT '审核人ID',
+  `applier_id` bigint(20) NOT NULL COMMENT '借款人ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `bid`
 -- ----------------------------
 
@@ -123,6 +144,21 @@ CREATE TABLE `companybankinfo` (
   `accountname` varchar(255) DEFAULT NULL COMMENT '开户人姓名',
   `banknumber` varchar(255) DEFAULT NULL COMMENT '开户人银行账号',
   `bankforkname` varchar(255) DEFAULT NULL COMMENT '开户支行',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `userbankinfo`
+-- ----------------------------
+
+DROP TABLE IF EXISTS `userbankinfo`;
+CREATE TABLE `userbankinfo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `bankname` varchar(255) DEFAULT NULL COMMENT '银行名称',
+  `accountname` varchar(255) DEFAULT NULL COMMENT '开户人姓名',
+  `banknumber` varchar(255) DEFAULT NULL COMMENT '开户人银行账号',
+  `bankforkname` varchar(255) DEFAULT NULL COMMENT '开户支行',
+   `loginInfo_id` bigint(20) NOT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 

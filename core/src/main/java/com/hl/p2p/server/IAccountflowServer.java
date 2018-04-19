@@ -7,6 +7,8 @@ import com.hl.p2p.pojo.Bidrequest;
 import java.math.BigDecimal;
 
 public interface IAccountflowServer {
+
+  boolean saveAccountflow(Accountflow accountflow);
   
   boolean createBidAccountflow(BigDecimal amount, Account account, Long bidRequestId);
 
