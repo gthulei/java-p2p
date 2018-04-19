@@ -81,8 +81,12 @@ public class BidConst {
 
   public static final BigDecimal MIN_WITHDRAW_AMOUNT = new BigDecimal(
     "500.0000");// 系统最小提现金额
-  public static final BigDecimal MONEY_WITHDRAW_CHARGEFEE = new BigDecimal(
+  public static final BigDecimal MONEY_WITHDRAW_CHARGEFEE_MIN = new BigDecimal(
     "2.0000");// 系统提现手续费
+  public static final BigDecimal MONEY_WITHDRAW_CHARGEFEE_MAX = new BigDecimal(
+    "5.0000");// 系统提现手续费
+  public static final BigDecimal MONEY_WITHDRAW = new BigDecimal(
+    "10000.0000");//手续费计算金额
 
   /** =============================账户流水类型================================ */
   public final static int ACCOUNT_ACTIONTYPE_RECHARGE_OFFLINE = 0;// 资金流水类别：线下充值

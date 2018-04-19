@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hl.p2p.mapper.MoneywithdrawMapper" >
+  <resultMap id="BaseResultMap" type="com.hl.p2p.pojo.Moneywithdraw" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="banknumber" property="banknumber" jdbcType="VARCHAR" />
+    <result column="bankforkname" property="bankforkname" jdbcType="VARCHAR" />
+    <result column="bankName" property="bankname" jdbcType="VARCHAR" />
+    <result column="realName" property="realname" jdbcType="VARCHAR" />
+    <result column="moneyAmount" property="moneyamount" jdbcType="DECIMAL" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+    <result column="chargeFee" property="chargefee" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="auditTime" property="audittime" jdbcType="TIMESTAMP" />
+    <result column="applyTime" property="applytime" jdbcType="TIMESTAMP" />
+
+    <association property="applier" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="ap_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+
+    <association property="auditor" javaType="com.hl.p2p.pojo.Logininfo" columnPrefix="au_">
+      <id column="id" property="id"/>
+      <result column="username" property="username"/>
+    </association>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.hl.p2p.pojo.Moneywithdraw" >
+    insert into moneywithdraw (id, banknumber, bankforkname, 
+      bankName, realName, moneyAmount, 
+      state, chargeFee, remark, 
+      auditTime, applyTime, auditor_id, 
+      applier_id)
+    values (#{id,jdbcType=BIGINT}, #{banknumber,jdbcType=VARCHAR}, #{bankforkname,jdbcType=VARCHAR}, 
+      #{bankname,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, #{moneyamount,jdbcType=DECIMAL}, 
+      #{state,jdbcType=TINYINT}, #{chargefee,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{audittime,jdbcType=TIMESTAMP}, #{applytime,jdbcType=TIMESTAMP}, #{auditor.id,jdbcType=BIGINT},
+      #{applier.id,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.hl.p2p.pojo.Moneywithdraw" >
+    update moneywithdraw
+    set banknumber = #{banknumber,jdbcType=VARCHAR},
+      bankforkname = #{bankforkname,jdbcType=VARCHAR},
+      bankName = #{bankname,jdbcType=VARCHAR},
+      realName = #{realname,jdbcType=VARCHAR},
+      moneyAmount = #{moneyamount,jdbcType=DECIMAL},
+      state = #{state,jdbcType=TINYINT},
+      chargeFee = #{chargefee,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      auditTime = #{audittime,jdbcType=TIMESTAMP},
+      applyTime = #{applytime,jdbcType=TIMESTAMP},
+      auditor_id = #{auditor.id,jdbcType=BIGINT},
+      applier_id = #{applier.id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, banknumber, bankforkname, bankName, realName, moneyAmount, state, chargeFee, 
+    remark, auditTime, applyTime, auditor_id, applier_id
+    from moneywithdraw
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, banknumber, bankforkname, bankName, realName, moneyAmount, state, chargeFee, 
+    remark, auditTime, applyTime, auditor_id, applier_id
+    from moneywithdraw
+  </select>
+</mapper>
