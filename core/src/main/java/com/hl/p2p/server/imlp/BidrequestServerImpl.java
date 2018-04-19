@@ -229,21 +229,14 @@ public class BidrequestServerImpl implements IBidrequestServer{
       if(bidrequest.getBidrequestamount().equals(bidrequest.getCurrentsum())){
         bidrequest.setBidrequeststate(BidConst.BIDREQUEST_STATE_APPROVE_PENDING_1);
       }
-      // 账户流水
-      Accountflow accountflow = new Accountflow();
-      accountflow.setBalance(accountInfo.getUsableamount().subtract(amount));
-      accountflow.setFreezed(accountInfo.getFreezedamount().add(amount));
-      accountflow.setActiontime(new Date());
-      accountflow.setAccountId(accountInfo.getId());
-      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_SUCCESSFUL);
-      accountflow.setNote(bidrequest.getId()+"投标");
       // 账户
       accountInfo.setFreezedamount(accountInfo.getFreezedamount().add(amount));
       accountInfo.setUsableamount(accountInfo.getUsableamount().subtract(amount));
       bidServer.saveBid(bid);
       bidrequestMapper.updateByPrimaryKey(bidrequest);
       accountServer.updateAccount(accountInfo);
-      accountflowServer.saveAccountflow(accountflow);
+      // 账户流水
+      accountflowServer.createBidAccountflow(amount,accountInfo,bidrequest.getId());
     }
   }
 
@@ -317,32 +310,16 @@ public class BidrequestServerImpl implements IBidrequestServer{
         account.setUnreturnamount(account.getUnreturnamount().add(bidrequest.getTotalrewardamount())
           .add(bidrequest.getBidrequestamount()));
         // 账户流水
-        Accountflow accountflow = new Accountflow();
-        accountflow.setBalance(accountflow.getBalance().add(bidrequest.getBidrequestamount()));
-        accountflow.setActiontime(new Date());
-        accountflow.setAccountId(bidrequest.getId());
-        accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BIDREQUEST_SUCCESSFUL);
-        accountflow.setNote("成功借款");
-        this.accountflowServer.saveAccountflow(accountflow);
+        this.accountflowServer.createBorrowAccountflow(account,bidrequest);
         // 平台手续费
         BigDecimal borrowChargeFee = CalculatetUtil.calAccountManagementCharge(bidrequest.getBidrequestamount());
-        accountflow.setActiontime(new Date());
-        accountflow.setBalance(accountflow.getBalance().subtract(borrowChargeFee));
-        accountflow.setNote("平台手续费");
-        this.accountflowServer.saveAccountflow(accountflow);
+
+        this.accountflowServer.createBorrowChargeFeeAccountflow(account,bidrequest,borrowChargeFee);
         account.setUsableamount(account.getUsableamount().subtract(borrowChargeFee));
         this.accountServer.updateAccount(account);
         Long systemaccountId = this.systemaAcountServer.seveSystemaAcount(borrowChargeFee);
         // 系统账户流水
-        Systemaccountflow systemaccountflow = new Systemaccountflow();
-        systemaccountflow.setAmount(systemaccountflow.getAmount().add(borrowChargeFee));
-        systemaccountflow.setBalance(systemaccountflow.getBalance().add(borrowChargeFee));
-        systemaccountflow.setNote("借款管理费");
-        systemaccountflow.setTargetuserId(bidrequest.getCreateuser().getId());
-        systemaccountflow.setAccountactiontype(BidConst.SYSTEM_ACCOUNT_ACTIONTYPE_MANAGE_CHARGE);
-        systemaccountflow.setSystemaccountId(systemaccountId);
-        this.systemaccountflowServer.seveSystemaccountflow(systemaccountflow);
-
+        this.systemaccountflowServer.SystemaMgtFeeccountflow(bidrequest,borrowChargeFee,systemaccountId);
 
         Map<Long, Account> map = new HashMap<>();
         for(Bid bid :bidrequest.getBids()){
@@ -369,14 +346,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
 
         }
         for (Account mapAccount : map.values()) {
-          // 账户流水
-          Accountflow investmentAccountflow = new Accountflow();
-          investmentAccountflow.setFreezed(accountflow.getFreezed().subtract(mapAccount.getFreezedamount()));
-          investmentAccountflow.setActiontime(new Date());
-          investmentAccountflow.setAccountId(mapAccount.getId());
-          investmentAccountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
-          investmentAccountflow.setNote("放款投标人冻结金额减少");
-          this.accountflowServer.saveAccountflow(investmentAccountflow);
+          this.accountflowServer.bidFreezeAccountflow(mapAccount);
           this.accountServer.updateAccount(mapAccount);
         }
 
@@ -505,14 +475,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
     // 再统一去修改投标人对应的账户
     for (Account bidAccount : map.values()) {
       // 账户流水
-      Accountflow accountflow = new Accountflow();
-      accountflow.setBalance(accountflow.getBalance().add(bidAccount.getUsableamount()));
-      accountflow.setFreezed(accountflow.getFreezed().subtract(bidAccount.getFreezedamount()));
-      accountflow.setActiontime(new Date());
-      accountflow.setAccountId(bidAccount.getId());
-      accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_BID_UNFREEZED);
-      accountflow.setNote(bidrequest.getId()+"满标一审拒绝");
-      accountflowServer.saveAccountflow(accountflow);
+      this.accountflowServer.bidEscAccountflow(bidAccount,bidrequest);
       this.accountServer.updateAccount(bidAccount);
     }
   }
