@@ -11,6 +11,25 @@
     <result column="account_id" property="accountId" jdbcType="BIGINT" />
   </resultMap>
 
+  <sql id="where">
+    <where>
+      <if test="beginDate!=null">
+        AND actionTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND actionTime &lt;= #{endDate}
+      </if>
+      AND account_id=#{accountid}
+    </where>
+  </sql>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select id, accountActionType,note, balance, freezed, actionTime, account_id
+    from accountflow <include refid="where"/>
+    ORDER BY actionTime DESC LIMIT #{start},#{pageSize}
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(id) from accountflow <include refid="where"/>
+  </select>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Accountflow" >
     insert into accountflow (id, accountActionType,
       note, balance, freezed, 

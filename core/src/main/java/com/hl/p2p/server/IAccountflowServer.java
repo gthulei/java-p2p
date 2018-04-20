@@ -3,6 +3,8 @@ package com.hl.p2p.server;
 import com.hl.p2p.pojo.Account;
 import com.hl.p2p.pojo.Accountflow;
 import com.hl.p2p.pojo.Bidrequest;
+import com.hl.p2p.query.AccountflowQueryObject;
+import com.hl.p2p.query.PageResult;
 
 import java.math.BigDecimal;
 
@@ -25,4 +27,6 @@ public interface IAccountflowServer {
   boolean withdrawalSuccessAccountflow(Long userId,BigDecimal moneyAmount);
 
   boolean withdrawalFailAccountflow(Long userId,BigDecimal moneyAmount);
+
+  PageResult getaccountflowPage(AccountflowQueryObject qo);
 }

@@ -4,6 +4,8 @@ import com.hl.p2p.mapper.AccountflowMapper;
 import com.hl.p2p.pojo.Account;
 import com.hl.p2p.pojo.Accountflow;
 import com.hl.p2p.pojo.Bidrequest;
+import com.hl.p2p.query.AccountflowQueryObject;
+import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.IAccountflowServer;
 import com.hl.p2p.utils.BidConst;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AccountflowServerImpl implements IAccountflowServer {
@@ -158,6 +161,23 @@ public class AccountflowServerImpl implements IAccountflowServer {
     accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_WITHDRAW_UNFREEZED);
     accountflow.setNote("提现审核失败退款流水");
     return accountflowMapper.insert(accountflow) > 0;
+  }
+
+  /**
+   * 查询账户流水
+   * @param qo
+   * @return
+   */
+  @Override
+  public PageResult getaccountflowPage(AccountflowQueryObject qo) {
+    int i = accountflowMapper.selectCount(qo);
+    List<Accountflow> list = accountflowMapper.selectPage(qo);
+    PageResult pageResult = new PageResult();
+    pageResult.setTotalCount(i);
+    pageResult.setPageSize(qo.getPageSize());
+    pageResult.setData(list);
+    pageResult.setCurrentPage(qo.getCurrentPage());
+    return pageResult;
   }
 
 }

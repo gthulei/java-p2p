@@ -1,6 +1,5 @@
 package com.hl.p2p.server;
 
-import com.hl.p2p.pojo.Moneywithdraw;
 import com.hl.p2p.query.MoneyWithdrawQueryObject;
 import com.hl.p2p.query.PageResult;
 

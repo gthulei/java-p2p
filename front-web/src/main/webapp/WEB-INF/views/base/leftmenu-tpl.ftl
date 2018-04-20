@@ -22,7 +22,7 @@
 	<li class="list-group-item">
 		<a href="#"><span>资产详情</span></a>
 		<ul class="in">
-			<li name="accountFlow_list"><a href="">账户流水</a></li>
+			<li name="accountFlow_list"><a href="/accountFlowList">账户流水</a></li>
 			<li name="recharge"><a href="/recharge_list">充值明细</a></li>
 			<li name="moneyWithdraw"><a href="/moneyWithdraw">提现申请</a></li>
 		</ul>

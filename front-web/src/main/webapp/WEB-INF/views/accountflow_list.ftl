@@ -15,7 +15,7 @@
 			$(function(){
 				
 				$('#pagination').twbsPagination({
-					totalPages : ${pageResult.totalCount}||1,
+					totalPages : ${pageResult.totalCount},
 					currentPage : ${pageResult.currentPage},
 					visiblePages : 5,
 					first:"首页",
@@ -56,7 +56,7 @@
 				</div>
 				<!-- 功能页面 -->
 				<div class="col-sm-9">
-					<form action="/recharge_list" name="searchForm" id="searchForm" class="form-inline">
+					<form action="/accountFlowList" name="searchForm" id="searchForm" class="form-inline">
 						<input type="hidden" id="currentPage" name="currentPage" value="" />
 						<div class="form-group">
 							<label>时间范围</label>
@@ -67,47 +67,30 @@
 							<input type="text" class="form-control endDate" name="endDate" value="${(qo.endDate?string('yyyy-MM-dd'))!''}"/>
 						</div>
 						<div class="form-group">
-						    <label>状态</label>
-						    <select class="form-control" name="state">
-						    	<option value="-1">全部</option>
-						    	<option value="0">审核中</option>
-						    	<option value="1">审核通过</option>
-						    	<option value="2">审核拒绝</option>
-						    </select>
-						    <script type="text/javascript">
-						    	$("[name=state] option[value='${(qo.state)!''}']").attr("selected","selected");
-						    </script>
-						</div>
-						<div class="form-group">
 							<button id="query" class="btn btn-success"><i class="icon-search"></i> 查询</button>
 						</div>
 					</form>
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span class="pull-left" style="line-height: 35px;">充值明细</span>
-							<a class="pull-right btn btn-danger btn-sm" href="/recharge.do">
-								账户充值
-							</a>
+							<span class="pull-left" style="line-height: 35px;">账户流水</span>
 							<div class="clearfix"></div>
 						</div>
 						<table class="table">
 							<thead>
 								<tr>
-									<th>平台账号</th>
-									<th>交易号</th>
-									<th>充值时间</th>
-									<th>充值金额</th>
-									<th>充值状态</th>
+									<th>可用金额</th>
+									<th>冻结金额</th>
+									<th>资金变化时间</th>
+									<th>备注</th>
 								</tr>
 							</thead>
 							<tbody>
 								<#list pageResult.data as data>
 									<tr>
-										<td><div class="bank bank_${data.bankinfo}"></div></td>
-										<td>${data.tradecode}</td>
-										<td>${data.tradetime?string("yyyy-MM-dd")}</td>
-								        <td>${data.amount} 元</td>
-								        <td>${data.audit}</td>
+										<td>${data.balance}元</td>
+										<td>${data.freezed}元</td>
+										<td>${data.actiontime?string("yyyy-MM-dd")}</td>
+										<td>${data.note}</td>
 									</tr>
 								</#list>
 							</tbody>

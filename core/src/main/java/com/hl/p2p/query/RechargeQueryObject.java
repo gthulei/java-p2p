@@ -5,6 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class RechargeQueryObject extends BaseQuery{
+
+  private Long applierId;
+
   private Date beginDate ;
 
   private Date endDate;
@@ -14,6 +17,14 @@ public class RechargeQueryObject extends BaseQuery{
   private String tradeCode;
 
   private int bankId;
+
+  public Long getApplierId() {
+    return applierId;
+  }
+
+  public void setApplierId(Long applierId) {
+    this.applierId = applierId;
+  }
 
   public int getBankId() {
     return bankId;

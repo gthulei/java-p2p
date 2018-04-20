@@ -17,8 +17,8 @@
 		});
 		
 		$('#pagination').twbsPagination({
-			totalPages : 1,
-			startPage : 1,
+			totalPages : ${pageResult.totalCount},
+			startPage : ${pageResult.currentPage},
 			visiblePages : 5,
 			first : "首页",
 			prev : "上一页",

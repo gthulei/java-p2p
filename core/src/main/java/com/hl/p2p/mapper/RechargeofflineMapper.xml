@@ -73,6 +73,9 @@
       <if test="bankId>1">
         AND  r.bankinfo_id = #{bankId}
       </if>
+      <if test="applierId!=null">
+        AND  r.applier_id = #{applierId}
+      </if>
     </where>
   </sql>
   <sql id="base_column">
@@ -100,6 +103,7 @@
     LEFT JOIN logininfo au ON r.auditor_id =au.id
     LEFT JOIN companybankinfo bank ON r.bankinfo_id=bank.id
     <include refid="condition"/>
+    ORDER BY r.state DESC LIMIT #{start},#{pageSize}
   </select>
   <select id="selectCount" resultType="java.lang.Integer">
     select count(id) from rechargeoffline  r <include refid="condition"/>
