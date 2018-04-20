@@ -44,4 +44,15 @@
 <select id="selectBidSumAmount" resultType="java.math.BigDecimal">
   select sum(availableAmount)  from bid where bidrequest_id=#{bidrequestid} and bidUser_id=#{userid};
 </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select <include refid="base_column" />
+    from bid b join logininfo u on u.id =b.bidUser_id
+    where b.bidUser_id = #{userid}  ORDER BY b.bidTime DESC LIMIT #{start},#{pageSize}
+  </select>
+
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(b.id)
+    from bid b join logininfo u on u.id =b.bidUser_id
+    where b.bidUser_id = #{userid}
+  </select>
 </mapper>

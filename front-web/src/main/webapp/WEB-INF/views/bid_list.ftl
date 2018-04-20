@@ -51,7 +51,7 @@
 			<div class="row">
 				<!--导航菜单-->
 				<div class="col-sm-3">
-					<#assign currentMenu="accountFlow_list" />
+					<#assign currentMenu="bid" />
 					<#include "base/leftmenu-tpl.ftl" />
 				</div>
 				<!-- 功能页面 -->
@@ -72,25 +72,27 @@
 					</form>
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span class="pull-left" style="line-height: 35px;">账户流水</span>
+							<span class="pull-left" style="line-height: 35px;">投资明细</span>
 							<div class="clearfix"></div>
 						</div>
 						<table class="table">
 							<thead>
 								<tr>
-									<th>可用金额</th>
-									<th>冻结金额</th>
-									<th>资金变化时间</th>
-									<th>备注</th>
+									<th>借款标题</th>
+									<th>年化利率</th>
+									<th>这次投标金额</th>
+									<th>投标时间</th>
+                  <th>查询标地信息</th>
 								</tr>
 							</thead>
 							<tbody>
 								<#list pageResult.data as data>
 									<tr>
-										<td>${data.balance}元</td>
-										<td>${data.freezed}元</td>
-										<td>${data.actiontime?string("yyyy-MM-dd")}</td>
-										<td>${data.note}</td>
+										<td>${data.bidrequesttitle}</td>
+										<td>${data.actualrate*100}%</td>
+										<td>${data.availableamount}</td>
+										<td>${data.bidtime?string("yyyy-MM-dd")}</td>
+                    <td><a href="/borrowDes?id=${data.bidrequestId}">查看</a></td>
 									</tr>
 								</#list>
 							</tbody>
