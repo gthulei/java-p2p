@@ -2,6 +2,8 @@ package com.hl.p2p.server.imlp;
 
 import com.hl.p2p.mapper.MoneywithdrawMapper;
 import com.hl.p2p.pojo.*;
+import com.hl.p2p.query.MoneyWithdrawQueryObject;
+import com.hl.p2p.query.PageResult;
 import com.hl.p2p.server.*;
 import com.hl.p2p.utils.BidConst;
 import com.hl.p2p.utils.BitStatesUtils;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 提现
@@ -35,6 +38,7 @@ public class MoneywithdrawServerImpl implements IMoneywithdrawServer {
 
   @Autowired
   private IAccountflowServer accountflowServer;
+
   /**
    * 提现申请
    * @param moneyAmount
@@ -79,5 +83,58 @@ public class MoneywithdrawServerImpl implements IMoneywithdrawServer {
     userinfo.addState(BitStatesUtils.OP_HAS_WITHDRAW_PROCESS);
     userinfoServer.updateUserInfo(userinfo);
 
+  }
+
+  @Override
+  public PageResult withdrawalPage(MoneyWithdrawQueryObject qo) {
+    int i = moneywithdrawMapper.selectCount(qo);
+    List<Moneywithdraw> list = moneywithdrawMapper.selectPage(qo);
+    PageResult pageResult = new PageResult();
+    pageResult.setData(list);
+    pageResult.setCurrentPage(qo.getCurrentPage());
+    pageResult.setPageSize(qo.getPageSize());
+    pageResult.setTotalCount(i);
+    return pageResult;
+  }
+
+
+  /**
+   * 提现审核
+   * @param id
+   * @param state
+   * @param remark
+   */
+  @Override
+  public void withdrawalaudit(Long id, Long state, String remark) {
+    Moneywithdraw moneywithdraw = moneywithdrawMapper.selectByPrimaryKey(id);
+    Userinfo userinfo = userinfoServer.getUserinfoById(moneywithdraw.getApplier().getId());
+    Account account = accountServer.getAccountInfoById(moneywithdraw.getApplier().getId());
+    //有为审核的提现
+    if(userinfo.getHasWithdrawInProcess()){
+      // 移除用户审核状态
+      userinfo.removeState(BitStatesUtils.OP_HAS_WITHDRAW_PROCESS);
+
+      moneywithdraw.setRemark(remark);
+      moneywithdraw.setAuditor(UserContext.getCurrent());
+      moneywithdraw.setAudittime(new Date());
+      //审核成功
+      if(state==moneywithdraw.STATE_AUDIT){
+        moneywithdraw.setState(moneywithdraw.STATE_AUDIT);
+        // 冻结资金减少
+        account.setFreezedamount(account.getFreezedamount().subtract(moneywithdraw.getMoneyamount()));
+        //生成流水
+        accountflowServer.withdrawalSuccessAccountflow(moneywithdraw.getApplier().getId(),moneywithdraw.getMoneyamount());
+      }else {
+        moneywithdraw.setState(moneywithdraw.STATE_REFUSE);
+        //退款
+        account.setFreezedamount(account.getFreezedamount().subtract(moneywithdraw.getMoneyamount()));
+        account.setUsableamount(account.getUsableamount().add(moneywithdraw.getMoneyamount()));
+        //生成流水
+        accountflowServer.withdrawalFailAccountflow(moneywithdraw.getApplier().getId(),moneywithdraw.getMoneyamount());
+      }
+      moneywithdrawMapper.updateByPrimaryKey(moneywithdraw);
+      accountServer.updateAccount(account);
+      userinfoServer.updateUserInfo(userinfo);
+    }
   }
 }

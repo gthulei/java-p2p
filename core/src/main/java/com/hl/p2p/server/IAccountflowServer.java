@@ -21,4 +21,8 @@ public interface IAccountflowServer {
   boolean bidEscAccountflow(Account account,Bidrequest bidrequest);
 
   boolean withdrawalFreezeAccountflow(Long userId,BigDecimal moneyAmount);
+
+  boolean withdrawalSuccessAccountflow(Long userId,BigDecimal moneyAmount);
+
+  boolean withdrawalFailAccountflow(Long userId,BigDecimal moneyAmount);
 }

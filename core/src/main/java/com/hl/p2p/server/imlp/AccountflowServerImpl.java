@@ -127,4 +127,37 @@ public class AccountflowServerImpl implements IAccountflowServer {
     return accountflowMapper.insert(accountflow) > 0;
   }
 
+  /**
+   * 提现成功流水
+   * @param moneyAmount
+   * @return
+   */
+  @Override
+  public boolean withdrawalSuccessAccountflow(Long userId,BigDecimal moneyAmount) {
+    Accountflow accountflow = new Accountflow();
+    accountflow.setFreezed(accountflow.getFreezed().subtract(moneyAmount));
+    accountflow.setActiontime(new Date());
+    accountflow.setAccountId(userId);
+    accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_WITHDRAW);
+    accountflow.setNote("提现成功流水");
+    return accountflowMapper.insert(accountflow) > 0;
+  }
+
+  /**
+   * 提现审核失败退款流水
+   * @param moneyAmount
+   * @return
+   */
+  @Override
+  public boolean withdrawalFailAccountflow(Long userId,BigDecimal moneyAmount) {
+    Accountflow accountflow = new Accountflow();
+    accountflow.setBalance(accountflow.getBalance().add(moneyAmount));
+    accountflow.setFreezed(accountflow.getFreezed().subtract(moneyAmount));
+    accountflow.setActiontime(new Date());
+    accountflow.setAccountId(userId);
+    accountflow.setAccountactiontype(BidConst.ACCOUNT_ACTIONTYPE_WITHDRAW_UNFREEZED);
+    accountflow.setNote("提现审核失败退款流水");
+    return accountflowMapper.insert(accountflow) > 0;
+  }
+
 }
