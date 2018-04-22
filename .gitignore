@@ -14,8 +14,6 @@
 *.jar
 *.war
 *.ear
-*.zip
-*.tar.gz
 *.rar
 .idea/*
 **/upload/**
