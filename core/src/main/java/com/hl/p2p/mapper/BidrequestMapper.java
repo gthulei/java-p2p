@@ -16,4 +16,8 @@ public interface BidrequestMapper {
     List<Bidrequest> selectPage(BidRequestQueryObject qo);
 
     int selectCount();
+
+    List<Bidrequest> selectBorrowList(BidRequestQueryObject qo);
+
+    int selectBorrowCount(BidRequestQueryObject qo);
 }

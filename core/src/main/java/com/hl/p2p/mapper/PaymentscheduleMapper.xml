@@ -19,10 +19,6 @@
       <result column="username" property="username"/>
     </association>
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from paymentschedule
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Paymentschedule" useGeneratedKeys="true" keyProperty="id">
     insert into paymentschedule (id, deadLine, payDate, 
       totalAmount, principal, interest, 
@@ -51,15 +47,12 @@
       bidRequestTitle = #{bidrequesttitle,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, deadLine, payDate, totalAmount, principal, interest, monthIndex, state, 
-    bidRequestType, returnType, bidrequest_id, biduser_id, bidRequestTitle
-    from paymentschedule
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, deadLine, payDate, totalAmount, principal, interest, monthIndex, state, 
-    bidRequestType, returnType, bidrequest_id, biduser_id, bidRequestTitle
-    from paymentschedule
+
+  <select id="selectByUserPaymentList" resultMap="BaseResultMap" >
+    select p.id, p.deadLine, p.payDate, p.totalAmount, p.principal, p.interest, p.monthIndex, p.state,
+    p.bidRequestType, p.returnType, p.bidrequest_id, p.bidRequestTitle,
+    bo.id as bo_id ,bo.username as bo_username
+    from paymentschedule p
+     LEFT JOIN logininfo bo ON p.biduser_id = bo.id where p.biduser_id = #{userid}
   </select>
 </mapper>

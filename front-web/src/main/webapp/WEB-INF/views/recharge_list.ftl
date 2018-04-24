@@ -16,7 +16,7 @@
 				
 				$('#pagination').twbsPagination({
 					totalPages : ${pageResult.totalCount}||1,
-					currentPage : ${pageResult.currentPage},
+          startPage: ${pageResult.currentPage},
 					visiblePages : 5,
 					first:"首页",
 				    prev:"上一页",
@@ -101,19 +101,25 @@
 								</tr>
 							</thead>
 							<tbody>
-								<#list pageResult.data as data>
+							<#if (pageResult.data?size > 0)>
+							  <#list pageResult.data as data>
 									<tr>
-										<td><div class="bank bank_${data.bankinfo}"></div></td>
-										<td>${data.tradecode}</td>
-										<td>${data.tradetime?string("yyyy-MM-dd")}</td>
-								        <td>${data.amount} 元</td>
-								        <td>${data.audit}</td>
-									</tr>
-								</#list>
+                    <td><div class="bank bank_${data.bankinfo}"></div></td>
+                    <td>${data.tradecode}</td>
+                    <td>${data.tradetime?string("yyyy-MM-dd")}</td>
+                    <td>${data.amount} 元</td>
+                    <td>${data.audit}</td>
+                  </tr>
+							  </#list>
+							</#if>
 							</tbody>
 						</table>
 						<div style="text-align: center;">
+							<#if (pageResult.data?size > 0)>
 							<ul id="pagination" class="pagination"></ul>
+								<#else >
+								暂未数据
+							</#if >
 						</div>
 					</div>
 				</div>

@@ -13,11 +13,10 @@
     <link type="text/css" rel="stylesheet" href="/css/account.css" />
 		<script type="text/javascript">
 			$(function(){
-				
 				$('#pagination').twbsPagination({
 					totalPages : ${pageResult.totalCount},
           startPage: ${pageResult.currentPage},
-					visiblePages : 5,
+          visiblePages : 5,
 					first:"首页",
 				    prev:"上一页",
 				    next:"下一页",
@@ -36,7 +35,8 @@
 				$(".beginDate,.endDate").click(function(){
 					WdatePicker();
 				});
-			});
+
+      });
 	 </script>
 	</head>
 	<body>
@@ -51,13 +51,13 @@
 			<div class="row">
 				<!--导航菜单-->
 				<div class="col-sm-3">
-					<#assign currentMenu="bid" />
+					<#assign currentMenu="receive" />
 					<#include "base/leftmenu-tpl.ftl" />
 				</div>
 				<!-- 功能页面 -->
 				<div class="col-sm-9">
-					<form action="/accountFlowList" name="searchForm" id="searchForm" class="form-inline">
-						<input type="hidden" id="currentPage" name="currentPage" value="" />
+					<form action="/paymentschedulelist" name="searchForm" id="searchForm" class="form-inline" method="post">
+						<input type="hidden" id="currentPage" name="currentPage"/>
 						<div class="form-group">
 							<label>时间范围</label>
 							<input type="text" class="form-control beginDate" name="beginDate" value="${(qo.beginDate?string('yyyy-MM-dd'))!''}"/>
@@ -72,31 +72,37 @@
 					</form>
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<span class="pull-left" style="line-height: 35px;">投资明细</span>
+							<span class="pull-left" style="line-height: 35px;">还款明细</span>
 							<div class="clearfix"></div>
 						</div>
 						<table class="table">
 							<thead>
 								<tr>
-									<th>借款标题</th>
-									<th>年化利率</th>
-									<th>这次投标金额</th>
-									<th>投标时间</th>
-                  <th>查询标地信息</th>
+									<th>投标金额</th>
+									<th>本期还款金额</th>
+									<th>本期应还款本金</th>
+									<th>本期应还款利息</th>
+                  <th>第几期</th>
+                  <th>本期还款截止时间</th>
+                  <th>还款时间</th>
+									<th>还款人</th>
 								</tr>
 							</thead>
 							<tbody>
-								<#if (pageResult.data?size > 0)>
+							<#if (pageResult.data?size > 0)>
 								<#list pageResult.data as data>
 									<tr>
-										<td>${data.bidrequesttitle}</td>
-										<td>${data.actualrate*100}%</td>
-										<td>${data.availableamount}</td>
-										<td>${data.bidtime?string("yyyy-MM-dd")}</td>
-                    <td><a href="/borrowDes?id=${data.bidrequestId}">查看</a></td>
-									</tr>
+                    <td>${data.bidamount}</td>
+                    <td>${data.totalamount}</td>
+                    <td>${data.principal}</td>
+                    <td>${data.interest}</td>
+                    <td>${data.monthindex}</td>
+                    <td>${data.deadline?string("yyyy-MM-dd")}</td>
+                    <td>${(data.paydate?string("yyyy-MM-dd"))!'-'}</td>
+                    <td>${data.fromlogininfo.username}</td>
+                  </tr>
 								</#list>
-								</#if>
+							</#if>
 							</tbody>
 						</table>
 						<div style="text-align: center;">

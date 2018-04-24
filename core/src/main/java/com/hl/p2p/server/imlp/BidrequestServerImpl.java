@@ -362,6 +362,7 @@ public class BidrequestServerImpl implements IBidrequestServer{
       this.update(bidrequest);
     }
   }
+
   /**
    * 创建针对这个借款的还款信息和汇款信息
    */
@@ -478,6 +479,23 @@ public class BidrequestServerImpl implements IBidrequestServer{
       this.accountflowServer.bidEscAccountflow(bidAccount,bidrequest);
       this.accountServer.updateAccount(bidAccount);
     }
+  }
+
+  /**
+   * 借款人标列表
+   * @param qo
+   * @return
+   */
+  @Override
+  public PageResult getBorrowList(BidRequestQueryObject qo) {
+    int i = bidrequestMapper.selectBorrowCount(qo);
+    List<Bidrequest> bidrequests = bidrequestMapper.selectBorrowList(qo);
+    PageResult pageResult = new PageResult();
+    pageResult.setData(bidrequests);
+    pageResult.setTotalCount(i);
+    pageResult.setCurrentPage(qo.getQuertState());
+    pageResult.setPageSize(qo.getPageSize());
+    return pageResult;
   }
 
 }

@@ -20,10 +20,6 @@
       <result column="username" property="username"/>
     </association>
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from paymentscheduledetail
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
   <insert id="insert" parameterType="com.hl.p2p.pojo.Paymentscheduledetail" >
     insert into paymentscheduledetail (id, bidamount, bid_id, 
       totalamount, principal, interest, 
@@ -53,15 +49,27 @@
       tologininfo_id = #{tologininfoId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select id, bidamount, bid_id, totalamount, principal, interest, monthindex, deadline, 
-    bidrequest_id, paydate, returntype, paymentschedule_id, fromlogininfo_id, tologininfo_id
-    from paymentscheduledetail
-    where id = #{id,jdbcType=BIGINT}
+  <sql id="where">
+    <where>
+       p.tologininfo_id=#{id}
+      <if test="beginDate!=null">
+        AND p.deadline &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND p.deadline &lt;= #{endDate}
+      </if>
+    </where>
+  </sql>
+  <select id="selectPage" resultMap="BaseResultMap">
+     select p.id, p.bidamount, p.bid_id, p.totalamount, p.principal, p.interest, p.monthindex, p.deadline,
+    p.bidrequest_id, p.paydate, p.returntype, p.paymentschedule_id, p.tologininfo_id,
+    bo.id as bo_id ,bo.username as bo_username
+    from paymentscheduledetail p
+    LEFT JOIN logininfo bo ON p.fromlogininfo_id = bo.id
+    <include refid="where"/>
+    ORDER BY p.deadline DESC LIMIT #{start},#{pageSize}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, bidamount, bid_id, totalamount, principal, interest, monthindex, deadline, 
-    bidrequest_id, paydate, returntype, paymentschedule_id, fromlogininfo_id, tologininfo_id
-    from paymentscheduledetail
+  <select id="selectCount" resultType="java.lang.Integer">
+    select count(p.id) from paymentscheduledetail p <include refid="where"/>
   </select>
 </mapper>

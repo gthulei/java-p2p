@@ -3,8 +3,8 @@
 		<a href="javascript:;"><span>借款项目</span></a>
 		<ul>
 			<li name="bid"><a href="/bidList"><span>投资明细</span></a></li>
-			<li name="receive"><a href="#"><span>收款明细</span></a></li>
-			<li name="bidRequest"><a href="/borrow_list"><span>借款项目</span></a></li>
+			<li name="receive"><a href="paymentschedulelist"><span>收款明细</span></a></li>
+			<li name="bidRequest"><a href="/borrowlist"><span>借款项目</span></a></li>
 			<li name="borrowBidReturn"><a href="/borrowBidReturn_list"><span>还款明细</span></a></li>
 		</ul>
 	</li>

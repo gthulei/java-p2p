@@ -26,4 +26,6 @@ public interface IBidrequestServer {
   void borrowFullAuditOne(Long id, int state, String remark);
 
   void borrowFullAuditTwo(Long id, int state, String remark);
+
+  PageResult getBorrowList(BidRequestQueryObject qo);
 }

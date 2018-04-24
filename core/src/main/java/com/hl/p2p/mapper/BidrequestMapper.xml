@@ -104,5 +104,25 @@
     SELECT COUNT(id) FROM bidrequest
     <include refid="where"/>
   </select>
-
+  <sql id="starTtime">
+    <where>
+      b.createuser_id=#{userid}
+      <if test="beginDate!=null">
+        AND b.applyTime &gt;= #{beginDate}
+      </if>
+      <if test="endDate!=null">
+        AND b.applyTime &lt;= #{endDate}
+      </if>
+    </where>
+  </sql>
+  <select id="selectBorrowList" resultMap="BaseResultMap">
+    SELECT <include refid="base_column"/>
+    from bidrequest b
+    LEFT JOIN logininfo u ON b.createuser_id=u.id
+    <include refid="where"/>
+    ORDER BY b.bidRequestState ASC LIMIT #{start},#{pageSize}
+  </select>
+  <select id="selectBorrowCount" resultType="java.lang.Integer">
+    select count(b.id) from bidrequest b  <include refid="where"/>
+  </select>
 </mapper>

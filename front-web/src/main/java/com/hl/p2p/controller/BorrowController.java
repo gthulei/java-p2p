@@ -1,9 +1,7 @@
 package com.hl.p2p.controller;
 
-import com.hl.p2p.pojo.Bidrequest;
-import com.hl.p2p.pojo.Bidrequestaudithistory;
-import com.hl.p2p.pojo.Logininfo;
-import com.hl.p2p.pojo.Userinfo;
+import com.hl.p2p.pojo.*;
+import com.hl.p2p.query.BidRequestQueryObject;
 import com.hl.p2p.server.*;
 import com.hl.p2p.utils.BidConst;
 import com.hl.p2p.utils.JsonResult;
@@ -12,10 +10,7 @@ import com.hl.p2p.utils.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -40,6 +35,9 @@ public class BorrowController {
 
   @Autowired
   private IBidrequestaudithistoryServer bidrequestaudithistoryServer;
+
+  @Autowired
+  private IPaymentServer paymentServer;
 
   @RequestMapping("/borrow")
   public String borrow(Model model){
@@ -127,6 +125,26 @@ public class BorrowController {
       return JsonResult.resultError("0000019",e.getMessage());
     }
 
+  }
+
+  /**
+   * 借款列表
+   * @return
+   */
+  @RequireLogin
+  @RequestMapping("/borrowlist")
+  public String borrowlist(@ModelAttribute("qo")BidRequestQueryObject qo,Model model){
+    qo.setUserid(UserContext.getCurrent().getId());
+    model.addAttribute("pageResult",bidrequestServer.getBorrowList(qo));
+    return "borrowlist";
+  }
+
+  @RequireLogin
+  @RequestMapping("borrowBidReturn_list")
+  public String borrowBidReturnList(@ModelAttribute("qo")BidRequestQueryObject qo,Model model){
+    List<Paymentschedule> list = paymentServer.getByUserPaymentList(UserContext.getCurrent().getId());
+    model.addAttribute("list",list);
+    return "borrowBidReturn_list";
   }
 
 }

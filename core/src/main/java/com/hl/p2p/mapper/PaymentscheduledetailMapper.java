@@ -1,16 +1,17 @@
 package com.hl.p2p.mapper;
 
 import com.hl.p2p.pojo.Paymentscheduledetail;
+import com.hl.p2p.query.PaymentQueryObject;
+
 import java.util.List;
 
 public interface PaymentscheduledetailMapper {
-    int deleteByPrimaryKey(Long id);
 
     int insert(Paymentscheduledetail record);
 
-    Paymentscheduledetail selectByPrimaryKey(Long id);
-
-    List<Paymentscheduledetail> selectAll();
-
     int updateByPrimaryKey(Paymentscheduledetail record);
+
+    List<Paymentscheduledetail> selectPage(PaymentQueryObject qo);
+
+    int selectCount(PaymentQueryObject qo);
 }
